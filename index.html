@@ -878,7 +878,8 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
 
 <footer>
   <div id="sync">연결 확인 중…</div>
-  <div class="ver">v7 · 09-20 08:10</div>
+  <div id="jserr" style="display:none;margin:8px 0;padding:9px;border-radius:9px;background:rgba(228,101,140,.12);border:1px solid rgba(228,101,140,.4);color:#F0B7C8;font-size:11px;text-align:left;word-break:break-all"></div>
+  <div class="ver">v8 · 09-20 08:40</div>
   <div class="tools">
     <button class="reset" id="resetBtn">체크 지우기</button>
   </div>
@@ -903,6 +904,12 @@ const SUPABASE_KEY = '여기에 붙여넣기';</pre>
 </div></nav>
 
 <script>
+window.addEventListener('error',function(ev){
+  var b=document.getElementById('jserr');
+  if(!b) return;
+  b.style.display='block';
+  b.textContent='오류: '+(ev.message||'')+' @'+((ev.filename||'').split('/').pop())+':'+(ev.lineno||'');
+});
 /* ══════════ 여기 두 줄만 채우면 됩니다 ══════════ */
 const SUPABASE_URL = 'https://jpadradcktsrxsxqbsez.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpwYWRyYWRja3RzcnhzeHFic2V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxODM2MzEsImV4cCI6MjEwNDc1OTYzMX0.E_nbRWxPNbW-LtMs3vjhAwS1WQJ7E8zfgZ7rsxzi48Y';
@@ -1331,7 +1338,7 @@ function drawCart(){
   let tip='';
   const has=id=>!!PICK[pk(curDay,id)];
   if(has('s59')&&(has('s53')||has('s41'))) tip='라치밸리는 왕복 5~6시간입니다. 레이크루이스나 존스턴과 같이 넣기 어렵습니다.';
-  else if(P.zs.some(z=>z.z==='ice')&&P.zs.some(z=>z.z==='yoho')) tip='아이스필즈와 요호는 갈래가 다릅니다. 하루에 둘 다는 무리예요.';
+  else if(P.sel.some(p=>p.z==='ice')&&P.sel.some(p=>p.z==='yoho')) tip='아이스필즈와 요호는 갈래가 다릅니다. 하루에 둘 다는 무리예요.';
   else if(P.total>P.day.budget) tip='하루에 담기 어렵습니다. 한두 곳 빼거나 다른 날로 옮기세요.';
 
   let t=P.day.start, rows='';
@@ -1419,12 +1426,12 @@ window.__loadOpts=function(rows){
   })();
   setTimeout(()=>{ if(typeof L==='undefined') drawCart(); }, 9000);
 })();
-buildTabs();
+try{ buildTabs(); }catch(e){ console.error(e); }
 [['2026-09-20',['s01','s04','s02','s11','s31']],
  ['2026-09-21',['s51','s52','s53','s41']],
  ['2026-09-22',['s61','s63','s64','s18','s15']],
  ['2026-09-23',['s32','s33']]].forEach(([d,ids])=>ids.forEach(i=>PICK[pk(d,i)]=true));
-drawCatalog(); drawCart(); renderDays();
+try{ drawCatalog(); drawCart(); renderDays(); }catch(e){ console.error('builder', e); }
 
 /* ---------- 날씨 자동 갱신 ---------- */
 (function(){
