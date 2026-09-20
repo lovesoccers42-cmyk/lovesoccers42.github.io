@@ -203,7 +203,8 @@ nav div{max-width:560px;margin:0 auto;display:flex;gap:2px}
 nav a{flex:1;min-width:0;text-align:center;padding:9px 1px;border-radius:10px;font-size:11px;font-weight:600;color:var(--dim);text-decoration:none;white-space:nowrap}
 nav a:active{background:var(--card);color:var(--ink)}
 footer{padding:26px 0 10px;color:var(--faint);font-size:12px;text-align:center}
-#sync{line-height:1.65;margin-bottom:12px}
+#sync{line-height:1.65;margin-bottom:6px}
+.ver{font-size:10px;color:var(--faint);margin-bottom:12px;letter-spacing:.04em}
 #sync b{font-weight:700;color:var(--dim)}
 #sync b.ok{color:var(--yzf)}
 #sync.bad b{color:var(--las)}
@@ -877,6 +878,7 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
 
 <footer>
   <div id="sync">연결 확인 중…</div>
+  <div class="ver">v7 · 09-20 08:10</div>
   <div class="tools">
     <button class="reset" id="resetBtn">체크 지우기</button>
   </div>
