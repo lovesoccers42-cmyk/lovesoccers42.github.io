@@ -906,7 +906,7 @@ const SUPABASE_URL = 'https://jpadradcktsrxsxqbsez.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpwYWRyYWRja3RzcnhzeHFic2V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxODM2MzEsImV4cCI6MjEwNDc1OTYzMX0.E_nbRWxPNbW-LtMs3vjhAwS1WQJ7E8zfgZ7rsxzi48Y';
 /* ═══════════════════════════════════════════════ */
 
-let sb = null, online = false, me = '';
+let online = false, me = '';
 let state = {};   // { key: {done, by} }
 
 /* ---------- 이름 ---------- */
@@ -974,10 +974,8 @@ document.addEventListener('change', async e=>{
   state[id] = {done: el.checked, by: el.checked ? me : ''};
   paint(); refresh();
   if(!online) return;
-  const { error } = await sb.from('checks').upsert({
-    id, done: el.checked, updated_by: el.checked ? me : null, updated_at: new Date().toISOString()
-  });
-  if(error) status('저장 실패 — 잠시 후 다시 시도하세요', 'bad');
+  upsert({id, done: el.checked, updated_by: el.checked ? me : null,
+          updated_at: new Date().toISOString()});
 });
 
 /* ---------- 초기화 ---------- */
@@ -994,9 +992,7 @@ document.getElementById('resetBtn').addEventListener('click', async function(){
   const ids = Object.keys(state).filter(k=> state[k].done);
   state = {}; paint(); refresh();
   if(!online || !ids.length) return;
-  await sb.from('checks').upsert(ids.map(id=>({
-    id, done:false, updated_by:null, updated_at:new Date().toISOString()
-  })));
+  try{ await apiPut(ids.map(id=>({id,done:false,updated_by:null,updated_at:new Date().toISOString()}))); }catch(e){}
 });
 
 /* ---------- D-day ---------- */
@@ -1255,9 +1251,7 @@ function hhmm(x){ const h=Math.floor(x), m=Math.round((x-h)*60); return String(h
 
 async function savePick(d,i,on){
   const t=ORD[pk(d,i)]||Date.now();
-  if(!online||!sb) return;
-  try{ await sb.from('checks').upsert({id:pk(d,i),done:on,updated_by:me||null,
-    updated_at:new Date(t).toISOString()}); }catch(e){}
+  upsert({id:pk(d,i),done:on,updated_by:me||null,updated_at:new Date(t).toISOString()});
 }
 function orderedPicks(day){
   const out=SPOTS.filter(p=>PICK[pk(day,p.id)])
@@ -1410,11 +1404,18 @@ window.__loadOpts=function(rows){
   drawCatalog(); drawCart(); renderDays();
 };
 (function(){
-  const sc=document.createElement('script');
-  sc.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-  sc.onload=()=>{ LMAP=null; drawCart(); };
-  sc.onerror=()=>{};
-  document.head.appendChild(sc);
+  const SRC=['https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+             'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js'];
+  let n=0;
+  (function load(){
+    if(n>=SRC.length){ drawCart(); return; }
+    const sc=document.createElement('script');
+    sc.src=SRC[n++];
+    sc.onload=()=>{ LMAP=null; drawCart(); };
+    sc.onerror=load;
+    document.head.appendChild(sc);
+  })();
+  setTimeout(()=>{ if(typeof L==='undefined') drawCart(); }, 9000);
 })();
 buildTabs();
 [['2026-09-20',['s01','s04','s02','s11','s31']],
@@ -1525,70 +1526,64 @@ drawCatalog(); drawCart(); renderDays();
   }
 })();
 
-/* ---------- 연결 ---------- */
-async function connect(){
-  readMe();
-  if(me) setMe(me);
-  refresh();
+/* ---------- 연결 (순수 fetch, 외부 라이브러리 없음) ---------- */
+const API = SUPABASE_URL.replace(/\/+$/,'') + '/rest/v1/checks';
+const HDR = {apikey:SUPABASE_KEY, Authorization:'Bearer '+SUPABASE_KEY, 'Content-Type':'application/json'};
+const to=(pr,ms)=>Promise.race([pr,new Promise((_,rj)=>setTimeout(()=>rj(new Error('시간 초과')),ms))]);
 
-  if(!SUPABASE_URL || !SUPABASE_KEY){
-    document.getElementById('setup').classList.add('open');
-    status('<b>설정 전 — 저장되지 않습니다</b>', 'bad');
-    return;
-  }
+async function apiGet(){
+  const r = await to(fetch(API+'?select=id,done,updated_by,updated_at',{headers:HDR}), 9000);
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}
+async function apiPut(rows){
+  const r = await to(fetch(API,{method:'POST',headers:
+    Object.assign({},HDR,{Prefer:'resolution=merge-duplicates,return=minimal'}),
+    body:JSON.stringify(rows)}), 9000);
+  if(!r.ok) throw new Error('HTTP '+r.status);
+}
+async function upsert(row){
+  if(!online) return;
+  try{ await apiPut([row]); }catch(e){ status('<b>저장 실패</b><br>눌러서 다시 시도','bad'); }
+}
 
-  const to=(pr,ms)=>Promise.race([pr,new Promise((_,rj)=>setTimeout(()=>rj(new Error('시간 초과')),ms))]);
-  const CDNS=['https://esm.sh/@supabase/supabase-js@2',
-              'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'];
-  let createClient=null, lastErr='';
-  for(const u of CDNS){
-    try{ const m=await to(import(u),8000); if(m&&m.createClient){ createClient=m.createClient; break; } }
-    catch(e){ lastErr=e.message||'실패'; }
-  }
-  if(!createClient){
-    status('<b>동기화 연결 실패</b><br>'+lastErr+' — 눌러서 다시 시도','bad');
-    return;
-  }
-
-  sb = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-  let data, error;
-  try{
-    ({ data, error } = await to(sb.from('checks').select('id, done, updated_by, updated_at'), 10000));
-  }catch(e){ error = {message:'응답이 없습니다'}; }
-  if(error){
-    status('<b>연결 실패</b><br>'+(error.message||'주소와 키를 확인하세요')+' — 눌러서 다시 시도','bad');
-    return;
-  }
-  online = true;
-  data.forEach(r=>{ state[r.id] = {done: r.done, by: r.updated_by || ''}; });
+function applyRows(rows){
+  let touched=false;
+  rows.forEach(r=>{
+    if(!r.id) return;
+    if(r.id.indexOf('opt:')===0){
+      PICK[r.id]=!!r.done;
+      if(r.done) ORD[r.id]=Date.parse(r.updated_at||'')||Date.now(); else delete ORD[r.id];
+      touched=true;
+    }else{
+      state[r.id]={done:r.done, by:r.updated_by||''};
+    }
+  });
   paint(); refresh();
-  status('<b class="ok">실시간 연결됨</b><br>한쪽에서 체크하면 즉시 반영됩니다');
+  if(touched){ drawCatalog(); drawCart(); renderDays(); }
+}
 
-  sb.channel('checks-live')
-    .on('postgres_changes', {event:'*', schema:'public', table:'checks'}, payload=>{
-      const r = payload.new;
-      if(!r || !r.id) return;
-      if(r.id.indexOf('opt:')===0){
-        PICK[r.id]=!!r.done;
-        if(r.done) ORD[r.id]=Date.parse(r.updated_at||'')||Date.now(); else delete ORD[r.id];
-        drawCatalog(); drawCart(); renderDays();
-        return;
-      }
-      state[r.id] = {done: r.done, by: r.updated_by || ''};
-      paint(); refresh();
-    })
-    .subscribe();
+let pollT=null;
+async function connect(){
+  try{
+    const rows = await apiGet();
+    online = true;
+    applyRows(rows);
+    status('<b class="ok">실시간 연결됨</b><br>두 사람이 같은 목록을 봅니다');
+    clearInterval(pollT);
+    pollT = setInterval(async ()=>{
+      if(document.hidden) return;
+      try{ applyRows(await apiGet()); }catch(e){}
+    }, 15000);
+  }catch(e){
+    online = false;
+    status('<b>동기화 연결 실패</b><br>'+(e.message||'네트워크')+' — 눌러서 다시 시도','bad');
+  }
 }
 connect();
 (function(){
   const el=document.getElementById('sync');
-  if(el) el.addEventListener('click',()=>{
-    if(el.className!=='bad') return;
-    status('연결 확인 중…'); online=false; sb=null; connect();
-  });
-  document.addEventListener('visibilitychange',()=>{
-    if(!document.hidden && !online) connect();
-  });
+  if(el) el.addEventListener('click',()=>{ if(el.className==='bad'){ status('연결 확인 중…'); connect(); } });
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden && !online) connect(); });
 })();
 </script>
