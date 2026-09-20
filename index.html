@@ -925,8 +925,10 @@ function setMe(name){
 /* ---------- 상태 표시 ---------- */
 function status(t, cls){
   const el = document.getElementById('sync');
+  if(!el) return;
   el.innerHTML = t;
   el.className = cls || '';
+  el.style.cursor = (cls==='bad') ? 'pointer' : '';
 }
 
 /* ---------- UI ---------- */
@@ -1524,7 +1526,7 @@ drawCatalog(); drawCart(); renderDays();
 })();
 
 /* ---------- 연결 ---------- */
-(async function(){
+async function connect(){
   readMe();
   if(me) setMe(me);
   refresh();
@@ -1535,19 +1537,27 @@ drawCatalog(); drawCart(); renderDays();
     return;
   }
 
-  let createClient;
-  try{
-    ({ createClient } = await import('https://esm.sh/@supabase/supabase-js@2'));
-  }catch(e){
-    status('<b>라이브러리를 불러오지 못했습니다</b><br>인터넷 연결을 확인하세요', 'bad');
+  const to=(pr,ms)=>Promise.race([pr,new Promise((_,rj)=>setTimeout(()=>rj(new Error('시간 초과')),ms))]);
+  const CDNS=['https://esm.sh/@supabase/supabase-js@2',
+              'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'];
+  let createClient=null, lastErr='';
+  for(const u of CDNS){
+    try{ const m=await to(import(u),8000); if(m&&m.createClient){ createClient=m.createClient; break; } }
+    catch(e){ lastErr=e.message||'실패'; }
+  }
+  if(!createClient){
+    status('<b>동기화 연결 실패</b><br>'+lastErr+' — 눌러서 다시 시도','bad');
     return;
   }
 
   sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const { data, error } = await sb.from('checks').select('id, done, updated_by, updated_at');
+  let data, error;
+  try{
+    ({ data, error } = await to(sb.from('checks').select('id, done, updated_by, updated_at'), 10000));
+  }catch(e){ error = {message:'응답이 없습니다'}; }
   if(error){
-    status('<b>연결 실패</b><br>' + (error.message || '주소와 키를 확인하세요'), 'bad');
+    status('<b>연결 실패</b><br>'+(error.message||'주소와 키를 확인하세요')+' — 눌러서 다시 시도','bad');
     return;
   }
   online = true;
@@ -1569,5 +1579,16 @@ drawCatalog(); drawCart(); renderDays();
       paint(); refresh();
     })
     .subscribe();
+}
+connect();
+(function(){
+  const el=document.getElementById('sync');
+  if(el) el.addEventListener('click',()=>{
+    if(el.className!=='bad') return;
+    status('연결 확인 중…'); online=false; sb=null; connect();
+  });
+  document.addEventListener('visibilitychange',()=>{
+    if(!document.hidden && !online) connect();
+  });
 })();
 </script>
