@@ -1,0 +1,1573 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>상수 · 은진 신혼여행 2026</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+
+<style>
+:root{
+  --bg:#0A0F1C; --card:#131C2E; --card-2:#0F1728;
+  --line:#233049; --ink:#E9EDF6; --dim:#8A97B0; --faint:#5C6880;
+  --yzf:#57E0AE; --yyc:#79B9EC; --lax:#F2A65A; --las:#E4658C;
+  --accent:var(--yzf); --r:14px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  font-size:15px;line-height:1.62;letter-spacing:-.01em;padding-bottom:84px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:560px;margin:0 auto;padding:0 18px}
+
+.hero{position:relative;overflow:hidden;padding:40px 0 26px;border-bottom:1px solid var(--line)}
+.aurora{position:absolute;inset:-40% -20% auto -20%;height:260px;pointer-events:none;
+  background:radial-gradient(60% 50% at 25% 60%, rgba(87,224,174,.30), transparent 70%),
+             radial-gradient(50% 45% at 65% 45%, rgba(121,185,236,.24), transparent 70%),
+             radial-gradient(45% 40% at 85% 70%, rgba(178,128,236,.20), transparent 70%);
+  filter:blur(26px);animation:drift 14s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translate3d(-4%,0,0)}to{transform:translate3d(6%,10px,0) scaleY(1.15)}}
+@media (prefers-reduced-motion:reduce){.aurora{animation:none}}
+.names{position:relative;font-size:13px;color:var(--dim);letter-spacing:.06em}
+h1{position:relative;margin:.3em 0 .1em;font-size:30px;font-weight:800;line-height:1.24;letter-spacing:-.03em}
+.dates{position:relative;color:var(--dim);font-size:14px;margin-bottom:20px}
+.dday{position:relative;display:inline-flex;align-items:baseline;gap:8px;background:rgba(87,224,174,.10);
+  border:1px solid rgba(87,224,174,.3);color:var(--yzf);padding:7px 14px;border-radius:999px;font-size:14px;font-weight:700}
+.dday small{font-weight:500;color:#9fe8cd;font-size:12px}
+.route{position:relative;display:flex;margin-top:24px}
+.leg{flex:1;min-width:0;padding-top:16px;position:relative}
+.leg::before{content:"";position:absolute;top:4px;left:0;right:0;height:3px;background:var(--c);opacity:.55;border-radius:2px}
+.leg + .leg::after{content:"";position:absolute;top:0;left:0;width:1px;height:11px;background:var(--bg)}
+.leg b{display:block;font-size:12.5px;font-weight:700;color:var(--c)}
+.leg span{display:block;font-size:11px;color:var(--faint)}
+
+section{padding:30px 0;border-bottom:1px solid var(--line)}
+h2{font-size:19px;font-weight:800;margin:0 0 4px;letter-spacing:-.02em}
+.sub{color:var(--dim);font-size:13.5px;margin:0 0 18px}
+
+.bar{height:5px;background:var(--line);border-radius:3px;overflow:hidden;margin:14px 0 4px}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .35s cubic-bezier(.2,.8,.2,1)}
+.barlabel{font-size:12px;color:var(--dim);margin-bottom:18px}
+
+.group{margin-bottom:22px}
+.group > h3{font-size:13px;font-weight:700;color:var(--dim);margin:0 0 8px;display:flex;align-items:baseline;gap:8px}
+.group > h3 em{font-style:normal;font-size:11.5px;color:var(--faint);font-weight:500}
+.group > h3 .cnt{font-size:11.5px;color:var(--faint);font-variant-numeric:tabular-nums;margin-left:auto;flex:0 0 auto}
+
+label.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 13px;margin-bottom:6px;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);cursor:pointer;transition:background .15s}
+label.chk:active{background:#18223a}
+label.chk input{position:absolute;opacity:0;width:0;height:0}
+.box{flex:0 0 20px;height:20px;margin-top:1px;border-radius:6px;border:1.5px solid #3A4763;display:grid;place-items:center;transition:.15s}
+.box svg{width:12px;height:12px;stroke:var(--bg);stroke-width:3.4;fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:0;transform:scale(.6);transition:.18s}
+.chk input:checked ~ .box{background:var(--accent);border-color:var(--accent)}
+.chk input:checked ~ .box svg{opacity:1;transform:scale(1)}
+.chk input:checked ~ .txt{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--faint)}
+.chk input:focus-visible ~ .box{outline:2px solid var(--accent);outline-offset:2px}
+.txt{flex:1;font-size:14.5px;line-height:1.45;transition:color .2s}
+.txt b{font-weight:700;color:var(--accent)}
+.chk input:checked ~ .txt b{color:var(--faint)}
+.txt small{display:block;color:var(--dim);font-size:12.5px;line-height:1.5;margin-top:2px}
+.chk input:checked ~ .txt small{color:var(--faint)}
+.urgent label.chk{border-color:rgba(228,101,140,.35);background:rgba(228,101,140,.07)}
+.urgent .box{border-color:#8d5a6c}
+.urgent .chk input:checked ~ .box{background:var(--las);border-color:var(--las)}
+.urgent .txt b{color:var(--las)}
+
+/* weather */
+.wx{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 15px;margin-bottom:9px}
+.wx h4{margin:0;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+.wx h4 .dot{width:7px;height:7px;border-radius:50%;background:var(--c)}
+.wx h4 span{margin-left:auto;font-size:12px;font-weight:500;color:var(--faint)}
+.temps{display:flex;align-items:baseline;gap:6px;margin:9px 0 2px;font-variant-numeric:tabular-nums}
+.temps .hi{font-size:26px;font-weight:800;color:var(--c);letter-spacing:-.03em}
+.temps .lo{font-size:16px;font-weight:700;color:var(--dim)}
+.temps .unit{font-size:12px;color:var(--faint);margin-left:3px}
+.wxnote{font-size:13px;color:#C9D2E2;margin:6px 0 0;line-height:1.55}
+.wxnote b{color:var(--ink)}
+.wear{margin-top:9px;padding-top:9px;border-top:1px solid var(--line);font-size:12.8px;color:var(--dim)}
+.wear b{color:var(--c);font-weight:700}
+.fc{display:flex;gap:5px;margin-top:10px;overflow-x:auto;padding-bottom:2px}
+.fc div{flex:0 0 auto;min-width:50px;text-align:center;background:var(--card-2);border:1px solid var(--line);border-radius:9px;padding:6px 4px}
+.fc b{display:block;font-size:10.5px;color:var(--faint);font-weight:600}
+.fc u{display:block;text-decoration:none;font-size:15px;margin:2px 0}
+.fc s{display:block;text-decoration:none;font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums}
+.fc em{display:block;font-style:normal;font-size:10px;color:var(--faint);margin-top:1px}
+.live{font-size:10.5px;color:var(--faint);margin-top:8px}
+
+.day{display:flex;gap:13px;padding:13px 0;border-top:1px solid var(--line)}
+.day:first-of-type{border-top:0}
+.date{flex:0 0 46px;font-size:13px;font-weight:700;color:var(--c);font-variant-numeric:tabular-nums;padding-top:1px}
+.date span{display:block;font-size:11px;font-weight:500;color:var(--faint)}
+.what{flex:1;font-size:14.5px}
+.what em{font-style:normal;display:block;color:var(--dim);font-size:12.8px;line-height:1.5;margin-top:1px}
+.flag{display:inline-block;font-size:11px;font-weight:700;color:var(--bg);background:var(--c);border-radius:5px;padding:1px 6px;margin-left:5px;vertical-align:1px}
+
+details{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:9px;overflow:hidden}
+details[open]{background:var(--card-2)}
+summary{list-style:none;cursor:pointer;padding:14px 15px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:9px}
+summary::-webkit-details-marker{display:none}
+summary .dot{width:7px;height:7px;border-radius:50%;background:var(--c);flex:0 0 7px}
+summary .arw{margin-left:auto;color:var(--faint);font-size:12px;transition:transform .2s}
+details[open] summary .arw{transform:rotate(180deg)}
+.body{padding:0 15px 15px;font-size:14px;color:#C9D2E2}
+.body p{margin:0 0 10px}.body p:last-child{margin-bottom:0}
+.body strong{color:var(--ink);font-weight:700}
+.body a{color:var(--c);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.18);word-break:break-all}
+.body a:active{opacity:.6}
+.linklist{margin:0;padding:0;list-style:none}
+.linklist li{margin-bottom:12px;padding-left:0}
+.linklist b{display:block;font-size:13.5px;color:var(--ink);margin-bottom:2px}
+.linklist span{display:block;font-size:12.3px;color:var(--dim);line-height:1.5;margin-bottom:3px}
+.body ul{margin:0 0 10px;padding-left:18px}
+.body li{margin-bottom:5px}
+.warn{border-left:2px solid var(--las);padding-left:11px;color:#F0B7C8}
+
+table.wash{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:4px}
+table.wash td{padding:10px 0;border-top:1px solid var(--line);vertical-align:top}
+table.wash tr:first-child td{border-top:0}
+table.wash td:first-child{width:74px;color:var(--yzf);font-weight:700;font-variant-numeric:tabular-nums}
+table.wash td:last-child{color:var(--dim);font-size:12.5px}
+table.wash b{color:var(--ink)}
+
+
+/* ---------- 촬영지 루트 ---------- */
+.corridor{margin:4px 0 22px;width:100%}
+.banner{width:100%;display:block;border-radius:12px;margin-bottom:12px;background:#0A0F1C}
+.shot{margin:0 0 12px;position:relative}
+.shot img{width:100%;display:block;border-radius:12px;aspect-ratio:16/6;object-fit:cover;background:#0E1730}
+.shot .alt{display:none;margin-bottom:0}
+.shot.fail img{display:none}
+.shot.fail .alt{display:block}
+.shot.fail figcaption{display:none}
+.shot figcaption{font-size:10.5px;color:var(--faint);margin-top:5px;line-height:1.45}
+.spot{width:100%;display:block;border-radius:10px;aspect-ratio:16/9;object-fit:cover;background:#0E1730;margin:8px 0 3px}
+.spot.hide{display:none}
+.cr{display:block;font-size:10px;color:var(--faint);line-height:1.4;margin-bottom:2px}
+.rt{margin-bottom:26px;transition:opacity .3s}
+.builder{margin:2px 0 16px}
+.pre{display:flex;gap:6px;margin-bottom:9px}
+.pre button{flex:1;padding:7px 4px;border-radius:9px;border:1px solid var(--line);background:none;
+  color:var(--dim);font:inherit;font-size:11.5px;font-weight:700;cursor:pointer}
+.pre button.on{background:rgba(121,185,236,.14);border-color:rgba(121,185,236,.5);color:var(--yyc)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:7px 11px;border-radius:999px;
+  border:1px solid var(--line);background:var(--card-2);color:var(--dim);
+  font:inherit;font-size:12.5px;cursor:pointer;transition:.15s}
+.chip.on{background:rgba(121,185,236,.13);border-color:rgba(121,185,236,.5);color:var(--ink)}
+.chip s{text-decoration:none;font-size:10.5px;color:var(--faint);font-variant-numeric:tabular-nums}
+.chip.on s{color:var(--yyc)}
+.sum{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:11px;
+  background:var(--card-2);border:1px solid var(--line);font-size:12.5px;color:var(--dim);flex-wrap:wrap}
+.sum b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.sum .st{margin-left:auto;font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px}
+.st.ok{background:rgba(87,224,174,.15);color:var(--yzf)}
+.st.tight{background:rgba(242,166,90,.15);color:var(--lax)}
+.st.over{background:rgba(228,101,140,.15);color:var(--las)}
+.hint{font-size:11.5px;color:var(--faint);margin-top:7px;line-height:1.5}
+.opt{display:flex;gap:10px;padding:10px 12px;margin-bottom:6px;background:var(--card-2);border:1px solid var(--line);border-radius:11px}
+.opt.pick{border-color:rgba(121,185,236,.45);background:rgba(121,185,236,.07)}
+.opt .k{flex:0 0 20px;height:20px;border-radius:6px;background:var(--line);color:var(--dim);
+  font-size:11.5px;font-weight:800;display:grid;place-items:center;margin-top:1px}
+.opt.pick .k{background:var(--yyc);color:var(--bg)}
+.opt .o{flex:1;font-size:13.5px;line-height:1.5}
+.opt .o b{font-weight:700}
+.opt .o u{text-decoration:none;color:var(--faint);font-size:11.5px;font-weight:600;margin-left:6px;font-variant-numeric:tabular-nums}
+.opt .o i{font-style:normal;display:block;color:var(--dim);font-size:12.3px;margin-top:2px;line-height:1.5}
+.done{opacity:.32}
+.done .spot,.done .shot{filter:grayscale(1)}
+.today{position:relative}
+.day.today,.rt.today{outline:1px solid rgba(87,224,174,.4);outline-offset:8px;border-radius:8px}
+.badge{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:5px;margin-left:6px;vertical-align:2px}
+.badge.ok{background:var(--line);color:var(--dim)}
+.badge.now{background:rgba(87,224,174,.16);color:var(--yzf)}
+.donebar{display:flex;align-items:center;gap:8px;margin:0 0 16px;padding:11px 13px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);font-size:12.8px;color:var(--dim)}
+.donebar b{color:var(--yzf);font-weight:700}
+#now.done{opacity:1}
+#now.done .urgent{opacity:.35}
+.rt-head{display:flex;align-items:baseline;gap:9px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.rt-head b{font-size:15px;font-weight:800;color:var(--c);font-variant-numeric:tabular-nums}
+.rt-head span{font-size:12.5px;color:var(--dim)}
+.rt-head em{font-style:normal;margin-left:auto;font-size:11.5px;color:var(--faint)}
+.stop{display:flex;gap:11px;padding:8px 0}
+.stop time{flex:0 0 46px;font-size:12px;font-weight:700;color:var(--day,var(--faint));font-variant-numeric:tabular-nums;padding-top:2px}
+.stop .s{flex:1;font-size:14px;line-height:1.5}
+.stop .s b{font-weight:700}
+.stop .s i{font-style:normal;display:block;font-size:12.3px;color:var(--dim);line-height:1.5;margin-top:1px}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:5px;margin-left:5px;vertical-align:1.5px}
+.tag.d{background:rgba(228,101,140,.16);color:#F0A7BE}
+.tag.t{background:rgba(87,224,174,.14);color:var(--yzf)}
+
+nav{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(10,15,28,.88);backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);padding:9px 12px calc(9px + env(safe-area-inset-bottom))}
+nav div{max-width:560px;margin:0 auto;display:flex;gap:2px}
+nav a{flex:1;min-width:0;text-align:center;padding:9px 1px;border-radius:10px;font-size:11px;font-weight:600;color:var(--dim);text-decoration:none;white-space:nowrap}
+nav a:active{background:var(--card);color:var(--ink)}
+footer{padding:26px 0 10px;color:var(--faint);font-size:12px;text-align:center}
+#sync{line-height:1.65;margin-bottom:12px}
+#sync b{font-weight:700;color:var(--dim)}
+#sync b.ok{color:var(--yzf)}
+#sync.bad b{color:var(--las)}
+.tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+button.reset{background:none;border:1px solid var(--line);color:var(--dim);padding:9px 15px;border-radius:9px;font:inherit;font-size:12.5px;cursor:pointer}
+button.reset:active{background:var(--card)}
+button.reset.danger{border-color:var(--las);color:var(--las)}
+
+#who{position:relative;display:flex;align-items:center;gap:7px;margin-top:20px;font-size:12.5px;color:var(--faint)}
+#who button{background:none;border:1px solid var(--line);color:var(--dim);padding:6px 14px;border-radius:999px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+#who button.on{background:rgba(87,224,174,.12);border-color:rgba(87,224,174,.45);color:var(--yzf)}
+.by{display:inline-block;margin-left:7px;padding:1px 7px;border-radius:999px;background:var(--line);color:var(--dim);font-size:11px;font-weight:600;vertical-align:1px}
+
+.setup{display:none;margin-top:16px;padding:16px;background:var(--card);border:1px solid rgba(228,101,140,.35);border-radius:var(--r);text-align:left}
+.setup.open{display:block}
+.setup h5{margin:0 0 8px;font-size:14px;font-weight:700;color:var(--las)}
+.setup p{margin:0 0 10px;font-size:12.5px;line-height:1.65;color:var(--dim)}
+.setup p b{color:var(--ink)}
+.setup pre{margin:0 0 10px;padding:11px;background:var(--bg);border:1px solid var(--line);border-radius:9px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.7;color:#C9D2E2;overflow-x:auto}
+
+/* ========== 코스 만들기 (최종) ========== */
+#build{--day:#79B9EC}
+.daytabs{display:flex;gap:5px;margin-bottom:14px}
+.daytabs button{flex:1;position:relative;padding:13px 3px 8px;border-radius:10px;border:1px solid var(--line);
+  background:none;color:var(--dim);font:inherit;font-size:12px;font-weight:700;cursor:pointer;line-height:1.35}
+.daytabs button::before{content:"";position:absolute;top:5px;left:50%;transform:translateX(-50%);
+  width:16px;height:3px;border-radius:2px;background:var(--dc);opacity:.5}
+.daytabs button span{display:block;font-size:10px;font-weight:500;color:var(--faint)}
+.daytabs button.on{background:color-mix(in srgb,var(--dc) 14%,transparent);
+  border-color:color-mix(in srgb,var(--dc) 55%,transparent);color:var(--dc)}
+.daytabs button.on::before{opacity:1}
+.daytabs button.on span{color:var(--dc);opacity:.75}
+
+.zone{margin-bottom:16px}
+.zone h4{margin:0 0 7px;font-size:12px;font-weight:700;color:var(--dim);display:flex;gap:7px;align-items:baseline}
+.zone h4 u{text-decoration:none;font-size:10.5px;color:var(--faint);font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:7px 11px;border-radius:999px;
+  border:1px solid var(--line);background:var(--card-2);color:var(--dim);
+  font:inherit;font-size:12.5px;cursor:pointer;transition:.15s;text-align:left}
+.chip .st2{color:var(--lax);font-size:10.5px;letter-spacing:-1px}
+.chip s{text-decoration:none;font-size:10.5px;color:var(--faint);font-variant-numeric:tabular-nums}
+.chip.on{background:color-mix(in srgb,var(--c2) 17%,transparent);border-color:var(--c2);color:var(--ink)}
+.chip.on s{color:var(--c2)}
+.chip.alt{border-color:color-mix(in srgb,var(--c2) 50%,transparent);
+  background:color-mix(in srgb,var(--c2) 6%,transparent)}
+.sq{display:inline-grid;place-items:center;min-width:17px;height:17px;padding:0 4px;border-radius:5px;
+  background:var(--c2,var(--day));color:#0A0F1C;font-size:10.5px;font-weight:800;margin-right:4px;
+  font-variant-numeric:tabular-nums}
+.rt2 .sq,.stops .sq{background:var(--day)}
+.chip em{font-style:normal;font-size:10px;font-weight:800;color:var(--c2);padding:1px 5px;border-radius:4px;
+  background:color-mix(in srgb,var(--c2) 20%,transparent);font-variant-numeric:tabular-nums}
+
+.cart{margin:16px 0 0;padding:13px;border-radius:var(--r);background:var(--card);
+  border:1px solid color-mix(in srgb,var(--day) 30%,var(--line))}
+.cartbar{position:sticky;top:0;z-index:7;margin:0 0 14px;padding:9px;border-radius:12px;
+  background:rgba(11,15,28,.96);backdrop-filter:blur(12px);
+  border:1px solid color-mix(in srgb,var(--day) 32%,var(--line))}
+.cartbar .daytabs{margin:0}
+.barsum{display:flex;gap:9px;align-items:center;flex-wrap:wrap;font-size:11.5px;color:var(--dim);
+  margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+.barsum b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.barsum .st{margin-left:auto}
+.cart .tot{display:flex;gap:9px;flex-wrap:wrap;align-items:center;font-size:12.5px;color:var(--dim)}
+.cart .tot b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.cart .st{margin-left:auto;font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px}
+.st.ok{background:rgba(87,224,174,.15);color:var(--yzf)}
+.st.tight{background:rgba(242,166,90,.15);color:var(--lax)}
+.st.over{background:rgba(228,101,140,.15);color:var(--las)}
+.cart .hint{font-size:11.5px;color:var(--lax);margin-top:7px;line-height:1.5}
+.cart .acts{display:flex;gap:7px;margin-top:10px}
+.cart .acts button{flex:1;padding:8px;border-radius:9px;border:1px solid var(--line);background:none;
+  color:var(--dim);font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.legend{display:flex;gap:9px;flex-wrap:wrap;font-size:10.5px;color:var(--faint);margin:9px 0 2px}
+.legend i{font-style:normal;display:inline-flex;align-items:center;gap:4px}
+.legend b{width:7px;height:7px;border-radius:50%;display:inline-block}
+
+.rt2{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+.rt2 .r{display:flex;gap:11px;padding:6px 0}
+.rt2 time{flex:0 0 46px;font-size:12px;font-weight:700;color:var(--day);font-variant-numeric:tabular-nums}
+.rt2 .rr{flex:1;font-size:13.5px;line-height:1.45}
+.rt2 .rr i{font-style:normal;display:block;font-size:11.5px;color:var(--faint);margin-top:1px}
+.rt2 .mv{font-size:11.5px;color:var(--faint);padding:3px 0 3px 57px}
+.rt2 .st2{color:var(--lax);font-size:11px;letter-spacing:-1px}
+
+.map{width:100%;display:block;border-radius:12px;background:#0B1324;margin:10px 0 4px;border:1px solid var(--line)}
+#lmap{height:280px;border-radius:12px;margin:10px 0 4px;border:1px solid var(--line);background:#E8E4DC;z-index:1}
+.leaflet-container{background:#E8E4DC;font-family:inherit}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#131C2E;color:#E9EDF6;box-shadow:0 4px 18px rgba(0,0,0,.5)}
+.leaflet-popup-content{margin:9px 12px;font-size:13px;line-height:1.5}
+.leaflet-popup-content i{font-style:normal;display:block;color:#8A97B0;font-size:11.5px;margin-top:2px}
+.leaflet-control-attribution{background:rgba(255,255,255,.55)!important;color:#7A7A7A!important;
+  font-size:8.5px!important;padding:0 4px!important;line-height:1.5!important;border-radius:5px 0 0 0!important}
+.leaflet-control-attribution a{color:#7A7A7A!important;text-decoration:none!important}
+.pin{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;
+  font-size:11.5px;font-weight:800;border:2.5px solid;background:#fff;
+  box-shadow:0 1px 5px rgba(0,0,0,.35)}
+.pin.home{border-radius:7px;border-color:#0E9E76;color:#0E9E76;font-size:9px}
+.dl{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:11.5px;color:var(--faint)}
+.dl button{padding:6px 12px;border-radius:8px;border:1px solid var(--line);background:none;
+  color:var(--dim);font:inherit;font-size:11.5px;font-weight:700;cursor:pointer}
+.dl button.done{border-color:rgba(87,224,174,.45);color:var(--yzf)}
+.stops .stop time{color:var(--day,var(--faint))}
+.stops .st2{color:var(--lax);font-size:11px;letter-spacing:-1px}
+</style>
+
+<div class="hero">
+  <div class="aurora"></div>
+  <div class="wrap">
+    <div class="names">상수 &amp; 은진</div>
+    <h1>캐나다 · 미국 서부<br>신혼여행</h1>
+    <div class="dates">2026. 9. 16 — 10. 4 · 18박 19일</div>
+    <div class="dday" id="dday">준비 중</div>
+    <div class="route">
+      <div class="leg" style="--c:var(--yzf)"><b>옐로나이프</b><span>9.16–19</span></div>
+      <div class="leg" style="--c:var(--yyc)"><b>밴프</b><span>9.19–24</span></div>
+      <div class="leg" style="--c:var(--lax)"><b>LA</b><span>9.24–27</span></div>
+      <div class="leg" style="--c:var(--las)"><b>베가스</b><span>9.27–10.2</span></div>
+    </div>
+
+    <div id="who">
+      <span>나는</span>
+      <button data-name="상수">상수</button>
+      <button data-name="은진">은진</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+<!-- ============ 코스 만들기 ============ -->
+<section id="build">
+  <h2>코스 만들기</h2>
+  <p class="sub">가고 싶은 곳을 담으면 동선과 시간을 계산합니다. <span style="color:var(--lax)">★</span>는 추천, <span style="color:var(--lax)">★★</span>는 놓치면 아까운 곳입니다.</p>
+  <div class="cartbar"><div class="daytabs" id="daytabs"></div><div class="barsum" id="cartbar"></div></div>
+  <div id="catalog"></div>
+  <div class="legend" id="legend"></div>
+  <div id="lmap"></div>
+  <div class="dl"><button id="dl">지도 저장</button><span>한 번 눌러두면 산속에서도 보입니다</span></div>
+  <div class="cart" id="cart"></div>
+</section>
+
+<!-- ============ 일정 ============ -->
+<section id="plan">
+  <h2>일정</h2>
+  <p class="sub">로키 구간(9/19–23)은 시간 단위로 펼쳐뒀습니다. 분홍 태그가 드라마 촬영지입니다.</p>
+
+  <div class="day" data-d="2026-09-16" style="--c:var(--yzf)"><div class="date">9.16<span>수</span></div><div class="what">인천 17:45 → 밴쿠버 11:30 → 옐로나이프 17:06 <span class="flag">AC252</span><em>환승 2시간 25분. 짐 찾아 재위탁해야 합니다. 체크인 후 두 시간이라도 자두고 21시 첫 오로라 투어.</em></div></div>
+  <div class="day" data-d="2026-09-17" style="--c:var(--yzf)"><div class="date">9.17<span>목</span></div><div class="what">올드타운 한 바퀴<em>부시 파일럿 모뉴먼트(계단 75개) → 올드타운 도보. 점심은 불럭스 비스트로. 다운타운 마빈저스(12–18시)와 올드에어포트로 월마트(8–22시)에 카드 매대.</em></div></div>
+  <div class="day" data-d="2026-09-18" style="--c:var(--yzf)"><div class="date">9.18<span>금</span></div><div class="what">낮엔 쉬기 <span class="flag">맑음 예보</span><em>강수 0%. 셋 중 가장 유력한 밤입니다. 다음 날 아침 8시에 셔틀 예약이 있으니 알람을 맞추고 주무세요.</em></div></div>
+  
+  
+  <div class="rt" data-d="2026-09-19" style="--c:var(--yyc)"><figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Calgary_skyline_from_the_northwest,_Alberta,_Canada.jpg?width=1200" alt="캘거리 다운타운과 캘거리 타워" loading="lazy" onerror="this.parentElement.style.display='none'"><figcaption>캘거리 다운타운과 캘거리 타워 · 사진 Ethan Sahagun / Wikimedia Commons</figcaption></figure><div class="rt-head"><b>9.19</b><span>토 · 캘거리</span><em>도보 + 차 5분</em></div><div class="stop"><time>08:00</time><div class="s"><b>모레인 셔틀 예약</b><i>옐로나이프에서 오전 8시. 옐로나이프도 같은 시간대라 시차 계산은 필요 없습니다.</i></div></div><div class="stop"><time>14:15</time><div class="s"><b>옐로나이프 → 캘거리</b></div></div><div class="stop"><time>17:30</time><div class="s"><b>렌터카 픽업</b><i>공항에서 다운타운 20분. 델타 호텔 체크인.</i></div></div><div class="stop"><time>18:30</time><div class="s"><b>크레센트 하이츠 전망대</b> <span class="tag d">촬영지</span><i>선셋 장면. 240 Crescent Rd NW, 24시간. 해 진 직후가 가장 좋습니다.</i></div></div><div class="stop"><time>19:00</time><div class="s"><b>센터 스트리트 다리</b> <span class="tag d">촬영지</span><i>아침 조깅 장면. 전망대 바로 아래. 사자 조각상 넷.</i></div></div><div class="stop"><time>19:30</time><div class="s"><b>스티븐 애비뉴 · 저녁</b> <span class="tag d">촬영지</span><i>5화 주호진·신지선 PD 만남 장소. Saltlik 토 23시까지, 예약 권장.</i></div></div><div class="stop"><time>21:00</time><div class="s"><b>캘거리 타워</b><i>21시 마감, 입장은 20:15까지.</i></div></div></div>
+  <div class="rt" data-d="2026-09-20" style="--c:var(--yyc)"><figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Canmore_Alberta_Canada.jpg?width=1200" alt="캔모어와 로키 봉우리" loading="lazy" onerror="this.parentElement.style.display='none'"><figcaption>캔모어 · 사진 Wikimedia Commons 기여자 / Wikimedia Commons</figcaption></figure><div class="rt-head"><b>9.20</b><span>일 · 캘거리 → 캔모어 → 밴프</span><em>여유 있는 날</em></div><div class="stops" data-day="2026-09-20"></div></div><div class="rt" data-d="2026-09-21" style="--c:var(--yyc)"><figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/1_lake_louise_pano_2019.jpg?width=1400" alt="레이크루이스 파노라마" loading="lazy" onerror="this.parentElement.style.display='none'"><figcaption>레이크루이스 · 사진 Chensiyuan / Wikimedia Commons</figcaption></figure><div class="rt-head"><b>9.21</b><span>월 · 레이크루이스</span><em>셔틀 예약 필수</em></div><div class="stops" data-day="2026-09-21"></div></div><div class="rt" data-d="2026-09-22" style="--c:var(--yyc)"><figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Emerald_Lake_-_Yoho_National_Park.JPG?width=1200" alt="요호 국립공원 에메랄드 호수" loading="lazy" onerror="this.parentElement.style.display='none'"><figcaption>에메랄드 호수 · 사진 JZ85 / Wikimedia Commons</figcaption></figure><div class="rt-head"><b>9.22</b><span>화 · 요호 → 밴프</span><em>촬영지 네 곳</em></div><div class="stops" data-day="2026-09-22"></div></div><div class="rt" data-d="2026-09-23" style="--c:var(--yyc)"><figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Town_of_Banff_viewed_from_Sulphur_Mountain.jpg?width=1200" alt="설퍼산에서 내려다본 밴프 타운" loading="lazy" onerror="this.parentElement.style.display='none'"><figcaption>밴프 타운 · 사진 Wikimedia Commons 기여자 / Wikimedia Commons</figcaption></figure><div class="rt-head"><b>9.23</b><span>수 · 밴프 → 캘거리</span><em>차 반납 20:00</em></div><div class="stops" data-day="2026-09-23"></div></div></section>
+
+<!-- ============ 날씨 ============ -->
+<section id="wx">
+  <h2>날씨</h2>
+  <p class="sub" id="wxsub">열 때마다 최신 예보를 받아옵니다.</p>
+
+  <div class="wx" style="--c:var(--yzf)">
+    <h4 data-lat="62.454" data-lon="-114.3718" data-tz="America/Edmonton" data-from="2026-09-16" data-to="2026-09-19"><span class="dot"></span>옐로나이프<span>9.16 – 9.19</span></h4>
+    <div class="temps"><span class="hi">12~14</span><span class="lo">/ 6~7</span><span class="unit">°C</span></div>
+    <p class="wxnote">당초 예보보다 <b>따뜻해졌습니다.</b> 낮 12도, 밤 6~7도 수준이에요.</p>
+    <p class="wxnote"><b>9/18 밤은 맑음</b>으로 나옵니다. 9/17은 비가 왔고 9/19는 흐림이라, 예보대로면 셋 중 이 밤이 가장 유력합니다.</p>
+    <div class="wear"><b>입을 것</b> — 내의 + 경량 패딩 + 바람막이. 밤에 서 있는 시간이 기니 핫팩은 그대로</div>
+  </div>
+
+  <div class="wx" style="--c:var(--yyc)">
+    <h4 data-lat="51.1784" data-lon="-115.5708" data-tz="America/Edmonton" data-from="2026-09-19" data-to="2026-09-24"><span class="dot"></span>밴프 · 캘거리<span>9.19 – 9.24</span></h4>
+    <div class="temps"><span class="hi">20~22</span><span class="lo">/ 2~4</span><span class="unit">°C</span></div>
+    <p class="wxnote"><b>예상보다 훨씬 좋습니다.</b> 9/19~21 사흘 내내 맑고 낮 22도까지 올라갑니다. 앞서 걱정했던 눈 예보는 사라졌어요.</p>
+    <p class="wxnote">대신 <b>일교차가 18~20도</b>입니다. 낮엔 반팔이 가능하고 밤엔 3~4도예요. 겹쳐 입기가 더 중요해졌습니다.</p>
+    <p class="wxnote">9/22는 낮 20도에 밤 2도, <b>9/23 밤엔 소나기 확률 30%</b>입니다. 마지막 날만 우산이 필요할 수 있어요.</p>
+    <div class="wear"><b>입을 것</b> — 낮엔 반팔이나 얇은 긴팔, 해 지면 패딩. 낮에 벗은 옷을 들고 다닐 배낭 하나</div>
+  </div>
+
+  <div class="wx" style="--c:var(--lax)">
+    <h4 data-lat="34.0522" data-lon="-118.2437" data-tz="America/Los_Angeles" data-from="2026-09-24" data-to="2026-09-27"><span class="dot"></span>LA<span>9.24 – 9.27</span></h4>
+    <div class="temps"><span class="hi">26~29</span><span class="lo">/ 17~20</span><span class="unit">°C</span></div>
+    <p class="wxnote">평년값입니다. 비는 거의 오지 않고, 낮엔 반팔이지만 <b>해 지면 선선</b>해집니다.</p>
+    <p class="wxnote">해변(산타모니카)은 내륙보다 3~5도 낮고 바람이 붑니다.</p>
+    <div class="wear"><b>입을 것</b> — 반팔 + 가디건. 밴프에서 쓰던 바람막이면 충분</div>
+  </div>
+
+  <div class="wx" style="--c:var(--las)">
+    <h4 data-lat="36.1699" data-lon="-115.1398" data-tz="America/Los_Angeles" data-from="2026-09-27" data-to="2026-10-02"><span class="dot"></span>라스베가스<span>9.27 – 10.2</span></h4>
+    <div class="temps"><span class="hi">32~36</span><span class="lo">/ 20~24</span><span class="unit">°C</span></div>
+    <p class="wxnote">아직 한여름입니다. 습도가 낮아 그늘은 견딜 만하지만 <b>땡볕은 위험한 수준</b>이에요. 물을 계속 드세요.</p>
+    <p class="wxnote">실내 에어컨이 아주 셉니다. 카지노와 쇼장 안에서는 오히려 춥습니다.</p>
+    <div class="wear"><b>입을 것</b> — 반팔 · 반바지 + 얇은 긴팔 하나 (실내용)</div>
+  </div>
+
+  <div class="wx" style="--c:var(--las)">
+    <h4 data-lat="37.6283" data-lon="-112.1677" data-tz="America/Denver" data-from="2026-09-28" data-to="2026-09-29"><span class="dot"></span>캐년 투어<span>9.28 – 9.29</span></h4>
+    <div class="temps"><span class="hi">18~25</span><span class="lo">/ 2~8</span><span class="unit">°C</span></div>
+    <p class="wxnote">브라이스 캐년은 <b>해발 2,400m</b>입니다. 새벽 출발 때 한 자릿수까지 떨어져요. 베가스 감각으로 반팔만 입고 나가면 고생합니다.</p>
+    <div class="wear"><b>챙길 것</b> — 경량 패딩을 이날만 다시 꺼내세요</div>
+  </div>
+</section>
+
+<!-- ============ 팁 ============ -->
+<section id="tips">
+  <h2>지역별 팁</h2>
+  <p class="sub">현지에서 다시 열어볼 내용들.</p>
+
+  <details style="--c:var(--yyc)">
+    <summary><span class="dot"></span>「이 사랑 통역 되나요?」 촬영지<span class="arw">▾</span></summary>
+    <div class="body">
+      <p>고윤정·김선호 주연 드라마가 앨버타 전역에서 촬영됐고, 촬영지가 이번 동선과 거의 그대로 겹칩니다. 캐나다 관광청이 한국어 공식 가이드도 내놨습니다.</p>
+
+      <p><strong>캘거리 — 9/19 저녁</strong></p>
+      <ul>
+        <li><b>크레센트 하이츠 전망대</b> (240 Crescent Rd NW, 24시간) — 차무희와 히로가 선셋을 보던 곳. 캘거리 타워와 스카이라인이 한눈에</li>
+        <li><b>센터 스트리트 다리</b> — 히로가 아침 조깅하던 1916년 다리. 양 끝에 사자 조각상 넷. 전망대 바로 아래</li>
+        <li><b>스티븐 애비뉴</b> — 5화에서 주호진과 신지선 PD가 만나는 장소</li>
+      </ul>
+
+      <p><strong>캔모어 — 9/20</strong></p>
+      <ul>
+        <li><b>쿼리 호수</b> (6–23시) — <b>차무희와 주호진이 첫 뽀뽀를 한 곳.</b> 시내에서 차로 5분, 하링봉이 물에 비칩니다</li>
+        <li><b>다운타운 캔모어</b> — 차무희가 사진 찍는 히로를 발견하는 장면</li>
+      </ul>
+
+      <p><strong>밴프</strong></p>
+      <ul>
+        <li><b>캐스케이드 오브 타임 정원</b> (8–23시, 무료) — 밴프 타운 전경과 캐스케이드산. 반프 애비뉴 인파를 피해 쉬기 좋습니다</li>
+        <li><b>밴프 곤돌라</b> — 9/20 계획에 이미 들어 있습니다</li>
+        <li><b>투잭 호수</b> — 런들산 반영 일몰. 주차가 11시면 찹니다</li>
+        <li><b>성 제임스 게이트 아이리시 펍</b> (207 Wolf St, 밤 12시까지) — 극중 마지막 밤 회식 장소</li>
+        <li><b>페어몬트 샤토 레이크루이스</b> — 9/21에 가는 곳. 애프터눈 티와 가을 카누</li>
+      </ul>
+
+      <p class="warn">드럼헬러·홀슈 캐년·로열 티렐 박물관은 캘거리에서 <b>북동쪽 1시간 30분</b>으로 로키 반대 방향이고, 오로라 장면을 찍은 어퍼 캐나나스키스 호수도 캔모어에서 한 시간 넘게 남쪽입니다. 이번 일정으로는 어렵습니다.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--yyc)">
+    <summary><span class="dot"></span>촬영지 사진 찍는 법<span class="arw">▾</span></summary>
+    <div class="body">
+      <p>장면과 비슷하게 담으려면 <strong>시간대</strong>가 절반입니다. 다들 한적한 곳을 골라 찍었기 때문에 사람이 적은 때가 관건이에요.</p>
+      <ul>
+        <li><b>쿼리 호수</b> — 바람이 잔잔한 이른 아침. 하링봉이 물에 비치는 쪽으로 서세요</li>
+        <li><b>밴프 보행자 다리</b> — 관광객이 몰리기 전 아침. 다리 위가 붐비면 장면 느낌이 안 납니다</li>
+        <li><b>레이크루이스 호숫가</b> — 역시 이른 아침, 바람이 없을 때 산이 완벽하게 반영됩니다</li>
+        <li><b>크레센트 하이츠</b> — 해가 진 직후. 캘거리 타워를 화면 가운데 두세요</li>
+        
+        <li><b>캐스케이드 오브 타임 정원</b> — 정원 위쪽에서 밴프 타운과 캐스케이드산을 같이 담는 자리가 인기입니다</li>
+      </ul>
+      <p class="warn">현지인들 사이에는 <strong>기대를 낮추라는 의견도 있습니다.</strong> 촬영 장소 상당수가 관광지가 아니라 현지인들이 산책하고 캠핑하는 한적한 곳이라, 「도깨비」의 퀘벡처럼 명소만 돌면 되는 구조가 아니라는 얘기예요. 촬영지만 좇기보다 <b>가는 길에 겹치는 곳만</b> 챙기시는 게 맞습니다. 이 일정은 그렇게 짰습니다.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--yyc)">
+    <summary><span class="dot"></span>촬영지 후기 · 장면 비교 링크<span class="arw">▾</span></summary>
+    <div class="body">
+      <p>현장에서 장면과 대조해보실 때 여세요. 방송 화면이 들어간 이미지는 제가 옮겨 담을 수 없어서 원본 링크로 겁니다.</p>
+      <ul class="linklist">
+        <li><b>캐나다 관광청 한국어 공식 가이드</b>
+          <span>장소별 사진과 어느 장면인지가 한국어로 정리돼 있습니다. 일차별 코스 구성</span>
+          <a href="https://travel.destinationcanada.com/ko-kr/things-to-do/love-translated">travel.destinationcanada.com/ko-kr/things-to-do/love-translated</a></li>
+        <li><b>Travel Alberta 촬영지 루트</b>
+          <span>영문. 운전 동선 기준으로 짜여 있어 렌터카 일정에 맞춰보기 좋습니다</span>
+          <a href="https://www.travelalberta.com/trip-ideas/road-trips-itineraries/can-this-love-be-translated-filming-locations">travelalberta.com/trip-ideas/road-trips-itineraries/can-this-love-be-translated-filming-locations</a></li>
+        <li><b>Trip.com 밴프 모먼트</b>
+          <span>다녀온 사람들이 올린 사진과 촬영지 루트 공유글이 모여 있습니다</span>
+          <a href="https://kr.trip.com/moments/destination-banff-1446683/">kr.trip.com/moments/destination-banff-1446683</a></li>
+        <li><b>밴프 여행기 (기사)</b>
+          <span>촬영지를 실제로 돌아본 기록</span>
+          <a href="https://v.daum.net/v/QRMJmT2uvA">v.daum.net/v/QRMJmT2uvA</a></li>
+        <li><b>촬영지 장소별 정리 (기사)</b>
+          <span>어느 장면이 어디인지 장소별로 짚어줍니다</span>
+          <a href="https://news.nate.com/view/20260204n07882">news.nate.com/view/20260204n07882</a></li>
+      </ul>
+      <p>비교샷을 더 찾으시려면 네이버에서 <b>이사통 촬영지 캔모어</b>, <b>이사통 쿼리레이크</b>, <b>이사통 촬영지 밴프</b>로 검색하세요. 장면 캡처와 본인 사진을 나란히 올린 글이 가장 쓸모 있습니다.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--yzf)">
+    <summary><span class="dot"></span>옐로나이프 오로라<span class="arw">▾</span></summary>
+    <div class="body">
+      <p>9월은 백야가 끝나고 겨울이 오기 전이라 현지에서도 최적기로 꼽는 시기입니다. 영하로 잘 안 떨어져 카메라 배터리 걱정이 없고, 노란 단풍과 호수 반영을 같이 담을 수 있습니다.</p>
+      <ul>
+        <li>투어는 보통 21시 픽업, 새벽 1~2시 복귀. 한 곳에서 안 보이면 차로 다른 포인트로 옮겨 다닙니다.</li>
+        <li>텐트나 다이닝하우스 안팎을 오가는 방식이라 생각보다 버틸 만합니다.</li>
+        <li>3박이면 확률은 높지만 보장은 아닙니다. 구름이 가장 큰 변수예요.</li>
+        <li>ATM에서 해외카드 컨택리스가 막히는 경우가 있으니 실물 카드를 챙기세요.</li>
+      </ul>
+      <p class="warn">인천 출발부터 도착까지 거의 24시간을 깨어 있게 됩니다. 첫날은 체크인 후 두어 시간이라도 자두세요.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--yyc)">
+    <summary><span class="dot"></span>밴프 · 로키 기본<span class="arw">▾</span></summary>
+    <div class="body">
+      <p><strong>입장료</strong> — 2026년 무료 기간(스트롱 패스)이 9월 7일에 끝납니다. 9/20 도착이니 <b>입장권을 사야 합니다.</b> 7일 미만이면 연간 디스커버리 패스보다 <b>데일리 패밀리 입장권</b>이 쌉니다. 차량 단위로 적용되니 차 앞유리에 놓으세요.</p>
+      <p><strong>시기</strong> — 10월 중순까지는 여행하기 좋고 관광지도 대부분 문을 엽니다. 9월 하순은 사람이 줄어드는 좋은 구간입니다. 올해는 예보가 특히 좋아서 9/19~21이 사흘 내내 맑습니다.</p>
+      <p><strong>운전</strong> — 굽이치는 길이 거의 없고 대부분 직선이라 어렵지 않습니다. 밴프·레이크루이스 타운을 빼면 주차비를 내는 곳도 거의 없습니다.</p>
+      <p><strong>야생동물</strong> — 안전거리를 유지하고 먼저 다가가지 마세요. 위협을 느끼면 실제로 공격합니다. 미네완카·투잭 호수 쪽은 이른 아침과 늦은 오후에 특히 많이 나옵니다.</p>
+      <p class="warn"><strong>곰 스프레이는 안 사셔도 됩니다.</strong> 관광객이 많이 가는 코스와 한두 시간짜리 짧은 트레일에서는 거의 필요 없습니다. 대여섯 시간 이상 들어가는 긴 하이킹에만 해당돼요. 이번 일정은 전부 짧은 코스라 살 일이 없고, 덕분에 미국 갈 때 버릴 걱정도 없습니다.</p>
+      <p>기념품은 밴프 시내보다 캔모어 세이프웨이가 쌉니다. 주유도 캔모어나 캘거리에서. 주류는 liquor store에서만 팝니다.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--yyc)">
+    <summary><span class="dot"></span>모레인 · 레이크루이스 자세히<span class="arw">▾</span></summary>
+    <div class="body">
+      <p><strong>모레인 호수는 개인 차량이 못 들어갑니다.</strong> 파크스 캐나다 셔틀, 밴프 출발 Roam 퍼블릭 버스, 사설 셔틀이나 투어 중 하나여야 합니다.</p>
+      <p>셔틀 티켓은 매년 4월 중순에 40%가 풀리고, 나머지 60%가 <b>방문 이틀 전 오전 8시 산악시간</b>에 나옵니다. 9/21에 가시려면 <b>9/19 아침 8시</b>, 아직 옐로나이프에 계실 때입니다. 좋은 시간대는 하루 이틀이면 사라져요. 다만 <b>일주일 전부터 취소표가 계속 나오니</b> 지금부터 틈틈이 확인해보세요.</p>
+      <p><strong>모레인에서</strong> — 호수 앞 <b>락파일</b>이라는 돌산에 오르면 호수를 바로 내려다볼 수 있습니다. 방문자 대부분이 올라가는 전망대예요. 카누도 탈 수 있습니다.</p>
+      <p><strong>레이크루이스에서</strong> — 호수변 산책, 왕복 1시간 페어뷰 트레일, 4~5시간짜리 빅비하이브(아그네스 호수 티하우스 경유). 카누도 있습니다.</p>
+      <p><strong>사진</strong> — 이른 아침 바람이 잔잔할 때 산이 호수에 완벽히 반영됩니다. 이게 가장 인기 있는 장면이에요.</p>
+      <p class="warn">9월 하순은 <strong>라치밸리</strong> 시즌입니다. 모레인에서 출발하는 낙엽송 단풍 트레일인데 노랗게 물든 풍경 때문에 사람이 몰립니다. 다만 센티넬 패스까지 왕복 5~6시간이라, 하려면 그날 모레인·레이크루이스·존스턴을 다 도는 계획은 포기해야 합니다.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--yyc)">
+    <summary><span class="dot"></span>밴프 · 캔모어에서 더 볼 것<span class="arw">▾</span></summary>
+    <div class="body">
+      <p><strong>어퍼 핫스프링스</strong> — 밴프 곤돌라 바로 옆 온천. 히든리지 온천으로 충분하니 굳이 갈 필요는 없지만, 로키에서 온천이라 하면 보통 여기를 말합니다.</p>
+      <p><strong>밴프 타운 전망 포인트</strong> — 캐스케이드 오브 타임 가든(타운 전경), 서프라이즈 코너(밴프스프링스 호텔 조망), 보우 폭포 포인트. 기차역 앞 밴프 사인은 인증샷 자리입니다.</p>
+      <p><strong>미네완카 · 투잭 호수</strong> — 밴프 동쪽. 이른 아침이나 늦은 오후에 야생동물이 많이 나와서 가벼운 드라이브 코스로 좋습니다. 미네완카 크루즈는 한국 여행자 사이에 지루하다는 평이 많으니 넘어가셔도 됩니다.</p>
+      <p><strong>캔모어</strong> — 세 자매 봉우리가 랜드마크고, 「라스트 오브 어스」 촬영지인 엔진 브리지가 있습니다. 그라시 호수 트레일은 난이도가 낮으면서 에메랄드빛 물색이 좋아 인기가 많습니다. 캔모어는 국립공원 밖이라 헬리콥터 투어도 여기서 출발합니다.</p>
+      <p><strong>선샤인 메도우즈</strong> — 곤돌라와 리프트로 올라가 걸어 내려오는 코스라 힘들지 않으면서 풍경이 좋습니다. 다만 시즌 종료가 이를 수 있으니 가시기 전에 운영 여부를 확인하세요.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--lax)">
+    <summary><span class="dot"></span>캘거리 공항 · 미국 입국<span class="arw">▾</span></summary>
+    <div class="body">
+      <p>캘거리에는 미국 사전입국심사(Preclearance) 시설이 있습니다. 여기서 미국 입국심사를 끝내고 LA에는 국내선처럼 도착합니다. 편리하지만 캐나다 출국 → 보안검색 → 미국 입국심사를 다 거치므로 <strong>출발 3시간 전 도착</strong>을 권합니다.</p>
+      <ul>
+        <li>CBP MPC 앱을 미리 설치하면 대기가 짧아집니다.</li>
+        <li>육류·과일·고기 함유 라면은 이 단계에서 압수됩니다.</li>
+        <li>2026년 들어 미국 입국심사가 까다로워졌습니다. 귀국 항공권과 숙소 예약 확인서를 바로 보여줄 수 있게 준비하세요.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details style="--c:var(--lax)">
+    <summary><span class="dot"></span>LA<span class="arw">▾</span></summary>
+    <div class="body">
+      <ul>
+        <li>렌터카가 없으니 우버/리프트 위주. 앱과 카드 등록은 출발 전에.</li>
+        <li>식당 팁 18~20%가 기본.</li>
+        <li>다운타운·할리우드 밤길과 차량 내 짐 방치는 피하세요.</li>
+        <li>9/27 베가스행 셔틀은 이른 아침 출발입니다. 픽업 장소를 전날 반드시 재확인.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details style="--c:var(--las)">
+    <summary><span class="dot"></span>스피어 공연<span class="arw">▾</span></summary>
+    <div class="body">
+      <p>돔 형태 스크린이라 앞자리가 무조건 좋은 게 아닙니다.</p>
+      <ul>
+        <li><strong>200~300 구역 정중앙</strong> — 영상 왜곡이 가장 적고 몰입감 최고.</li>
+        <li><strong>400 구역</strong> — 전체를 내려다볼 수 있고 가성비가 좋지만 경사가 가파릅니다.</li>
+        <li><strong>100 구역 뒷열</strong> — 2층 발코니에 가려 스크린 천장이 아예 안 보입니다.</li>
+      </ul>
+      <p class="warn">배경이 움직이는 장면에서 멀미가 날 수 있습니다. 예민하면 통로 쪽 좌석으로.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--las)">
+    <summary><span class="dot"></span>캐년 투어 · 베가스<span class="arw">▾</span></summary>
+    <div class="body">
+      <ul>
+        <li>브라이스 캐년은 해발 2,400m라 새벽이 한 자릿수까지 떨어집니다. 경량 패딩을 이날만 다시 꺼내세요.</li>
+        <li>투어 숙소에 칫솔·치약이 없습니다.</li>
+        <li>가이드 팁은 1인 1일 $10~20이 관례. 현금으로.</li>
+        <li>플라밍고는 객실료와 별도로 리조트 피가 매일 청구됩니다.</li>
+        <li>베가스는 건조합니다. 물을 계속 드세요.</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<!-- ============ 쇼핑 ============ -->
+<section id="shop">
+  <h2>쇼핑</h2>
+  <p class="sub">한국보다 싸거나, 한국에서 못 사는 것만 골랐습니다.</p>
+
+  <details style="--c:var(--yyc)">
+    <summary><span class="dot"></span>캐나다 — 한국에서 못 사는 브랜드<span class="arw">▾</span></summary>
+    <div class="body">
+      <p><strong>Aritzia 아리치아</strong> — 캐나다 여성복 브랜드. 한국에 매장이 없어 직구밖에 방법이 없습니다. 치누크 센터(21시까지) 또는 다운타운 7가(18시 마감).</p>
+      <p><strong>Roots 루츠</strong> — 한국에서 철수했습니다. 비버 로고 스웨트셔츠가 대표 상품. 치누크 센터, 마켓몰 모두 21시까지.</p>
+      <p><strong>Rocky Mountain Soap 로키마운틴솝</strong> — 캔모어에서 시작한 앨버타 브랜드. 820 8St 본점이 <b>9/20 장 보러 가는 그 거리</b>에 있습니다. 매일 9:30–21시. 천연 비누·핸드크림이라 선물용으로 부피도 적당합니다.</p>
+      <p><strong>MEC</strong> — 캐나다 아웃도어 협동조합. 자체 브랜드 제품은 한국에서 못 삽니다.</p>
+      <p><strong>Kicking Horse Coffee · Tim Hortons</strong> — 둘 다 한국 미판매. 마트 원두 코너에 있습니다.</p>
+      <p><strong>Coffee Crisp · Aero · 케첩맛 감자칩</strong> — 캐나다 한정 과자들. 선물 단가가 가장 낮습니다. 세이프웨이에서 한 봉지씩.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--yyc)">
+    <summary><span class="dot"></span>캐나다 — 한국보다 확실히 싼 것<span class="arw">▾</span></summary>
+    <div class="body">
+      <p><strong>Arc'teryx 아크테릭스</strong> — 캐나다 본사 브랜드라 한국 정가와 차이가 큽니다. 반프 애비뉴 123번지 매장이 매일 21시까지라 9/21~22 저녁에 들를 수 있습니다.</p>
+      <p><strong>lululemon 룰루레몬</strong> — 역시 캐나다 브랜드. 매장 안쪽 <b>We Made Too Much</b> 세일 코너가 핵심입니다. 캘거리 17번가 727번지, 9/19 토요일 20시까지.</p>
+      <p><strong>메이플 시럽 · 메이플 버터</strong> — 한국 수입가의 절반 이하. 밴프 기념품점 말고 <b>캔모어 세이프웨이</b>에서 사세요. 액체라 위탁수하물로.</p>
+      <p><strong>아이스와인</strong> — 한국에서 유난히 비싼 품목입니다. 리쿼스토어에서만 팝니다.</p>
+      <p><strong>Herschel 허쉘</strong> — 밴쿠버 백팩 브랜드. 한국 대비 차이가 있습니다.</p>
+      <p class="warn">캐나다는 관광객 세금 환급 제도가 없습니다. 표시가에 세금이 붙으니 예산을 그만큼 더 잡으세요. 일반 의류·신발·전자제품은 한국과 차이가 거의 없으니 넘어가시면 됩니다.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--las)">
+    <summary><span class="dot"></span>미국 — 차이가 큰 브랜드<span class="arw">▾</span></summary>
+    <div class="body">
+      <p><strong>Kirkland Signature 영양제</strong> — 차이가 가장 큰 품목입니다. 한국의 절반 이하예요. Nature Made, NOW Foods도 같은 매대에 있습니다. 코스트코 서머린(10/1).</p>
+      <p><strong>Tylenol · Advil · Zyrtec · Neosporin · Aquaphor · Vaseline</strong> — CVS나 월그린. 부피 작고 값 차이가 큽니다. 아무 날이나 스트립 근처에서 됩니다.</p>
+      <p><strong>Coach · Kate Spade · Tory Burch</strong> — 아울렛 전용 라인이라 한국 백화점가와 비교가 안 됩니다. 시타델(9/26), 라스베가스 노스 프리미엄(9/30).</p>
+      <p><strong>Polo Ralph Lauren · Tommy Hilfiger · Levi's · Champion</strong> — 아울렛 기준 한국 대비 차이가 큽니다.</p>
+      <p><strong>UGG</strong> — 시즌 전이라 사이즈가 남아 있습니다.</p>
+      <p><strong>Le Creuset · Staub · Lodge</strong> — 주물팬은 한국 절반 수준입니다. 다만 무거워요.</p>
+      <p><strong>Bath &amp; Body Works</strong> — 상시 세일 구조라 한국 매장가와 차이가 큽니다.</p>
+      <p><strong>Trader Joe's</strong> — 자체 브랜드 시즈닝·에코백·초콜릿. 한국에 안 들어옵니다. 단가가 낮아 여러 명 챙길 때 좋습니다.</p>
+      <p class="warn">기대하지 마실 것: <b>나이키·아디다스</b>는 한국 세일가와 비슷합니다. <b>화장품</b>은 한국이 더 싼 경우가 많고, <b>전자제품</b>은 관세를 생각하면 실익이 없습니다.</p>
+      <p>렌터카가 없으니 무거운 건 <strong>베가스에서 마지막에</strong> 사세요. 귀국편이 1인 2개 32kg입니다.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--yzf)">
+    <summary><span class="dot"></span>포켓몬 — 자판기와 마트<span class="arw">▾</span></summary>
+    <div class="body">
+      <p><strong>공식 자판기는 월마트·타겟에 없습니다.</strong> 크로거, 앨버슨스, 세이프웨이 같은 <b>식료품 체인</b>에만 들어갑니다. 여기 물건은 정가라 팩 4~7달러, 부스터 번들 25~30달러, ETB 50~55달러 수준입니다.</p>
+      <p class="warn">몰이나 관광지에서 보이는 자판기는 대부분 사설 기계입니다. 팩 하나에 15~20달러를 받아요. <strong>정가의 세 배</strong>입니다. 재미로도 권하지 않습니다.</p>
+
+      <p><strong>동선에 걸리는 확인처</strong></p>
+      <ul>
+        <li><b>캔모어 세이프웨이</b> (1200 Railway Ave, 7–22시) — 9/20 장 보는 그곳</li>
+        <li><b>랄프스 코리아타운</b> (670 S Western Ave, 새벽 1시까지) — 크로거 계열. 9/24 저녁</li>
+        <li><b>스미스</b> (2540 S Maryland Pkwy, 6–24시) — 크로거 계열. 스트립에서 가깝습니다</li>
+      </ul>
+      <p>기계가 있는지는 매장마다 다릅니다. 보통 입구나 계산대 근처에 있으니 들어가면서 한 번 훑어보세요.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--yyc)">
+    <summary><span class="dot"></span>포켓몬 — 실드 제품은 캐나다에서<span class="arw">▾</span></summary>
+    <div class="body">
+      <p>팩과 박스를 직접 까실 거면 <strong>캐나다 구간이 승부처</strong>입니다. 미국은 스캘퍼 경쟁이 극심해서 매대가 거의 비어 있고, 일부 타겟 매장은 1인 1개 제한까지 걸었습니다. 재고는 새벽·오전에 채워지고 몇 시간 안에 사라집니다.</p>
+      <p>반면 캐나다는 상대적으로 여유가 있고, 특히 <strong>관광객 경쟁이 없는 소도시 매장</strong>이 유리합니다.</p>
+
+      <p><strong>옐로나이프 월마트</strong> — 313 Old Airport Rd, 매일 8–22시. 시내에서 차로 5분. 인구 2만 도시라 카드 매대가 그대로 남아 있을 가능성이 가장 높은 곳입니다. 9/17 낮에 택시로 다녀올 만합니다.</p>
+      <p><strong>캔모어 세이프웨이</strong> — 9/20 장 보는 김에.</p>
+      <p><strong>디어풋 시티 월마트 · 크로스아이언 밀스</strong> — 1110 57Ave NE, 22시까지. 9/23 캘거리 내려오는 길에 크로스아이언과 같은 방향입니다.</p>
+
+      <p><strong>미국 구간</strong>이라면 코스트코 서머린(10/1)의 번들·틴이 그나마 정가에 가깝습니다. 마트 매대는 기대치를 낮추세요.</p>
+
+      <p class="warn">실전 요령 — 매장 직원에게 <b>"When does the card vendor come in?"</b> 하고 물어보면 알려줍니다. 그리고 <b>계산대 옆 카드 랙은 메인 매대와 따로 채워집니다.</b> 메인이 비었어도 계산대 쪽을 꼭 보세요.</p>
+      <p>카드는 미국 입국이나 한국 반입에 아무 제한이 없습니다. 짐이 무거워지는 것만 감안하시면 됩니다.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--las)">
+    <summary><span class="dot"></span>포켓몬 — 카드샵 (실드 취급)<span class="arw">▾</span></summary>
+    <div class="body">
+      <p>카드샵은 실드도 팝니다. 다만 시세가 붙어서 마트 정가보다는 비쌉니다. 마트에서 못 구했을 때의 대안으로 보세요.</p>
+      <p><strong>옐로나이프 · 마빈저스</strong><br>5010 49 St. 9/17 올드타운 도보 코스에 그대로 들어갑니다. 평일 12–18시, 토 10–18시.</p>
+      <p><strong>캘거리 · 볼티드 YYC</strong><br>1435 17 Ave SW. 평점 5.0에 리뷰 197개. 가격이 시세에 맞다는 평이 많습니다. 토요일 22시까지. <b>9/19 저녁이 유일한 기회</b>입니다.</p>
+      <p><strong>LA 코리아타운 · 턴 제로 게임즈</strong><br>3959 Wilshire Blvd. 매일 11–22시. 9/24 저녁 코스에 그대로 들어갑니다.</p>
+      <p><strong>시타델 아울렛 안 · 마우야 유니콘</strong><br>아울렛 단지 안이라 9/26에 따로 움직일 필요가 없습니다.</p>
+      <p><strong>라스베가스 · 888 컬렉터블스</strong><br>4276 Spring Mountain Rd. 리뷰 517개의 포켓몬 전문점으로 실드 재고가 깊습니다. 매일 11–22시. 9/30 아울렛에서 차로 10분.</p>
+      <p class="warn"><strong>밴프의 프리미어 스포츠카드는 피하세요.</strong> 반프 애비뉴 한복판이라 눈에 띄지만 평점이 2.4입니다. 시세의 두세 배를 부르고 응대가 무례하다는 후기가 반복됩니다. 여러 리뷰가 대놓고 캘거리에서 사라고 적어뒀습니다.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--lax)">
+    <summary><span class="dot"></span>캐나다 → 미국, 못 가져가는 것<span class="arw">▾</span></summary>
+    <div class="body">
+      <p>9/24 캘거리에서 <strong>미국 사전입국심사</strong>를 받습니다. 여기서 압수되는 것들입니다.</p>
+      <ul>
+        <li><strong>육류 전부</strong> — 육포, 소시지, 고기 스프가 든 라면</li>
+        <li><strong>신선 과일 · 채소</strong></li>
+        <li>일부 유제품 (치즈는 종류에 따라 다릅니다)</li>
+        <li><strong>곰 스프레이</strong> — 위탁이든 기내든 안 됩니다</li>
+      </ul>
+      <p>메이플 시럽, 쿠키, 초콜릿, 원두, 밀봉된 가공식품은 괜찮습니다. 액체와 잼류는 위탁수하물로.</p>
+      <p class="warn">신고서에 음식물 소지를 <strong>있다고 체크하는 게 안전합니다.</strong> 신고하고 버리면 그만인데, 숨겼다가 걸리면 벌금이 붙습니다.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--yzf)">
+    <summary><span class="dot"></span>한국 입국 면세 한도<span class="arw">▾</span></summary>
+    <div class="body">
+      <p><strong>1인당 미화 800달러.</strong> 부부 합산이 안 되고 각자 따로 적용됩니다. 초과하면 초과분에 과세됩니다.</p>
+      <p>아래는 800달러와 <strong>별도로</strong> 면세됩니다.</p>
+      <ul>
+        <li><strong>주류</strong> 2병 (합계 2L 이하, 총액 $400 이하)</li>
+        <li><strong>담배</strong> 200개비</li>
+        <li><strong>향수</strong> 100ml</li>
+      </ul>
+      <p>초과하면 기내에서 신고서를 쓰세요. <strong>자진신고하면 세액 일부를 감면</strong>받지만, 안 하고 걸리면 가산세가 붙습니다.</p>
+      <p class="warn">미국 육포는 한국 반입도 금지입니다. 축산물 가공품은 아예 사지 마세요.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ============ 준비물 ============ -->
+<section id="pack">
+  <h2>준비물</h2>
+  <p class="sub">출발 준비는 끝났습니다. 캐년 투어 배낭 챙길 때 다시 쓰세요.</p>
+  <div class="bar"><i data-bar="pack"></i></div>
+  <div class="barlabel" data-label="pack"></div>
+
+  <div data-group="pack">
+
+    <div class="group">
+      <h3>기내 수하물 <em>짐 분실 대비</em></h3>
+      <label class="chk"><input type="checkbox" data-k="c1"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">오로라용 방한복 한 세트<small>옐로나이프는 짐이 늦게 오면 대체 구매가 거의 안 됩니다.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="c2"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">1박분 속옷 · 세면도구</span></label>
+      <label class="chk"><input type="checkbox" data-k="c3"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">상비약 · 여권 · 카드</span></label>
+      <label class="chk"><input type="checkbox" data-k="c4"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">보조배터리<small>위탁수하물 반입 금지. 무조건 기내로.</small></span></label>
+    </div>
+
+    <div class="group">
+      <h3>방한 3겹 <em>9/23까지 계속 씁니다</em></h3>
+      <label class="chk"><input type="checkbox" data-k="w1"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">경량 구스다운 패딩 <b>1</b><small>압축팩에 넣으면 주먹만 해집니다. 플리스는 안 줄어듭니다.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="w2"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">방풍·방수 바람막이 <b>1</b><small>후드 달린 것으로. 우산 대용이 됩니다.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="w3"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">메리노 또는 기모 내의 상의 <b>2</b></span></label>
+      <label class="chk"><input type="checkbox" data-k="w4"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">기모 내의 하의 <b>1</b><small>낡은 걸로. 캘거리에서 버리고 갑니다.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="w5"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">방풍 오버팬츠 <b>1</b><small>과소평가되는 항목. 접으면 손바닥만 한데 상의 한 겹보다 효과가 큽니다.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="w6"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">기모 장갑 · 비니 · 넥워머</span></label>
+      <label class="chk"><input type="checkbox" data-k="w7"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">두꺼운 양말 <b>2</b>켤레</span></label>
+      <label class="chk"><input type="checkbox" data-k="w8"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">방수 트레킹화 <b>1</b><small>비행기에 신고 타세요.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="w9"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">핫팩 <b>2인 25개</b> (발핫팩 포함)<small>무게가 없고 쓰면 사라집니다. 발핫팩을 꼭 넣으세요.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="w10"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">접이식 은박 방석 <b>2</b><small>야외 벤치가 얼음장입니다. 천 원짜리인데 밤이 편해집니다.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="w11"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">고보습 크림 · 립밤</span></label>
+    </div>
+
+    <div class="group">
+      <h3>의류 <em>1인 8일치</em></h3>
+      <label class="chk"><input type="checkbox" data-k="a1"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">속옷 · 양말 <b>8</b>세트<small>퀵드라이 제품으로. 부피가 작으니 여기는 넉넉히.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="a2"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">상의 <b>5</b>장<small>메리노 2장을 섞으면 연속 착용이 가능합니다.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="a3"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">하의 <b>3</b>장<small>긴바지 2, 반바지나 스커트 1. 더운 쪽 옷은 현지에서 보충.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="a4"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">가디건 <b>1</b><small>LA 저녁, 베가스 실내 에어컨용.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="a5"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">가벼운 스니커즈 <b>1</b> · 슬리퍼 <b>1</b><small>신발은 3켤레를 넘기지 마세요. 공간을 제일 많이 먹습니다.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="a6"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">커플 스냅용 <b>1</b>벌<small>오로라와 호수 양쪽에 쓸 수 있는 걸로 하나만. 어두운 색은 밤에 안 보입니다.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="a7"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">잠옷 <b>1</b> · 수영복 <b>1</b><small>밴프 어퍼 핫스프링스, 히든리지·플라밍고 수영장.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="a8"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">세탁세제 시트 <b>5</b>장 · 압축팩</span></label>
+      <label class="chk"><input type="checkbox" data-k="a9"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">휴대용 수하물 저울 <b>1</b><small>1인 1개 23kg 기준. 한쪽만 넘어도 요금이 붙습니다. 돌아올 때도 씁니다.</small></span></label>
+    </div>
+
+    <div class="group">
+      <h3>서류 · 결제</h3>
+      <label class="chk"><input type="checkbox" data-k="d1"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">여권 2매 (유효기간 6개월 이상)</span></label>
+      <label class="chk"><input type="checkbox" data-k="d2"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">eTA · ESTA 승인 메일 캡처</span></label>
+      <label class="chk"><input type="checkbox" data-k="d3"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">국제운전면허증 + 한국 면허증 원본<small>둘 다 있어야 차를 내줍니다.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="d4"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">운전자 본인 명의 실물 신용카드</span></label>
+      <label class="chk"><input type="checkbox" data-k="d5"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">해외결제 카드 각자 2장 이상</span></label>
+      <label class="chk"><input type="checkbox" data-k="d6"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">USD 소액권 ($1 · $5)<small>팁·가이드용. 한국에서 미리 바꿔가세요.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="d7"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">CAD 소액 현금</span></label>
+      <label class="chk"><input type="checkbox" data-k="d8"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">여행자보험 가입<small>미국 의료비 때문에라도 필수.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="d9"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">여권 사본 클라우드 저장</span></label>
+    </div>
+
+    <div class="group">
+      <h3>촬영 <em>오로라 사진의 성패</em></h3>
+      <label class="chk"><input type="checkbox" data-k="p1"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">여행용 삼각대<small>후기 공통 의견 — 폰 성능보다 삼각대 유무가 결과를 가릅니다.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="p2"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">블루투스 셔터 리모컨</span></label>
+      <label class="chk"><input type="checkbox" data-k="p3"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">적색광 헤드랜턴<small>남의 촬영을 방해하지 않고 인물에 빛을 줄 수 있습니다.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="p4"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">카메라 · 충전기 · 여분 메모리</span></label>
+    </div>
+
+    <div class="group">
+      <h3>전자 <em>부부 합쳐 한 세트</em></h3>
+      <label class="chk"><input type="checkbox" data-k="e1"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">돼지코(A타입) <b>4</b>개 · 멀티탭 <b>1</b></span></label>
+      <label class="chk"><input type="checkbox" data-k="e2"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">충전기 프리볼트 확인<small>고데기·드라이기는 두고 가고 호텔 것을 쓰세요.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="e3"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">eSIM (캐나다 · 미국)</span></label>
+      <label class="chk"><input type="checkbox" data-k="e4"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">목베개 · 안대 · 귀마개</span></label>
+    </div>
+
+    <div class="group">
+      <h3>약 · 위생 <em>부부 합쳐 한 세트</em></h3>
+      <label class="chk"><input type="checkbox" data-k="m1"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">감기약 · 진통제 · 지사제 · 소화제</span></label>
+      <label class="chk"><input type="checkbox" data-k="m3"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">멀미약<small>캐년 투어 이동, 스피어 공연 둘 다 필요할 수 있습니다.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="m4"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">밴드 · 연고 · 인공눈물</span></label>
+      <label class="chk"><input type="checkbox" data-k="m5"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">선크림 · 선글라스 · 모자<small>베가스 햇볕이 위험한 수준입니다.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="m6"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">여분 칫솔 · 치약<small>캐년 투어 숙소는 어메니티가 없습니다.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="m7"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">화장품 소분<small>샴푸·바디워시·수건은 호텔에 다 있습니다. 빼세요.</small></span></label>
+    </div>
+
+    <div class="group">
+      <h3>빼도 되는 것 <em>확인만 하고 넘어가세요</em></h3>
+      <label class="chk"><input type="checkbox" data-k="x1"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">즉석밥 · 라면 빼기<small>무겁고 미국행에 못 가져갑니다. 캘거리 한인마트에서 사세요.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="x2"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">고데기 · 드라이기 · 우산 빼기<small>우산은 후드 바람막이로 대체됩니다.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="x3"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">귀국 짐은 베가스에서 캐리어 구매로<small>비즈니스라 1인 2개 32kg. 아울렛·코스트코 캐리어가 한국보다 쌉니다. 더플백을 들고 갈 필요가 없어요.</small></span></label>
+      <label class="chk"><input type="checkbox" data-k="x4"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">캐리어 70%만 채웠는지 확인</span></label>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 짐 전략 ============ -->
+<section id="light">
+  <h2>짐 줄이는 법</h2>
+  <p class="sub">귀국편 수하물과 쇼핑 짐 계획은 여기 있습니다.</p>
+
+  <details style="--c:var(--yzf)" open>
+    <summary><span class="dot"></span>세탁 계획<span class="arw">▾</span></summary>
+    <div class="body">
+      <table class="wash">
+        <tr><td>9.17–18</td><td><b>옐로나이프 호텔</b><br>게스트 런드리가 있는 숙소가 많습니다</td></tr>
+        <tr><td>9.25–26</td><td><b>LA 숙소</b> — 여기가 핵심<br>한 번 돌리면 남은 9일이 해결됩니다</td></tr>
+        <tr><td>9.30–10.1</td><td><b>베가스</b><br>플라밍고는 게스트 세탁기가 없습니다. 필요하면 근처 코인세탁소</td></tr>
+      </table>
+      <p style="margin-top:12px">속옷·양말은 퀵드라이 제품으로. 밤에 빨아 널면 아침에 마릅니다. 상의에 <strong>메리노울 2장</strong>을 섞으면 2~3일 연속 입어도 냄새가 안 나서 장수가 확 줄어듭니다.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--lax)">
+    <summary><span class="dot"></span>현지에서 사도 되는 것, 안 되는 것<span class="arw">▾</span></summary>
+    <div class="body">
+      <p><strong>살 수 없는 구간 (9/16–9/23)</strong><br>옐로나이프는 선택지가 거의 없고 밴프는 관광지 가격입니다. 이 8일치 옷은 전부 들고 가야 합니다.</p>
+      <p><strong>사도 되는 구간 (9/24 이후)</strong><br>LA 타겟·시타델 아울렛, 베가스 프리미엄 아울렛, 코스트코. 여름옷은 여기가 싸고 종류도 많습니다. 어차피 아울렛 쇼핑 계획이 있으니 <strong>더운 쪽 옷은 최소한만</strong> 가져가세요.</p>
+      <p>예외로 <strong>넥워머·페이스커버</strong> 정도는 옐로나이프 다운타운에서 살 수 있습니다. 비싸지만 첫날 밤에 춥다고 느끼면 선택지가 되긴 합니다.</p>
+    </div>
+  </details>
+
+  <details style="--c:var(--yyc)">
+    <summary><span class="dot"></span>방한복 부피 줄이기<span class="arw">▾</span></summary>
+    <div class="body">
+      <p>대여가 안 되는 시즌이라 다 들고 가야 하는데, 다행히 <strong>밴프 밤 기온이 옐로나이프만큼 낮습니다.</strong> 방한복 대부분이 9/23까지 계속 쓰이므로 죽은 짐은 생각보다 적습니다.</p>
+      <ul>
+        <li><strong>두꺼운 한 벌보다 얇은 세 겹.</strong> 구스다운은 압축팩에서 주먹만 해지지만 플리스·양털은 아무리 눌러도 안 줄어듭니다.</li>
+        <li><strong>핫팩을 부피의 대체재로.</strong> 무게가 없고 쓰면 사라집니다. 특히 발핫팩 — 발이 제일 먼저 시립니다.</li>
+        <li><strong>부피 큰 건 입고 타세요.</strong> 트레킹화는 신고, 패딩은 손에 들고.</li>
+        <li><strong>낡은 걸로 가져가 캘거리에서 버리기</strong> — 기모 내의, 두꺼운 양말, 은박 방석. 9/23 어클라임 호텔에서 정리하면 미국 구간이 가벼워집니다.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details style="--c:var(--las)">
+    <summary><span class="dot"></span>캐리어 구성<span class="arw">▾</span></summary>
+    <div class="body">
+      <p><strong>나갈 때는 좁고 돌아올 때는 넓습니다.</strong> 인천→옐로나이프와 캘거리→LA가 모두 1인 1개 23kg이라, 베가스에 도착할 때까지 두 분의 짐은 <strong>캐리어 2개 · 46kg</strong>가 전부입니다.</p>
+      <ul>
+        <li>24~26인치 <strong>두 개</strong>, 각각 23kg 미만</li>
+        <li>기내용 배낭 각 1개 — 여유 가방이 없으니 이걸 잘 써야 합니다</li>
+        <li>출발할 때 <strong>70%만 채우기</strong></li>
+      </ul>
+      <p>반면 귀국편 대한항공 비즈니스는 보통 <strong>1인 2개 32kg</strong>입니다. 합쳐서 4개 128kg이니 사실상 제한이 없어요.</p>
+      <p class="warn">그래서 베가스 아울렛이나 코스트코에서 <strong>캐리어를 하나 사는 것</strong>이 접이식 더플백보다 낫습니다. 한국보다 싸고 짐 보호도 잘 됩니다. 무게 배분은 무거운 것부터 두 캐리어에 번갈아 담고, 휴대용 저울로 한 번 재보세요. 트레킹화는 신고 타면 그 자체로 1kg가 빠집니다.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ============ 출발 전 ============ -->
+<section id="now">
+  <h2>출발 전에 끝낼 일</h2>
+  <p class="sub">지금 안 하면 현지에서 못 되돌리는 것들.</p>
+  <div class="bar"><i data-bar="now"></i></div>
+  <div class="barlabel" data-label="now"></div>
+
+  <div class="urgent" data-group="now">
+    <label class="chk"><input type="checkbox" data-k="n2"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">캐나다 eTA 신청 (2인)<small>canada.ca 공식 사이트만. 1인 CAD 7. 여권번호의 알파벳 O와 숫자 0 혼동 주의.</small></span></label>
+    <label class="chk"><input type="checkbox" data-k="n3"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">미국 ESTA 신청 (2인)<small>cbp.gov 공식 사이트. 출발 72시간 전까지 권고.</small></span></label>
+    <label class="chk"><input type="checkbox" data-k="n4"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">모레인 레이크 셔틀 예약<small>전체의 60%가 방문 이틀 전 <b>오전 8시 산악시간</b>에 풀립니다. 9/21 방문이면 <b>9/19 아침 8시, 옐로나이프에서</b>입니다. 옐로나이프도 같은 시간대라 시차 계산은 필요 없어요. 전날이 마지막 오로라 밤이니 알람 필수. <b>일주일 전부터 취소표도 계속 나오니 지금부터 수시로 확인하세요.</b> 못 구해도 밴프 출발 Roam 퍼블릭 버스나 사설 셔틀·투어가 있습니다.</small></span></label>
+    <label class="chk"><input type="checkbox" data-k="n10"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">LA 숙소 세탁기 있는지 문의<small><b>짐 크기를 결정하는 질문입니다.</b> 세탁기가 있으면 옷을 8일치만 싸면 됩니다.</small></span></label>
+    <label class="chk"><input type="checkbox" data-k="n13"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">방풍 오버팬츠 · 발핫팩 · 은박 방석 구매<small>출발까지 나흘. 오버팬츠는 매장에서 구하기 애매할 수 있으니 오늘 주문하세요.</small></span></label>
+    <label class="chk"><input type="checkbox" data-k="n1"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">AC252로 온라인 체크인 · 앞쪽 좌석<small>밴쿠버 환승 2시간 25분. 짐 찾아 재위탁해야 하니 앞에서 내리는 게 유리합니다.</small></span></label>
+    <label class="chk"><input type="checkbox" data-k="n5"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">스피어 좌석 확인<small>200~300 구역 정중앙이 최선. 100구역 뒷열은 천장이 가립니다.</small></span></label>
+    <label class="chk"><input type="checkbox" data-k="n6"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">렌터카 예약 조건 확인<small>운전자 등록, 자차 풀커버 여부, 편도 반납 수수료.</small></span></label>
+    <label class="chk"><input type="checkbox" data-k="n7"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">CBP MPC 앱 설치<small>캘거리 미국 사전입국심사 대기가 짧아집니다.</small></span></label>
+    <label class="chk"><input type="checkbox" data-k="n9"><span class="box"><svg viewBox="0 0 14 14"><path d="M2 7.5 5.5 11 12 3.5"/></svg></span><span class="txt">예약확인서 전부 휴대폰에 저장<small>항공·숙소·투어·렌터카. 미국 입국심사에서 요구할 수 있습니다.</small></span></label>
+  </div>
+</section>
+
+<footer>
+  <div id="sync">연결 확인 중…</div>
+  <div class="tools">
+    <button class="reset" id="resetBtn">체크 지우기</button>
+  </div>
+
+  <div class="setup" id="setup">
+    <h5>아직 설정 전입니다</h5>
+    <p>지금은 체크가 저장되지 않습니다. 아래 두 줄만 채우면 두 사람이 실시간으로 같은 목록을 보게 됩니다. 자세한 순서는 함께 드린 <b>SETUP.md</b>를 보세요.</p>
+    <pre>const SUPABASE_URL = '여기에 붙여넣기';
+const SUPABASE_KEY = '여기에 붙여넣기';</pre>
+    <p>파일 맨 아래 &lt;script&gt; 안 첫 두 줄입니다.</p>
+  </div>
+</footer>
+</main>
+
+<nav><div>
+  <a href="#build">코스</a>
+  <a href="#plan">일정</a>
+  <a href="#wx">날씨</a>
+  <a href="#tips">팁</a>
+  <a href="#shop">쇼핑</a>
+  <a href="#pack">준비물</a>
+</div></nav>
+
+<script>
+/* ══════════ 여기 두 줄만 채우면 됩니다 ══════════ */
+const SUPABASE_URL = 'https://jpadradcktsrxsxqbsez.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpwYWRyYWRja3RzcnhzeHFic2V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxODM2MzEsImV4cCI6MjEwNDc1OTYzMX0.E_nbRWxPNbW-LtMs3vjhAwS1WQJ7E8zfgZ7rsxzi48Y';
+/* ═══════════════════════════════════════════════ */
+
+let sb = null, online = false, me = '';
+let state = {};   // { key: {done, by} }
+
+/* ---------- 이름 ---------- */
+function readMe(){
+  const m = location.hash.match(/me=([^&]+)/);
+  if(m) me = decodeURIComponent(m[1]);
+}
+function setMe(name){
+  me = name;
+  location.hash = 'me=' + encodeURIComponent(name);
+  document.querySelectorAll('#who button').forEach(b=>{
+    b.classList.toggle('on', b.dataset.name === name);
+  });
+}
+
+/* ---------- 상태 표시 ---------- */
+function status(t, cls){
+  const el = document.getElementById('sync');
+  el.innerHTML = t;
+  el.className = cls || '';
+}
+
+/* ---------- UI ---------- */
+function paint(){
+  document.querySelectorAll('input[data-k]').forEach(el=>{
+    const s = state[el.dataset.k];
+    el.checked = !!(s && s.done);
+    const tag = el.parentElement.querySelector('.by');
+    if(tag) tag.remove();
+    if(s && s.done && s.by){
+      const b = document.createElement('span');
+      b.className = 'by';
+      b.textContent = s.by;
+      el.parentElement.querySelector('.txt').appendChild(b);
+    }
+  });
+}
+function refresh(){
+  ['now','pack'].forEach(g=>{
+    const scope = document.querySelector('[data-group="'+g+'"]');
+    if(!scope) return;
+    const all = scope.querySelectorAll('input[data-k]').length;
+    const done = scope.querySelectorAll('input[data-k]:checked').length;
+    document.querySelector('[data-bar="'+g+'"]').style.width = (all?Math.round(done/all*100):0)+'%';
+    document.querySelector('[data-label="'+g+'"]').textContent =
+      (done===all && all>0) ? '전부 완료' : done+' / '+all+' 완료';
+  });
+  document.querySelectorAll('.group').forEach(gr=>{
+    const h3 = gr.querySelector('h3');
+    const all = gr.querySelectorAll('input[data-k]').length;
+    const done = gr.querySelectorAll('input[data-k]:checked').length;
+    let cnt = h3.querySelector('.cnt');
+    if(!cnt){ cnt = document.createElement('span'); cnt.className='cnt'; h3.appendChild(cnt); }
+    cnt.textContent = done+'/'+all;
+  });
+}
+
+/* ---------- 체크 ---------- */
+document.addEventListener('change', async e=>{
+  const el = e.target;
+  if(!el.matches('input[data-k]')) return;
+  const id = el.dataset.k;
+  state[id] = {done: el.checked, by: el.checked ? me : ''};
+  paint(); refresh();
+  if(!online) return;
+  const { error } = await sb.from('checks').upsert({
+    id, done: el.checked, updated_by: el.checked ? me : null, updated_at: new Date().toISOString()
+  });
+  if(error) status('저장 실패 — 잠시 후 다시 시도하세요', 'bad');
+});
+
+/* ---------- 초기화 ---------- */
+let armed = false;
+document.getElementById('resetBtn').addEventListener('click', async function(){
+  if(!armed){
+    armed = true;
+    this.textContent = '두 사람 모두 지워집니다 — 한 번 더';
+    this.classList.add('danger');
+    setTimeout(()=>{ armed=false; this.textContent='체크 지우기'; this.classList.remove('danger'); }, 4000);
+    return;
+  }
+  armed = false; this.textContent='체크 지우기'; this.classList.remove('danger');
+  const ids = Object.keys(state).filter(k=> state[k].done);
+  state = {}; paint(); refresh();
+  if(!online || !ids.length) return;
+  await sb.from('checks').upsert(ids.map(id=>({
+    id, done:false, updated_by:null, updated_at:new Date().toISOString()
+  })));
+});
+
+/* ---------- D-day ---------- */
+(function(){
+  const dep = new Date('2026-09-16T17:45:00+09:00');
+  const el = document.getElementById('dday');
+  const days = Math.ceil((dep - new Date()) / 86400000);
+  if(days > 0) el.innerHTML = 'D-'+days+' <small>인천 출발까지</small>';
+  else if(days === 0) el.innerHTML = '오늘 출발 <small>인천 17:45</small>';
+  else el.innerHTML = '여행 중 <small>즐거운 시간 보내세요</small>';
+})();
+
+/* ---------- 이름 버튼 ---------- */
+document.querySelectorAll('#who button').forEach(b=>{
+  b.addEventListener('click', ()=> setMe(b.dataset.name));
+});
+
+
+
+
+
+
+
+
+/* ---------- 타일 캐시 (오프라인용) ---------- */
+const TDB=(()=>{ let dbp;
+  function db(){ if(!dbp) dbp=new Promise((res,rej)=>{
+    const r=indexedDB.open('rk-tiles',1);
+    r.onupgradeneeded=()=>r.result.createObjectStore('t');
+    r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }); return dbp; }
+  return {
+    async get(k){ try{ const d=await db(); return await new Promise(res=>{
+      const q=d.transaction('t').objectStore('t').get(k);
+      q.onsuccess=()=>res(q.result); q.onerror=()=>res(null); }); }catch(e){ return null; } },
+    async put(k,v){ try{ const d=await db(); d.transaction('t','readwrite').objectStore('t').put(v,k); }catch(e){} },
+    async count(){ try{ const d=await db(); return await new Promise(res=>{
+      const q=d.transaction('t').objectStore('t').count();
+      q.onsuccess=()=>res(q.result); q.onerror=()=>res(0); }); }catch(e){ return 0; } }
+  };
+})();
+
+const TILE='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png';
+function tileUrl(z,x,y){ return TILE.replace('{s}','abc'[(x+y)%3]).replace('{z}',z).replace('{x}',x).replace('{y}',y); }
+function lon2x(lo,z){ return Math.floor((lo+180)/360*Math.pow(2,z)); }
+function lat2y(la,z){ const r=la*Math.PI/180;
+  return Math.floor((1-Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*Math.pow(2,z)); }
+
+let LMAP=null, LLAYER=null, LMARKS=[];
+function initMap(){
+  if(LMAP) return LMAP;
+  if(typeof L==='undefined') return null;
+  const el=document.getElementById('lmap');
+  if(!el) return null;
+  LMAP=L.map(el,{zoomControl:true, attributionControl:true});
+  const Cached=L.TileLayer.extend({
+    createTile(c,done){
+      const img=document.createElement('img');
+      img.alt='';
+      const url=this.getTileUrl(c);
+      (async()=>{
+        const hit=await TDB.get(url);
+        if(hit){ img.src=URL.createObjectURL(hit); done(null,img); return; }
+        try{
+          const r=await fetch(url,{mode:'cors'});
+          if(!r.ok) throw 0;
+          const b=await r.blob();
+          TDB.put(url,b);
+          img.src=URL.createObjectURL(b);
+          done(null,img);
+        }catch(e){ done(e,img); }
+      })();
+      return img;
+    }
+  });
+  LLAYER=new Cached(TILE,{maxZoom:16,minZoom:8,
+    attribution:'&copy; OSM · CARTO'});
+  LMAP.attributionControl.setPrefix('');
+  LLAYER.addTo(LMAP);
+  LMAP.setView([51.3,-115.9],9);
+  return LMAP;
+}
+function paintMap(ordered,col){
+  const m=initMap();
+  if(!m) return false;
+  LMARKS.forEach(x=>m.removeLayer(x)); LMARKS=[];
+  const pin=(html,cls,color)=>L.divIcon({className:'',html:
+    '<div class="pin '+cls+'" style="border-color:'+color+';color:'+color+'">'+html+'</div>',
+    iconSize:[24,24], iconAnchor:[12,12]});
+  const pts=[[HOME.la,HOME.lo]];
+  LMARKS.push(L.marker([HOME.la,HOME.lo],{icon:pin('숙소','home','#0E9E76')})
+    .bindPopup('<b>히든리지 리조트</b>').addTo(m));
+  ordered.forEach((p,i)=>{
+    pts.push([p.la,p.lo]);
+    LMARKS.push(L.marker([p.la,p.lo],{icon:pin(i+1,'',col)})
+      .bindPopup('<b>'+(p.st?stars(p.st)+' ':'')+p.n+'</b><i>'+(p.km?p.km+'km · ':'')+p.h+'시간</i>')
+      .addTo(m));
+  });
+  setTimeout(()=>{ m.invalidateSize();
+    m.fitBounds(L.latLngBounds(pts).pad(0.25),{maxZoom:12}); },60);
+  return true;
+}
+async function cacheTiles(btn){
+  const m=LMAP; if(!m) return;
+  const b=m.getBounds();
+  let urls=[];
+  for(let z=9; z<=13; z++){
+    const x0=lon2x(b.getWest(),z), x1=lon2x(b.getEast(),z);
+    const y0=lat2y(b.getNorth(),z), y1=lat2y(b.getSouth(),z);
+    for(let x=x0;x<=x1;x++) for(let y=y0;y<=y1;y++) urls.push(tileUrl(z,x,y));
+  }
+  let done=0;
+  btn.disabled=true;
+  for(const u of urls){
+    if(!(await TDB.get(u))){
+      try{ const r=await fetch(u,{mode:'cors'}); if(r.ok) await TDB.put(u, await r.blob()); }catch(e){}
+    }
+    done++;
+    if(done%10===0) btn.textContent='저장 중 '+Math.round(done/urls.length*100)+'%';
+  }
+  btn.textContent='저장 완료 ('+urls.length+'장)';
+  btn.classList.add('done');
+  btn.disabled=false;
+}
+
+/* ---------- 지도 ---------- */
+const BND={la0:51.02,la1:51.78,lo0:-116.62,lo1:-115.28};
+const KK=Math.cos(51.4*Math.PI/180), MW=340, MH=318, MP=12;
+function MX(lo){ return MP+((lo-BND.lo0)*KK)/((BND.lo1-BND.lo0)*KK)*(MW-MP*2); }
+function MY(la){ return MH-MP-((la-BND.la0)/(BND.la1-BND.la0))*(MH-MP*2); }
+function path(pts){ return pts.map((q,i)=>(i?'L':'M')+MX(q[1]).toFixed(1)+' '+MY(q[0]).toFixed(1)).join(' '); }
+
+const ROADS=[
+ {n:'1번 고속도로', w:2.4, c:'#3A4763', p:[[51.05,-115.30],[51.089,-115.359],[51.178,-115.571],[51.263,-115.917],[51.425,-116.180],[51.398,-116.486],[51.30,-116.60]]},
+ {n:'보밸리 파크웨이', w:1.3, c:'#2C3850', p:[[51.178,-115.571],[51.245,-115.840],[51.263,-115.917],[51.38,-116.12],[51.425,-116.180]]},
+ {n:'아이스필즈', w:2.0, c:'#3A4763', p:[[51.425,-116.180],[51.52,-116.30],[51.669,-116.461],[51.717,-116.517],[51.77,-116.55]]},
+ {n:'미네완카', w:1.2, c:'#2C3850', p:[[51.178,-115.571],[51.201,-115.535],[51.228,-115.497],[51.264,-115.375]]},
+ {n:'모레인로', w:1.2, c:'#2C3850', p:[[51.425,-116.180],[51.37,-116.19],[51.322,-116.186]]},
+ {n:'요호', w:1.2, c:'#2C3850', p:[[51.398,-116.486],[51.443,-116.529]]},
+ {n:'스프레이', w:1.2, c:'#2C3850', p:[[51.089,-115.359],[51.078,-115.403]]},
+];
+const LAKES=[
+ {n:'레이크루이스', la:51.417, lo:-116.223, rx:7, ry:3.5},
+ {n:'모레인',      la:51.322, lo:-116.186, rx:5, ry:3},
+ {n:'에메랄드',    la:51.443, lo:-116.529, rx:5, ry:4},
+ {n:'미네완카',    la:51.264, lo:-115.375, rx:11, ry:3.5},
+ {n:'투잭',        la:51.228, lo:-115.497, rx:4, ry:3},
+ {n:'보우',        la:51.669, lo:-116.461, rx:6, ry:4},
+ {n:'페이토',      la:51.717, lo:-116.517, rx:5, ry:3.5},
+ {n:'버밀리언',    la:51.181, lo:-115.594, rx:5, ry:2.5},
+];
+const TOWNS=[
+ {n:'캔모어', la:51.089, lo:-115.359, dx:6, dy:10},
+ {n:'밴프',   la:51.178, lo:-115.571, dx:6, dy:-6},
+ {n:'레이크루이스', la:51.425, lo:-116.180, dx:-2, dy:-9},
+ {n:'필드',   la:51.398, lo:-116.486, dx:0, dy:11},
+];
+function baseMap(){
+  let g='<rect width="'+MW+'" height="'+MH+'" fill="#0B1324"/>';
+  g+='<path d="'+path([[51.02,-115.33],[51.178,-115.571],[51.263,-115.917],[51.425,-116.18],[51.60,-116.40],[51.78,-116.55]])+
+     '" fill="none" stroke="#17324C" stroke-width="3" opacity=".55"/>';
+  ROADS.forEach(r=>{ g+='<path d="'+path(r.p)+'" fill="none" stroke="'+r.c+'" stroke-width="'+r.w+'" stroke-linecap="round"/>'; });
+  LAKES.forEach(l=>{ g+='<ellipse cx="'+MX(l.lo).toFixed(1)+'" cy="'+MY(l.la).toFixed(1)+'" rx="'+l.rx+'" ry="'+l.ry+'" fill="#2A7C86" opacity=".8"/>'; });
+  TOWNS.forEach(t=>{
+    const x=MX(t.lo), y=MY(t.la);
+    g+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="2.4" fill="#8A97B0"/>'+
+       '<text x="'+(x+t.dx).toFixed(1)+'" y="'+(y+t.dy).toFixed(1)+'" font-size="9" fill="#8A97B0" '+
+       'text-anchor="'+(t.dx<0?'end':'start')+'">'+t.n+'</text>';
+  });
+  return g;
+}
+const HOME={la:51.1880, lo:-115.5480};
+function drawMap(ordered, col){
+  const pts=[HOME].concat(ordered.map(p=>({la:p.la,lo:p.lo}))).concat([HOME]);
+  let g=baseMap();
+  if(ordered.length){
+    g+='<path d="'+path(pts.map(q=>[q.la,q.lo]))+'" fill="none" stroke="'+col+
+       '" stroke-width="1.8" stroke-dasharray="5 3" opacity=".8"/>';
+    ordered.forEach((p,i)=>{
+      const x=MX(p.lo), y=MY(p.la);
+      g+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="8.5" fill="#0B1324" stroke="'+col+'" stroke-width="2"/>'+
+         '<text x="'+x.toFixed(1)+'" y="'+(y+3.3).toFixed(1)+'" font-size="9.5" font-weight="700" text-anchor="middle" fill="'+col+'">'+(i+1)+'</text>';
+    });
+  }
+  const hx=MX(HOME.lo), hy=MY(HOME.la);
+  g+='<rect x="'+(hx-6).toFixed(1)+'" y="'+(hy-6).toFixed(1)+'" width="12" height="12" rx="3.5" fill="#0B1324" stroke="#57E0AE" stroke-width="2"/>';
+  return '<svg class="map" viewBox="0 0 '+MW+' '+MH+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="선택한 장소의 이동 경로 지도">'+g+'</svg>';
+}
+
+/* ---------- 코스 만들기 ---------- */
+const ZONES=[
+  {z:'can', n:'캔모어', pos:-0.4, note:'밴프에서 동쪽 20분'},
+  {z:'town',n:'밴프 타운', pos:0.15, note:'숙소에서 가장 가까움'},
+  {z:'near',n:'밴프 근교 호수', pos:0.4, note:'차로 15~25분'},
+  {z:'bvp', n:'보밸리 파크웨이', pos:0.55, note:'레이크루이스 가는 옛길'},
+  {z:'ll',  n:'레이크루이스', pos:0.75, note:'밴프에서 40분'},
+  {z:'yoho',n:'요호 국립공원', pos:1.3, note:'밴프에서 1시간 20분'},
+  {z:'ice', n:'아이스필즈', pos:1.6, note:'밴프에서 1시간 30분'},
+];
+const SPOTS=[
+ {id:'s01',z:'can',n:'쿼리 호수',km:1,h:0.5,st:1,la:51.0781,lo:-115.3736,img:'Canmore_from_Ha_Ling.jpg',cap:'하링봉에서 본 캔모어'},
+ {id:'s02',z:'can',n:'그라시 호수',km:4,h:2,st:2,la:51.0783,lo:-115.4031,img:'Grassi_Lakes,_Canmore,_Canada_(Unsplash).jpg',cap:'그라시 호수'},
+ {id:'s03',z:'can',n:'그로토 캐년',km:4,h:1.5,st:0,la:51.1103,lo:-115.2686},
+ {id:'s04',z:'can',n:'캔모어 다운타운',km:1.5,h:1.5,st:1,la:51.0884,lo:-115.3489,img:'Canmore_-_Alberta_-_panoramio.jpg',cap:'캔모어 다운타운'},
+ {id:'s05',z:'can',n:'세 자매 뷰포인트',km:0.5,h:0.3,st:0,la:51.0728,lo:-115.3379},
+ {id:'s11',z:'town',n:'밴프 곤돌라',km:2,h:2,st:2,la:51.1484,lo:-115.5722,img:'Banff_Gondola_Sulphur_Mountain_(15800344652).jpg',cap:'설퍼산 곤돌라'},
+ {id:'s12',z:'town',n:'어퍼 핫스프링스',km:0,h:1.5,st:0,la:51.1513,lo:-115.5681},
+ {id:'s13',z:'town',n:'보우 폭포',km:0.5,h:0.5,st:1,la:51.168,lo:-115.5615},
+ {id:'s14',z:'town',n:'서프라이즈 코너',km:0.3,h:0.3,st:1,la:51.1673,lo:-115.5592},
+ {id:'s15',z:'town',n:'캐스케이드 정원',km:0.5,h:0.5,st:0,la:51.1714,lo:-115.5718},
+ {id:'s16',z:'town',n:'보행자 다리',km:0.5,h:0.3,st:0,la:51.174,lo:-115.572,img:'Banff_Avenue_-_Sulphur_Mountain.jpg',cap:'반프 애비뉴'},
+ {id:'s17',z:'town',n:'밴프 사인',km:0.3,h:0.3,st:0,la:51.1759,lo:-115.5722},
+ {id:'s18',z:'town',n:'반프 애비뉴',km:1.5,h:1.5,st:1,la:51.178,lo:-115.5718},
+ {id:'s19',z:'town',n:'와이트 박물관',km:0.3,h:1,st:0,la:51.1746,lo:-115.5735},
+ {id:'s20',z:'town',n:'케이브 앤 베이슨',km:1,h:1,st:0,la:51.1697,lo:-115.586},
+ {id:'s21',z:'town',n:'후두 전망대',km:0.5,h:0.5,st:0,la:51.1855,lo:-115.5417},
+ {id:'s22',z:'town',n:'터널 마운틴',km:4.3,h:2,st:0,la:51.183,lo:-115.556},
+ {id:'s31',z:'near',n:'버밀리언 레이크',km:0.5,h:1,st:1,la:51.1808,lo:-115.5942,img:'Vermillion_Lakes,_Banff.jpg',cap:'버밀리언 레이크'},
+ {id:'s32',z:'near',n:'투잭 호수',km:1,h:0.5,st:1,la:51.228,lo:-115.4966,img:'Reflection_at_Two_Jack_Lake.jpg',cap:'투잭 호수'},
+ {id:'s33',z:'near',n:'미네완카 호수',km:1,h:0.7,st:1,la:51.2641,lo:-115.3746,img:'Lake_Minnewanka_11092005.jpg',cap:'미네완카 호수'},
+ {id:'s34',z:'near',n:'캐스케이드 폰드',km:1,h:0.5,st:0,la:51.2012,lo:-115.5345},
+ {id:'s41',z:'bvp',n:'존스턴 로어 폭포',km:2.5,h:1,st:2,la:51.2452,lo:-115.8395,img:'Johnston_Canyon_(32526977764).jpg',cap:'존스턴 캐년'},
+ {id:'s42',z:'bvp',n:'존스턴 어퍼 폭포',km:5.2,h:2,st:0,la:51.247,lo:-115.845},
+ {id:'s43',z:'bvp',n:'모란츠 커브',km:0.3,h:0.3,st:0,la:51.354,lo:-116.07},
+ {id:'s44',z:'bvp',n:'선샤인 메도우즈',km:6,h:4,st:0,la:51.08,lo:-115.78},
+ {id:'s51',z:'ll',n:'모레인 호수',km:2,h:1,st:2,la:51.3217,lo:-116.186,img:'Moraine_Lake_17092005.jpg',cap:'모레인 호수'},
+ {id:'s52',z:'ll',n:'락파일 전망대',km:0.5,h:0.5,st:1,la:51.327,lo:-116.179},
+ {id:'s53',z:'ll',n:'레이크루이스 호숫가',km:4,h:1.5,st:2,la:51.417,lo:-116.217,img:'Alberta_-_Lake_Louise_-_Lake_view_01.jpg',cap:'레이크루이스'},
+ {id:'s54',z:'ll',n:'샤토 애프터눈 티',km:0,h:1,st:1,la:51.4168,lo:-116.216},
+ {id:'s55',z:'ll',n:'카누',km:0,h:1,st:1,la:51.4168,lo:-116.216},
+ {id:'s56',z:'ll',n:'페어뷰 트레일',km:3,h:1,st:0,la:51.412,lo:-116.228},
+ {id:'s57',z:'ll',n:'콘솔레이션 호수',km:6,h:2,st:0,la:51.315,lo:-116.17},
+ {id:'s58',z:'ll',n:'아그네스 티하우스',km:11,h:4,st:0,la:51.429,lo:-116.25},
+ {id:'s59',z:'ll',n:'라치밸리 · 센티넬',km:11,h:5.5,st:1,la:51.333,lo:-116.209},
+ {id:'s61',z:'yoho',n:'에메랄드 호수',km:5.2,h:1.5,st:2,la:51.443,lo:-116.529,img:'Emerald_Lake_-_Yoho_National_Park.JPG',cap:'에메랄드 호수'},
+ {id:'s62',z:'yoho',n:'에메랄드 카누',km:0,h:1,st:1,la:51.443,lo:-116.529},
+ {id:'s63',z:'yoho',n:'타카카오 폭포',km:1,h:0.5,st:1,la:51.499,lo:-116.48},
+ {id:'s64',z:'yoho',n:'내추럴 브리지',km:0.5,h:0.5,st:0,la:51.39,lo:-116.513},
+ {id:'s65',z:'yoho',n:'스파이럴 터널',km:0.2,h:0.3,st:0,la:51.447,lo:-116.354},
+ {id:'s71',z:'ice',n:'보우 호수',km:1,h:0.7,st:1,la:51.669,lo:-116.461},
+ {id:'s72',z:'ice',n:'페이토 호수',km:1.5,h:1,st:2,la:51.717,lo:-116.517},
+ {id:'s73',z:'ice',n:'크로우풋 빙하',km:0.3,h:0.3,st:0,la:51.65,lo:-116.44},
+ {id:'s74',z:'ice',n:'허버트 호수',km:0.5,h:0.3,st:0,la:51.483,lo:-116.211},
+];
+const DAYS=[
+  {d:'2026-09-20', l:'9.20', s:'오늘', start:9, budget:10, c:'#79B9EC'},
+  {d:'2026-09-21', l:'9.21', s:'월',   start:7, budget:11, c:'#57E0AE'},
+  {d:'2026-09-22', l:'9.22', s:'화',   start:8, budget:11, c:'#F2A65A'},
+  {d:'2026-09-23', l:'9.23', s:'수',   start:7, budget:7,  c:'#E4658C'},
+];
+let curDay=DAYS[0].d;
+const PICK={}, ORD={};
+const pk=(d,i)=>'opt:'+d+':'+i;
+const dayC=d=>(DAYS.find(x=>x.d===d)||DAYS[0]).c;
+function stars(n){ return n===2?'★★':n===1?'★':''; }
+function hhmm(x){ const h=Math.floor(x), m=Math.round((x-h)*60); return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0'); }
+
+async function savePick(d,i,on){
+  const t=ORD[pk(d,i)]||Date.now();
+  if(!online||!sb) return;
+  try{ await sb.from('checks').upsert({id:pk(d,i),done:on,updated_by:me||null,
+    updated_at:new Date(t).toISOString()}); }catch(e){}
+}
+function orderedPicks(day){
+  const out=SPOTS.filter(p=>PICK[pk(day,p.id)])
+    .sort((a,b)=>(ORD[pk(day,a.id)]||0)-(ORD[pk(day,b.id)]||0));
+  return {out};
+}
+function zoneOf(p){ return ZONES.find(z=>z.z===p.z); }
+function legs(out){
+  const L=[]; let prev=0;
+  out.forEach(p=>{ const pos=zoneOf(p).pos; L.push(Math.abs(pos-prev)); prev=pos; });
+  return {L, back:Math.abs(prev)};
+}
+function sortByRoute(day){
+  const out=SPOTS.filter(p=>PICK[pk(day,p.id)])
+    .sort((a,b)=> zoneOf(a).pos-zoneOf(b).pos || b.st-a.st);
+  const t0=Date.now();
+  out.forEach((p,i)=>{ ORD[pk(day,p.id)]=t0+i; savePick(day,p.id,true); });
+}
+function buildTabs(){
+  const box=document.getElementById('daytabs');
+  if(!box||box.dataset.built) return;
+  box.dataset.built='1';
+  box.innerHTML=DAYS.map(d=>'<button data-d="'+d.d+'" style="--dc:'+d.c+'">'+d.l+'<span>'+d.s+'</span></button>').join('');
+  box.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+    curDay=b.dataset.d;
+    box.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.d===curDay));
+    document.getElementById('build').style.setProperty('--day',dayC(curDay));
+    drawCatalog(); drawCart();
+  }));
+  box.querySelector('button').classList.add('on');
+  document.getElementById('build').style.setProperty('--day',dayC(curDay));
+  const dl=document.getElementById('dl');
+  if(dl && !dl.dataset.b){ dl.dataset.b='1'; dl.addEventListener('click',()=>cacheTiles(dl)); }
+}
+function drawCatalog(){
+  const box=document.getElementById('catalog');
+  if(!box) return;
+  box.innerHTML=ZONES.map(z=>{
+    const list=SPOTS.filter(p=>p.z===z.z);
+    if(!list.length) return '';
+    return '<div class="zone"><h4>'+z.n+' <u>'+z.note+'</u></h4><div class="chips">'+list.map(p=>{
+      const on=!!PICK[pk(curDay,p.id)];
+      const others=DAYS.filter(d=>d.d!==curDay && PICK[pk(d.d,p.id)]);
+      const c2=on?dayC(curDay):(others[0]?others[0].c:'');
+      const cls='chip'+(on?' on':(others.length?' alt':''));
+      const seq=on?(orderedPicks(curDay).out.findIndex(x=>x.id===p.id)+1):0;
+      return '<button class="'+cls+'" data-s="'+p.id+'"'+(c2?' style="--c2:'+c2+'"':'')+'>'+
+        (seq?'<b class="sq">'+seq+'</b>':'')+
+        (p.st?'<span class="st2">'+stars(p.st)+'</span>':'')+p.n+
+        others.map(d=>'<em style="--c2:'+d.c+'">'+d.l+'</em>').join('')+
+        '<s>'+(p.km?p.km+'km ':'')+p.h+'h</s></button>';
+    }).join('')+'</div></div>';
+  }).join('');
+  box.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
+    const k=pk(curDay,c.dataset.s);
+    PICK[k]=!PICK[k];
+    if(PICK[k]) ORD[k]=Date.now(); else delete ORD[k];
+    savePick(curDay,c.dataset.s,PICK[k]);
+    drawCatalog(); drawCart(); renderDays();
+  }));
+}
+function plan(){
+  const day=DAYS.find(d=>d.d===curDay);
+  const {out}=orderedPicks(curDay);
+  const {L,back}=legs(out);
+  const drive=L.reduce((a,x)=>a+x,0)+back;
+  const act=out.reduce((a,p)=>a+p.h,0);
+  return {day, sel:out, L, back, drive, act, km:out.reduce((a,p)=>a+p.km,0), total:act+drive};
+}
+function drawCart(){
+  const box=document.getElementById('cart');
+  if(!box) return;
+  const P=plan(), col=P.day.c;
+  const st=P.total>P.day.budget?['over','무리']:P.total>P.day.budget-1.5?['tight','빠듯']:['ok','여유'];
+  let tip='';
+  const has=id=>!!PICK[pk(curDay,id)];
+  if(has('s59')&&(has('s53')||has('s41'))) tip='라치밸리는 왕복 5~6시간입니다. 레이크루이스나 존스턴과 같이 넣기 어렵습니다.';
+  else if(P.zs.some(z=>z.z==='ice')&&P.zs.some(z=>z.z==='yoho')) tip='아이스필즈와 요호는 갈래가 다릅니다. 하루에 둘 다는 무리예요.';
+  else if(P.total>P.day.budget) tip='하루에 담기 어렵습니다. 한두 곳 빼거나 다른 날로 옮기세요.';
+
+  let t=P.day.start, rows='';
+  P.sel.forEach((p,i)=>{
+    if(P.L[i]>0.05){ rows+='<div class="mv">차로 '+Math.round(P.L[i]*60)+'분 이동</div>'; t+=P.L[i]; }
+    rows+='<div class="r"><time>'+hhmm(t)+'</time><div class="rr"><b class="sq">'+(i+1)+'</b>'+
+      (p.st?'<span class="st2">'+stars(p.st)+'</span> ':'')+p.n+
+      '<i>'+(p.km?p.km+'km · ':'')+p.h+'시간</i></div></div>';
+    t+=p.h;
+  });
+  if(P.sel.length){
+    if(P.back>0.05){ rows+='<div class="mv">숙소까지 '+Math.round(P.back*60)+'분</div>'; t+=P.back; }
+    rows+='<div class="r"><time>'+hhmm(t)+'</time><div class="rr">숙소 도착</div></div>';
+  }
+
+  const bar=document.getElementById('cartbar');
+  if(bar) bar.innerHTML='<span>'+P.day.l+' 담은 곳 <b>'+P.sel.length+'</b></span>'+
+    '<span>걷기 <b>'+P.km.toFixed(1)+'</b>km</span>'+
+    '<span>총 <b>'+P.total.toFixed(1)+'</b>h</span>'+
+    '<span class="st '+st[0]+'">'+st[1]+'</span>';
+
+  box.innerHTML=
+    '<div class="tot"><span>활동 <b>'+P.act.toFixed(1)+'</b>h + 이동 <b>'+P.drive.toFixed(1)+
+    '</b>h = 총 <b>'+P.total.toFixed(1)+'</b>h</span></div>'+
+    (tip?'<div class="hint">'+tip+'</div>':'')+
+    '<div class="acts"><button id="srt">거리순 정렬</button><button id="clr">이 날 비우기</button></div>'+
+    (rows?'<div class="rt2">'+rows+'</div>':'');
+  const leg=document.getElementById('legend');
+  if(leg) leg.innerHTML=DAYS.map(d=>'<i><b style="background:'+d.c+'"></b>'+d.l+
+    (d.d===curDay?' 보는 중':'')+'</i>').join('');
+  if(!paintMap(P.sel,col)){
+    const el=document.getElementById('lmap');
+    if(el && !el.dataset.fb){ el.dataset.fb='1'; el.innerHTML=drawMap(P.sel,col); el.style.height='auto'; }
+  }
+  const sb2=box.querySelector('#srt');
+  if(sb2) sb2.addEventListener('click',()=>{ sortByRoute(curDay); drawCatalog(); drawCart(); renderDays(); });
+  box.querySelector('#clr').addEventListener('click',()=>{
+    SPOTS.forEach(p=>{ if(PICK[pk(curDay,p.id)]){ PICK[pk(curDay,p.id)]=false; savePick(curDay,p.id,false);} });
+    drawCatalog(); drawCart(); renderDays();
+  });
+}
+function renderDays(){
+  document.querySelectorAll('.stops[data-day]').forEach(box=>{
+    const day=box.dataset.day, D=DAYS.find(x=>x.d===day);
+    if(!D) return;
+    box.style.setProperty('--day',D.c);
+    const {out}=orderedPicks(day);
+    if(!out.length){ box.innerHTML='<div class="stop"><time>—</time><div class="s"><i>코스 탭에서 갈 곳을 담으면 시간표가 만들어집니다.</i></div></div>'; return; }
+    const {L,back}=legs(out);
+    let t=D.start, html='';
+    out.forEach((p,i)=>{
+      if(L[i]>0.05){ html+='<div class="stop"><time></time><div class="s"><i>차로 '+Math.round(L[i]*60)+'분 이동</i></div></div>'; t+=L[i]; }
+      html+='<div class="stop"><time>'+hhmm(t)+'</time><div class="s"><b><span class="sq">'+(i+1)+'</span> '+
+        (p.st?'<span class="st2">'+stars(p.st)+'</span> ':'')+p.n+'</b><i>'+
+        (p.km?p.km+'km · ':'')+p.h+'시간</i>'+
+        (p.img?'<img class="spot" loading="lazy" alt="'+p.cap+'" src="https://commons.wikimedia.org/wiki/Special:FilePath/'+p.img+'?width=900" onerror="this.classList.add(\'hide\');this.nextElementSibling.classList.add(\'hide\')"><span class="cr">'+p.cap+' / Wikimedia Commons</span>':'')+
+        '</div></div>';
+      t+=p.h;
+    });
+    if(back>0.05){ html+='<div class="stop"><time></time><div class="s"><i>숙소까지 '+Math.round(back*60)+'분</i></div></div>'; t+=back; }
+    html+='<div class="stop"><time>'+hhmm(t)+'</time><div class="s"><b>숙소 도착</b></div></div>';
+    box.innerHTML=html;
+  });
+}
+window.__loadOpts=function(rows){
+  rows.forEach(r=>{
+    if(!r.id||r.id.indexOf('opt:')!==0) return;
+    PICK[r.id]=!!r.done;
+    if(r.done) ORD[r.id]=Date.parse(r.updated_at||'')||Date.now();
+    else delete ORD[r.id];
+  });
+  drawCatalog(); drawCart(); renderDays();
+};
+(function(){
+  const sc=document.createElement('script');
+  sc.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  sc.onload=()=>{ LMAP=null; drawCart(); };
+  sc.onerror=()=>{};
+  document.head.appendChild(sc);
+})();
+buildTabs();
+[['2026-09-20',['s01','s04','s02','s11','s31']],
+ ['2026-09-21',['s51','s52','s53','s41']],
+ ['2026-09-22',['s61','s63','s64','s18','s15']],
+ ['2026-09-23',['s32','s33']]].forEach(([d,ids])=>ids.forEach(i=>PICK[pk(d,i)]=true));
+drawCatalog(); drawCart(); renderDays();
+
+/* ---------- 날씨 자동 갱신 ---------- */
+(function(){
+  const ICON = c =>
+    c===0?['☀','맑음']: c<=2?['⛅','구름조금']: c===3?['☁','흐림']:
+    c<=48?['🌫','안개']: c<=57?['🌦','이슬비']: c<=67?['🌧','비']:
+    c<=77?['🌨','눈']: c<=82?['🌧','소나기']: c<=86?['🌨','눈']: ['⛈','뇌우'];
+  const WD = ['일','월','화','수','목','금','토'];
+
+  document.querySelectorAll('#wx h4[data-lat]').forEach(async h=>{
+    const card = h.parentElement;
+    const u = 'https://api.open-meteo.com/v1/forecast?latitude='+h.dataset.lat+
+      '&longitude='+h.dataset.lon+'&daily=temperature_2m_max,temperature_2m_min,'+
+      'precipitation_probability_max,weather_code&timezone='+encodeURIComponent(h.dataset.tz)+
+      '&forecast_days=16';
+    try{
+      const r = await fetch(u);
+      if(!r.ok) return;
+      const d = (await r.json()).daily;
+      const from = h.dataset.from, to = h.dataset.to;
+      const idx = d.time.map((t,i)=>({t,i})).filter(o=> o.t>=from && o.t<=to).map(o=>o.i);
+      if(!idx.length) return;
+
+      const hi = Math.round(Math.max(...idx.map(i=>d.temperature_2m_max[i])));
+      const hiL = Math.round(Math.min(...idx.map(i=>d.temperature_2m_max[i])));
+      const lo = Math.round(Math.min(...idx.map(i=>d.temperature_2m_min[i])));
+      const loH = Math.round(Math.max(...idx.map(i=>d.temperature_2m_min[i])));
+      const tEl = card.querySelector('.temps');
+      if(tEl) tEl.innerHTML = '<span class="hi">'+(hiL===hi?hi:hiL+'~'+hi)+'</span>'+
+        '<span class="lo">/ '+(lo===loH?lo:lo+'~'+loH)+'</span><span class="unit">°C</span>';
+
+      let strip = card.querySelector('.fc');
+      if(!strip){ strip = document.createElement('div'); strip.className='fc';
+        (card.querySelector('.wear')||card).before(strip); }
+      strip.innerHTML = idx.map(i=>{
+        const dt = new Date(d.time[i]+'T00:00:00');
+        const [ic,lab] = ICON(d.weather_code[i]);
+        const pop = d.precipitation_probability_max[i];
+        return '<div><b>'+(dt.getMonth()+1)+'.'+dt.getDate()+' '+WD[dt.getDay()]+'</b>'+
+          '<u title="'+lab+'">'+ic+'</u>'+
+          '<s>'+Math.round(d.temperature_2m_max[i])+'/'+Math.round(d.temperature_2m_min[i])+'</s>'+
+          (pop!=null? '<em>'+pop+'%</em>':'')+'</div>';
+      }).join('');
+
+      let live = card.querySelector('.live');
+      if(!live){ live = document.createElement('div'); live.className='live'; card.appendChild(live); }
+      const now = new Date();
+      live.textContent = '갱신 ' + (now.getMonth()+1) + '.' + now.getDate() + ' ' +
+        String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') +
+        ' · Open-Meteo';
+    }catch(e){}
+  });
+})();
+
+/* ---------- 지난 일정 흐리게 ---------- */
+(function(){
+  const today = new Date();
+  const t = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  let todayEl = null, doneCount = 0;
+  document.querySelectorAll('[data-d]').forEach(el=>{
+    const [y,m,d] = el.dataset.d.split('-').map(Number);
+    const day = new Date(y, m-1, d);
+    if(day < t){
+      el.classList.add('done'); doneCount++;
+      const h = el.querySelector('.date, .rt-head b');
+      if(h && !h.querySelector('.badge')){
+        const b = document.createElement('span');
+        b.className='badge ok'; b.textContent='완료';
+        h.appendChild(b);
+      }
+    } else if(day.getTime() === t.getTime()){
+      el.classList.add('today'); todayEl = el;
+      const h = el.querySelector('.date, .rt-head b');
+      if(h){
+        const b = document.createElement('span');
+        b.className='badge now'; b.textContent='오늘';
+        h.appendChild(b);
+      }
+    }
+  });
+
+  const dep = new Date(2026,8,16);
+  if(t >= dep){
+    const now = document.getElementById('now');
+    if(now){
+      now.classList.add('done');
+      const bar = document.createElement('div');
+      bar.className='donebar';
+      bar.innerHTML='<b>출발 완료</b> 이 목록은 이제 참고용입니다';
+      now.querySelector('.bar').before(bar);
+    }
+  }
+
+  if(todayEl){
+    const jump = document.createElement('a');
+    jump.href='#plan'; jump.className='reset'; jump.style.cssText='display:block;text-align:center;margin:0 0 18px;text-decoration:none';
+    jump.textContent='오늘 일정으로';
+    const plan = document.getElementById('plan');
+    if(plan) plan.querySelector('.sub').after(jump);
+    setTimeout(()=>{ if(location.hash==='#plan') todayEl.scrollIntoView({block:'center'}); }, 400);
+  }
+})();
+
+/* ---------- 연결 ---------- */
+(async function(){
+  readMe();
+  if(me) setMe(me);
+  refresh();
+
+  if(!SUPABASE_URL || !SUPABASE_KEY){
+    document.getElementById('setup').classList.add('open');
+    status('<b>설정 전 — 저장되지 않습니다</b>', 'bad');
+    return;
+  }
+
+  let createClient;
+  try{
+    ({ createClient } = await import('https://esm.sh/@supabase/supabase-js@2'));
+  }catch(e){
+    status('<b>라이브러리를 불러오지 못했습니다</b><br>인터넷 연결을 확인하세요', 'bad');
+    return;
+  }
+
+  sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const { data, error } = await sb.from('checks').select('id, done, updated_by, updated_at');
+  if(error){
+    status('<b>연결 실패</b><br>' + (error.message || '주소와 키를 확인하세요'), 'bad');
+    return;
+  }
+  online = true;
+  data.forEach(r=>{ state[r.id] = {done: r.done, by: r.updated_by || ''}; });
+  paint(); refresh();
+  status('<b class="ok">실시간 연결됨</b><br>한쪽에서 체크하면 즉시 반영됩니다');
+
+  sb.channel('checks-live')
+    .on('postgres_changes', {event:'*', schema:'public', table:'checks'}, payload=>{
+      const r = payload.new;
+      if(!r || !r.id) return;
+      if(r.id.indexOf('opt:')===0){
+        PICK[r.id]=!!r.done;
+        if(r.done) ORD[r.id]=Date.parse(r.updated_at||'')||Date.now(); else delete ORD[r.id];
+        drawCatalog(); drawCart(); renderDays();
+        return;
+      }
+      state[r.id] = {done: r.done, by: r.updated_by || ''};
+      paint(); refresh();
+    })
+    .subscribe();
+})();
+</script>
