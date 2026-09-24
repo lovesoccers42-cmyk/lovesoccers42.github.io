@@ -322,7 +322,7 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
   box-shadow:0 1px 5px rgba(0,0,0,.35)}
 .pin.home{border-radius:7px;border-color:#0E9E76;color:#0E9E76;font-size:9px}
 .pin.card{border-color:#B57BE0;font-size:13px;width:24px;height:24px;background:#fff}
-.pin.card.mart{border-color:#8AA4C8;opacity:.9}
+.pin.card.mart{border-color:#4E9C8B;font-size:12px}
 .dl{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:11.5px;color:var(--faint)}
 .dl button{padding:6px 12px;border-radius:8px;border:1px solid var(--line);background:none;
   color:var(--dim);font:inherit;font-size:11.5px;font-weight:700;cursor:pointer}
@@ -373,7 +373,7 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
   </div>
   <div class="legend" id="legend"></div>
   <div id="lmap"></div>
-  <div class="dl"><button id="cardBtn">🃏 카드샵</button><button id="dl">지도 저장</button><span>한 번 눌러두면 산속에서도 보입니다</span></div>
+  <div class="dl"><button id="cardBtn">🃏 카드샵 · 🛒 마트</button><button id="dl">지도 저장</button><span>한 번 눌러두면 산속에서도 보입니다</span></div>
   <div class="cart" id="cart"></div>
 </section>
 
@@ -920,7 +920,7 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
 <footer>
   <div id="sync">연결 확인 중…</div>
   <div id="jserr" style="display:none;margin:8px 0;padding:9px;border-radius:9px;background:rgba(228,101,140,.12);border:1px solid rgba(228,101,140,.4);color:#F0B7C8;font-size:11px;text-align:left;word-break:break-all"></div>
-  <div class="ver">v15 · 09-24 14:10</div>
+  <div class="ver">v16 · 09-24 15:00</div>
   <div class="tools">
     <button class="reset" id="resetBtn">체크 지우기</button>
   </div>
@@ -1261,10 +1261,6 @@ const CARDS=[
  {rg:'la',t:'shop',n:'RARE PULL',la:34.1647,lo:-118.4478,h:'요일별 상이',m:'5.0/48. 셔먼옥스. 자체 랜덤팩이 특색'},
  {rg:'la',t:'shop',n:'Tartarian Cards',la:34.1728,lo:-118.5636,h:'13–21시',m:'4.9/30. 타자나. 멉니다'},
  {rg:'la',t:'shop',n:'The TCG Center',la:34.2642,lo:-118.5041,h:'일 휴무 · 10–18시',m:'5.0/145. 그라나다힐스. 시세 이하 실드가 있다는 평'},
- {rg:'la',t:'mart',n:'Ralphs (Western)',la:34.06,lo:-118.3086,h:'5–25시',m:'크로거 계열 — 공식 자판기 확인처'},
- {rg:'la',t:'mart',n:'Ralphs (3rd St)',la:34.0684,lo:-118.2905,h:'5–25시',m:'크로거 계열'},
- {rg:'la',t:'mart',n:'Vons (3rd St)',la:34.07,lo:-118.2909,h:'6–26시',m:'앨버슨스 계열 — 공식 자판기 확인처'},
- {rg:'la',t:'mart',n:'Target 코리아타운',la:34.0632,lo:-118.2865,h:'7–21시',m:'실드 정가. 재고는 기대 낮게'},
  {rg:'vg',t:'shop',n:'Cards N Hobby',la:36.1433,lo:-115.2095,h:'매일 10–19시',m:'4.9/815. 포켓몬 벽 하나가 통째. 시내 최저가라는 평이 많음'},
  {rg:'vg',t:'shop',n:'888 Collectibles',la:36.1278,lo:-115.1971,h:'매일 11–22시',m:'4.4/522. 싱글·실드 모두 깊음. 포켓몬 전문'},
  {rg:'vg',t:'shop',n:'777 Card Factory',la:36.127,lo:-115.1925,h:'월 휴무 · 14–22시',m:'888 바로 옆. 가격 협상 된다는 평'},
@@ -1274,9 +1270,41 @@ const CARDS=[
  {rg:'vg',t:'shop',n:'Phantasma',la:36.2039,lo:-115.2227,h:'14–21시',m:'4.8/53. 스트립에서 북서쪽'},
  {rg:'vg',t:'shop',n:'Legacy Trading Cards',la:36.2798,lo:-115.2616,h:'매일 11–18시',m:'4.8/226. 북쪽 외곽. 재고가 많음'},
  {rg:'vg',t:'shop',n:'Ribbit TCG',la:36.2379,lo:-115.2103,h:'월·화 휴무',m:'4.7/39. 북쪽 외곽'},
- {rg:'vg',t:'mart',n:'Smith\'s (Maryland)',la:36.1434,lo:-115.1349,h:'6–24시',m:'크로거 계열 — 공식 자판기 확인처'},
- {rg:'vg',t:'mart',n:'Target 스트립',la:36.1048,lo:-115.1725,h:'7–22시',m:'스트립 위. 걸어갈 수 있음'},
- {rg:'vg',t:'mart',n:'Albertsons (Charleston)',la:36.1569,lo:-115.1256,h:'6–22시',m:'앨버슨스 계열 — 공식 자판기 확인처'},
+ {rg:'la',t:'mart',n:'Ralphs (Western)',la:34.06,lo:-118.3086,h:'5–25시',m:'크로거 · 숙소에서 가장 가까움'},
+ {rg:'la',t:'mart',n:'Ralphs (3rd St)',la:34.0684,lo:-118.2905,h:'5–25시',m:'크로거'},
+ {rg:'la',t:'mart',n:'Ralphs (Pico)',la:34.0478,lo:-118.3394,h:'5–25시',m:'크로거'},
+ {rg:'la',t:'mart',n:'Ralphs (La Brea)',la:34.07,lo:-118.3435,h:'5–25시',m:'크로거'},
+ {rg:'la',t:'mart',n:'Ralphs (Sunset)',la:34.0987,lo:-118.3484,h:'5–25시',m:'크로거 · 할리우드'},
+ {rg:'la',t:'mart',n:'Ralphs (Vermont)',la:34.0318,lo:-118.2908,h:'5–25시',m:'크로거 · 4.3/3064로 큰 매장'},
+ {rg:'la',t:'mart',n:'Ralphs Fresh Fare (9th St)',la:34.0458,lo:-118.2606,h:'5–24시',m:'크로거 · 다운타운'},
+ {rg:'la',t:'mart',n:'Ralphs Fresh Fare (Olympic)',la:34.0524,lo:-118.4178,h:'6–25시',m:'크로거 · RWT 가는 길'},
+ {rg:'la',t:'mart',n:'Ralphs (National)',la:34.0261,lo:-118.4333,h:'5–24시',m:'크로거 · 웨스트LA'},
+ {rg:'la',t:'mart',n:'Vons (3rd St)',la:34.07,lo:-118.2909,h:'6–26시',m:'앨버슨스 · 숙소 근처'},
+ {rg:'la',t:'mart',n:'Vons (Sunset)',la:34.0971,lo:-118.288,h:'5–25시',m:'앨버슨스'},
+ {rg:'la',t:'mart',n:'Vons (Fairfax)',la:34.0505,lo:-118.3663,h:'6–22시',m:'앨버슨스'},
+ {rg:'la',t:'mart',n:'Vons (Alvarado)',la:34.0795,lo:-118.2613,h:'6–23시',m:'앨버슨스'},
+ {rg:'la',t:'mart',n:'Vons (Figueroa)',la:34.1361,lo:-118.1895,h:'6–23시',m:'앨버슨스 · 빌라스 타코스 근처'},
+ {rg:'la',t:'mart',n:'Target 코리아타운',la:34.0632,lo:-118.2865,h:'7–21시',m:'실드 정가'},
+ {rg:'la',t:'mart',n:'Target 선셋',la:34.0978,lo:-118.3098,h:'8–22시',m:'할리우드'},
+ {rg:'la',t:'mart',n:'Target 다운타운',la:34.0491,lo:-118.2614,h:'7–21시',m:''},
+ {rg:'la',t:'mart',n:'Target 비벌리',la:34.0752,lo:-118.3756,h:'8–22시',m:'주차 유료 주의'},
+ {rg:'la',t:'mart',n:'Target 웨스트우드',la:34.0627,lo:-118.4441,h:'7–22시',m:'2시간 무료주차'},
+ {rg:'la',t:'mart',n:'Target 라시에네가',la:34.0234,lo:-118.3738,h:'7–22시',m:'큰 매장'},
+ {rg:'la',t:'mart',n:'Target 이글록',la:34.1411,lo:-118.2241,h:'8–23시',m:'리뷰에 카드 수량 제한 언급'},
+ {rg:'la',t:'mart',n:'Target 컬버시티',la:33.9993,lo:-118.3935,h:'7–22시',m:''},
+ {rg:'vg',t:'mart',n:'Smith\'s (Maryland)',la:36.1434,lo:-115.1349,h:'6–24시',m:'크로거 · 스트립에서 가까움'},
+ {rg:'vg',t:'mart',n:'Smith\'s (Decatur)',la:36.1183,lo:-115.2096,h:'6–24시',m:'크로거'},
+ {rg:'vg',t:'mart',n:'Smith\'s (Rancho)',la:36.1613,lo:-115.1746,h:'6–24시',m:'크로거 · 프리몬트 근처'},
+ {rg:'vg',t:'mart',n:'Smith\'s (E Sahara)',la:36.1429,lo:-115.0671,h:'6–24시',m:'크로거'},
+ {rg:'vg',t:'mart',n:'Smith\'s (W Charleston)',la:36.1577,lo:-115.3122,h:'6–24시',m:'크로거 · 코스트코 근처'},
+ {rg:'vg',t:'mart',n:'Smith\'s (LV Blvd S)',la:36.0402,lo:-115.1706,h:'6–24시',m:'크로거 · 남쪽'},
+ {rg:'vg',t:'mart',n:'Vons (Twain)',la:36.121,lo:-115.1391,h:'6–22시',m:'앨버슨스 · 스트립 동쪽'},
+ {rg:'vg',t:'mart',n:'Vons (Tropicana)',la:36.1,lo:-115.1378,h:'6–22시',m:'앨버슨스'},
+ {rg:'vg',t:'mart',n:'Albertsons (Charleston)',la:36.1569,lo:-115.1256,h:'6–22시',m:'앨버슨스'},
+ {rg:'vg',t:'mart',n:'Target 스트립',la:36.1048,lo:-115.1725,h:'7–22시',m:'스트립 위 · 도보 가능'},
+ {rg:'vg',t:'mart',n:'Walmart (Charleston)',la:36.1565,lo:-115.2018,h:'6–23시',m:'888·Cards N Hobby 근처'},
+ {rg:'vg',t:'mart',n:'Walmart (Rainbow)',la:36.1232,lo:-115.2465,h:'6–23시',m:''},
+ {rg:'vg',t:'mart',n:'Walmart (Eastern)',la:36.0805,lo:-115.1217,h:'6–23시',m:''},
 ];
 let CARDON=true, CMARKS=[];
 function paintCards(){
@@ -1286,9 +1314,9 @@ function paintCards(){
   const rg=regOf(curDay);
   CARDS.filter(c=>c.rg===rg).forEach(c=>{
     const ic=L.divIcon({className:'',iconSize:[26,26],iconAnchor:[13,13],
-      html:'<div class="pin card'+(c.t==='mart'?' mart':'')+'">🃏</div>'});
+      html:'<div class="pin card'+(c.t==='mart'?' mart':'')+'">'+(c.t==='mart'?'🛒':'🃏')+'</div>'});
     CMARKS.push(L.marker([c.la,c.lo],{icon:ic,zIndexOffset:-100})
-      .bindPopup('<b>🃏 '+c.n+'</b><i>'+c.h+'<br>'+c.m+'</i>').addTo(LMAP));
+      .bindPopup('<b>'+(c.t==='mart'?'🛒':'🃏')+' '+c.n+'</b><i>'+c.h+'<br>'+c.m+'</i>').addTo(LMAP));
   });
 }
 
