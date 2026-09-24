@@ -282,6 +282,20 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
 .cart .acts{display:flex;gap:7px;margin-top:10px}
 .cart .acts button{flex:1;padding:8px;border-radius:9px;border:1px solid var(--line);background:none;
   color:var(--dim);font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.addbox{margin:2px 0 14px}
+.addform{display:none;margin-top:9px;padding:12px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
+.addform.open{display:block}
+.addform input{width:100%;padding:9px 11px;margin-bottom:7px;border-radius:9px;border:1px solid var(--line);
+  background:var(--bg);color:var(--ink);font:inherit;font-size:13px}
+.addform input:focus{outline:none;border-color:var(--day)}
+.addform .row{display:flex;gap:7px}
+.addform .row input{flex:1}
+.addform .row button{flex:1}
+.addform button{width:100%;margin-bottom:7px}
+.addform button.go{border-color:color-mix(in srgb,var(--day) 50%,transparent);color:var(--day)}
+.pickbtn.armed{border-color:var(--lax);color:var(--lax)}
+.amsg{font-size:11.5px;color:var(--dim);line-height:1.5}
+.chip .del{margin-left:5px;font-size:12px;color:var(--faint);font-weight:700}
 .legend{display:flex;gap:9px;flex-wrap:wrap;font-size:10.5px;color:var(--faint);margin:9px 0 2px}
 .legend i{font-style:normal;display:inline-flex;align-items:center;gap:4px}
 .legend b{width:7px;height:7px;border-radius:50%;display:inline-block}
@@ -347,6 +361,16 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
   <p class="sub">가고 싶은 곳을 담으면 동선과 시간을 계산합니다. <span style="color:var(--lax)">★</span>는 추천, <span style="color:var(--lax)">★★</span>는 놓치면 아까운 곳입니다.</p>
   <div class="cartbar"><div class="daytabs" id="daytabs"></div><div class="barsum" id="cartbar"></div></div>
   <div id="catalog"></div>
+  <div class="addbox">
+    <button class="reset" id="addBtn">+ 장소 직접 추가</button>
+    <div class="addform" id="addForm">
+      <input id="aName" placeholder="장소 이름" maxlength="24">
+      <div class="row"><input id="aH" type="number" step="0.5" min="0.5" placeholder="머무는 시간 (h)"><input id="aKm" type="number" step="0.5" min="0" placeholder="걷기 (km)"></div>
+      <button class="reset pickbtn" id="aPick">지도에서 위치 찍기</button>
+      <div class="row"><button class="reset" id="aCancel">취소</button><button class="reset go" id="aSave">추가</button></div>
+      <div class="amsg" id="aMsg"></div>
+    </div>
+  </div>
   <div class="legend" id="legend"></div>
   <div id="lmap"></div>
   <div class="dl"><button id="cardBtn">🃏 카드샵</button><button id="dl">지도 저장</button><span>한 번 눌러두면 산속에서도 보입니다</span></div>
@@ -896,7 +920,7 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
 <footer>
   <div id="sync">연결 확인 중…</div>
   <div id="jserr" style="display:none;margin:8px 0;padding:9px;border-radius:9px;background:rgba(228,101,140,.12);border:1px solid rgba(228,101,140,.4);color:#F0B7C8;font-size:11px;text-align:left;word-break:break-all"></div>
-  <div class="ver">v14 · 09-24 13:30</div>
+  <div class="ver">v15 · 09-24 14:10</div>
   <div class="tools">
     <button class="reset" id="resetBtn">체크 지우기</button>
   </div>
@@ -1103,6 +1127,7 @@ function initMap(){
   LMAP.attributionControl.setPrefix('');
   LLAYER.addTo(LMAP);
   LMAP.setView([51.3,-115.9],9);
+  LMAP.on('click',e=>{ if(PICKMODE && window.__setPick) window.__setPick(e.latlng.lat,e.latlng.lng); });
   return LMAP;
 }
 function paintMap(ordered,col){
@@ -1267,6 +1292,77 @@ function paintCards(){
   });
 }
 
+
+/* ---------- 직접 추가 ---------- */
+let PICKMODE=false;
+function customRow(o){ return {id:'spot:'+o.k, done:true, updated_by:JSON.stringify(o), updated_at:new Date().toISOString()}; }
+
+function loadCustom(rows){
+  rows.forEach(r=>{
+    if(!r.id || r.id.indexOf('spot:')!==0) return;
+    const ex=SPOTS.findIndex(p=>p.id===r.id);
+    if(!r.done){ if(ex>=0) SPOTS.splice(ex,1); return; }
+    let o; try{ o=JSON.parse(r.updated_by||'{}'); }catch(e){ return; }
+    if(!o.n||o.la==null) return;
+    const sp={id:r.id, z:o.rg==='vg'?'vg':'la', n:o.n, km:+o.km||0, h:+o.h||1, st:0, la:+o.la, lo:+o.lo, mine:1};
+    if(ex>=0) SPOTS[ex]=sp; else SPOTS.push(sp);
+  });
+}
+async function saveCustom(o){ await upsert(customRow(o)); }
+async function delCustom(id){
+  const i=SPOTS.findIndex(p=>p.id===id);
+  if(i>=0) SPOTS.splice(i,1);
+  DAYS.forEach(d=>{ delete PICK[pk(d.d,id)]; delete ORD[pk(d.d,id)]; });
+  await upsert({id, done:false, updated_by:null, updated_at:new Date().toISOString()});
+  drawCatalog(); drawCart(); renderDays();
+}
+
+function bindAdd(){
+  const btn=document.getElementById('addBtn'), form=document.getElementById('addForm');
+  if(!btn||btn.dataset.b) return;
+  btn.dataset.b='1';
+  const msg=document.getElementById('aMsg'), pick=document.getElementById('aPick');
+  let LL=null;
+  const reset=()=>{ LL=null; PICKMODE=false; pick.classList.remove('armed');
+    pick.textContent='지도에서 위치 찍기'; msg.textContent='';
+    ['aName','aH','aKm'].forEach(i=>document.getElementById(i).value=''); };
+
+  btn.addEventListener('click',()=>{ form.classList.toggle('open'); if(!form.classList.contains('open')) reset(); });
+  document.getElementById('aCancel').addEventListener('click',()=>{ form.classList.remove('open'); reset(); });
+
+  pick.addEventListener('click',()=>{
+    if(!LMAP){ msg.textContent='지도가 아직 안 떴습니다.'; return; }
+    PICKMODE=!PICKMODE;
+    pick.classList.toggle('armed',PICKMODE);
+    pick.textContent=PICKMODE?'지도를 눌러 위치를 정하세요':'지도에서 위치 찍기';
+    if(PICKMODE){ msg.textContent='아래 지도에서 장소를 누르세요.';
+      document.getElementById('lmap').scrollIntoView({block:'center',behavior:'smooth'}); }
+  });
+
+  window.__setPick=(la,lo)=>{
+    LL={la:+la.toFixed(5),lo:+lo.toFixed(5)};
+    PICKMODE=false; pick.classList.remove('armed'); pick.textContent='위치 지정됨 · 다시 찍기';
+    msg.textContent='위치: '+LL.la+', '+LL.lo;
+  };
+
+  document.getElementById('aSave').addEventListener('click',async ()=>{
+    const n=document.getElementById('aName').value.trim();
+    const h=parseFloat(document.getElementById('aH').value);
+    const km=parseFloat(document.getElementById('aKm').value)||0;
+    if(!n){ msg.textContent='이름을 넣어주세요.'; return; }
+    if(!h||h<=0){ msg.textContent='머무는 시간을 넣어주세요.'; return; }
+    if(!LL){ msg.textContent='지도에서 위치를 찍어주세요.'; return; }
+    const o={k:Date.now().toString(36), n, h, km, la:LL.la, lo:LL.lo, rg:regOf(curDay)};
+    const id='spot:'+o.k;
+    SPOTS.push({id, z:o.rg==='vg'?'vg':'la', n, km, h, st:0, la:LL.la, lo:LL.lo, mine:1});
+    PICK[pk(curDay,id)]=true; ORD[pk(curDay,id)]=Date.now();
+    await saveCustom(o);
+    await savePick(curDay,id,true);
+    form.classList.remove('open'); reset();
+    drawCatalog(); drawCart(); renderDays();
+  });
+}
+
 /* ---------- 코스 만들기 ---------- */
 const REG={
   rk:{home:{la:51.1880,lo:-115.5480,n:'히든리지'}, sp:70},
@@ -1354,8 +1450,6 @@ SPOTS.push( {id:'v10',z:'vg',n:'호텔에서 쉬기',km:0,h:2,st:0,la:36.1162,lo
 SPOTS.push({id:'u13',z:'la',n:'레이크 할리우드 파크',km:1.5,h:1,st:2,la:34.1269,lo:-118.3261});
 SPOTS.push({id:'u14',z:'la',n:"Villa's Tacos",km:0.3,h:1.5,st:2,la:34.1086,lo:-118.1968});
 SPOTS.push({id:'u15',z:'la',n:'예트골 (한식)',km:0.3,h:1.5,st:1,la:34.0494,lo:-118.3085});
-SPOTS.push({id:'u16',z:'la',n:'RWT Collective',km:0.5,h:1.5,st:2,la:34.0384,lo:-118.4422});
-SPOTS.push({id:'u17',z:'la',n:'Turn Zero Games',km:0.3,h:0.7,st:0,la:34.0621,lo:-118.3136});
 const DAYS=[
   {d:'2026-09-20', l:'9.20', s:'일', rg:'rk', start:9, budget:10, c:'#79B9EC'},
   {d:'2026-09-21', l:'9.21', s:'월', rg:'rk', start:7, budget:11, c:'#57E0AE'},
@@ -1444,8 +1538,9 @@ function drawCatalog(){
   const box=document.getElementById('catalog');
   if(!box) return;
   const rg=regOf(curDay);
+  const mine=SPOTS.filter(p=>p.mine && ((p.z==='vg'?'vg':'la')===rg));
   box.innerHTML=ZONES.filter(z=>(z.rg||'rk')===rg).map(z=>{
-    const list=SPOTS.filter(p=>p.z===z.z);
+    const list=SPOTS.filter(p=>p.z===z.z && !p.mine);
     if(!list.length) return '';
     return '<div class="zone"><h4>'+z.n+' <u>'+z.note+'</u></h4><div class="chips">'+list.map(p=>{
       const on=!!PICK[pk(curDay,p.id)];
@@ -1459,7 +1554,19 @@ function drawCatalog(){
         others.map(d=>'<em style="--c2:'+d.c+'">'+d.l+'</em>').join('')+
         '<s>'+(p.km?p.km+'km ':'')+p.h+'h</s></button>';
     }).join('')+'</div></div>';
-  }).join('');
+  }).join('') + (mine.length?('<div class="zone"><h4>내가 추가한 곳 <u>직접 넣은 장소</u></h4><div class="chips">'+
+    mine.map(p=>{
+      const on=!!PICK[pk(curDay,p.id)];
+      const seq=on?(orderedPicks(curDay).out.findIndex(x=>x.id===p.id)+1):0;
+      return '<button class="chip'+(on?' on':'')+'" data-s="'+p.id+'"'+(on?' style="--c2:'+dayC(curDay)+'"':'')+'>'+
+        (seq?'<b class="sq">'+seq+'</b>':'')+p.n+'<s>'+(p.km?p.km+'km ':'')+p.h+'h</s>'+
+        '<span class="del" data-del="'+p.id+'">✕</span></button>';
+    }).join('')+'</div></div>'):'');
+  box.querySelectorAll('.del').forEach(x=>x.addEventListener('click',ev=>{
+    ev.stopPropagation();
+    if(confirm('이 장소를 목록에서 지울까요?')) delCustom(x.dataset.del);
+  }));
+  bindAdd();
   box.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
     const k=pk(curDay,c.dataset.s);
     PICK[k]=!PICK[k];
@@ -1713,8 +1820,10 @@ async function upsert(row){
 
 function applyRows(rows){
   let touched=false;
+  loadCustom(rows);
   rows.forEach(r=>{
     if(!r.id) return;
+    if(r.id.indexOf('spot:')===0){ touched=true; return; }
     if(r.id.indexOf('opt:')===0){
       PICK[r.id]=!!r.done;
       if(r.done) ORD[r.id]=Date.parse(r.updated_at||'')||Date.now(); else delete ORD[r.id];
