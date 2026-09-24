@@ -894,7 +894,7 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
 <footer>
   <div id="sync">연결 확인 중…</div>
   <div id="jserr" style="display:none;margin:8px 0;padding:9px;border-radius:9px;background:rgba(228,101,140,.12);border:1px solid rgba(228,101,140,.4);color:#F0B7C8;font-size:11px;text-align:left;word-break:break-all"></div>
-  <div class="ver">v10 · 09-23 10:20</div>
+  <div class="ver">v11 · 09-24 08:30</div>
   <div class="tools">
     <button class="reset" id="resetBtn">체크 지우기</button>
   </div>
@@ -1058,8 +1058,8 @@ const TDB=(()=>{ let dbp;
   };
 })();
 
-const TILE='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png';
-function tileUrl(z,x,y){ return TILE.replace('{s}','abc'[(x+y)%3]).replace('{z}',z).replace('{x}',x).replace('{y}',y); }
+const TILE='https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+function tileUrl(z,x,y){ return TILE.replace('{s}','a').replace('{z}',z).replace('{x}',x).replace('{y}',y); }
 function lon2x(lo,z){ return Math.floor((lo+180)/360*Math.pow(2,z)); }
 function lat2y(la,z){ const r=la*Math.PI/180;
   return Math.floor((1-Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*Math.pow(2,z)); }
@@ -1086,13 +1086,18 @@ function initMap(){
           TDB.put(url,b);
           img.src=URL.createObjectURL(b);
           done(null,img);
-        }catch(e){ done(e,img); }
+        }catch(e){
+          img.crossOrigin=null;
+          img.onload=()=>done(null,img);
+          img.onerror=()=>done(e,img);
+          img.src=url;
+        }
       })();
       return img;
     }
   });
   LLAYER=new Cached(TILE,{maxZoom:16,minZoom:8,
-    attribution:'&copy; OSM · CARTO'});
+    attribution:'&copy; OpenStreetMap'});
   LMAP.attributionControl.setPrefix('');
   LLAYER.addTo(LMAP);
   LMAP.setView([51.3,-115.9],9);
@@ -1377,7 +1382,7 @@ function drawCatalog(){
     if(!list.length) return '';
     return '<div class="zone"><h4>'+z.n+' <u>'+z.note+'</u></h4><div class="chips">'+list.map(p=>{
       const on=!!PICK[pk(curDay,p.id)];
-      const others=DAYS.filter(d=>d.d!==curDay && PICK[pk(d.d,p.id)]);
+      const others=DAYS.filter(d=>d.d!==curDay && !isPast(d.d) && PICK[pk(d.d,p.id)]);
       const c2=on?dayC(curDay):(others[0]?others[0].c:'');
       const cls='chip'+(on?' on':(others.length?' alt':''));
       const seq=on?(orderedPicks(curDay).out.findIndex(x=>x.id===p.id)+1):0;
@@ -1441,7 +1446,7 @@ function drawCart(){
     '<div class="acts"><button id="srt">거리순 정렬</button><button id="clr">이 날 비우기</button></div>'+
     (rows?'<div class="rt2">'+rows+'</div>':'');
   const leg=document.getElementById('legend');
-  if(leg) leg.innerHTML=DAYS.map(d=>'<i><b style="background:'+d.c+'"></b>'+d.l+
+  if(leg) leg.innerHTML=DAYS.filter(d=>!isPast(d.d)).map(d=>'<i><b style="background:'+d.c+'"></b>'+d.l+
     (d.d===curDay?' 보는 중':'')+'</i>').join('');
   if(!paintMap(P.sel,col)){
     const el=document.getElementById('lmap');
