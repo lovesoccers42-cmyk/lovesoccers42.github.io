@@ -896,7 +896,7 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
 <footer>
   <div id="sync">연결 확인 중…</div>
   <div id="jserr" style="display:none;margin:8px 0;padding:9px;border-radius:9px;background:rgba(228,101,140,.12);border:1px solid rgba(228,101,140,.4);color:#F0B7C8;font-size:11px;text-align:left;word-break:break-all"></div>
-  <div class="ver">v13 · 09-24 12:00</div>
+  <div class="ver">v14 · 09-24 13:30</div>
   <div class="tools">
     <button class="reset" id="resetBtn">체크 지우기</button>
   </div>
@@ -1218,21 +1218,39 @@ function drawMap(ordered, col){
 
 /* ---------- 카드 스팟 (자판기·마트·카드샵) ---------- */
 const CARDS=[
- // LA
- {rg:'la',t:'shop',n:'RWT Collective',la:34.0384,lo:-118.4422,h:'매일 11–23시',m:'리뷰 1003개 4.9. 팩·박스·싱글 다 있고 시세 적정'},
+ {rg:'la',t:'shop',n:'RWT Collective',la:34.0384,lo:-118.4422,h:'매일 11–23시',m:'4.9/1003. 팩·박스·싱글 다 있고 시세 적정. LA 최고로 꼽힘'},
+ {rg:'la',t:'shop',n:'Culver Collectibles',la:34.0384,lo:-118.4422,h:'매일 11–20시',m:'RWT와 같은 건물. 5.0/57. 지하주차 무료'},
+ {rg:'la',t:'shop',n:'PokeMall TCG',la:34.0568,lo:-118.384,h:'수 휴무 · 12–20시',m:'4.6/41. 포켓몬 전문, 주인이 컬렉션도 전시'},
+ {rg:'la',t:'shop',n:'Lucky Vault',la:34.0906,lo:-118.3027,h:'일 휴무 · 요일별 상이',m:'4.8/462. 가격 협상 가능. 전화 확인 권장'},
  {rg:'la',t:'shop',n:'Turn Zero Games',la:34.0621,lo:-118.3136,h:'매일 11–22시',m:'코리아타운. MTG 중심이라 포켓몬은 곁다리'},
- {rg:'la',t:'shop',n:'Lucky Vault',la:34.0906,lo:-118.3027,h:'수·일 휴무',m:'4.8/462, 가격 협상 가능. 요일별 시간 제각각 — 전화 확인'},
- {rg:'la',t:'shop',n:'Pokepack bros',la:33.9375,lo:-118.2778,h:'매일 10–20시',m:'ETB·번들 재고 많음. 동네가 험하다는 후기'},
- {rg:'la',t:'mart',n:'Ralphs (Western)',la:34.0600,lo:-118.3086,h:'5–25시',m:'크로거 계열 — 공식 자판기 확인처'},
+ {rg:'la',t:'shop',n:'Jojo\'s Bazaar',la:34.0441,lo:-118.3008,h:'일 휴무 · 11–19시',m:'4.9/28. 패션디스트릭트. 스캘핑 안 한다는 평'},
+ {rg:'la',t:'shop',n:'It\'s GameTime!',la:34.029,lo:-118.4108,h:'화 휴무 · 12–20시',m:'4.6/231. 포켓몬 재고가 늘 있는 편. 정가보다 약간 위'},
+ {rg:'la',t:'shop',n:'Grail and Grade',la:34.0443,lo:-118.4316,h:'월 휴무 · 15–21시',m:'4.8/59. 실드 가격이 이 동네 최저라는 평'},
+ {rg:'la',t:'shop',n:'Pokepack bros',la:33.9375,lo:-118.2778,h:'매일 10–20시',m:'4.6/171. ETB·번들 많음. 동네가 험하다는 후기'},
+ {rg:'la',t:'shop',n:'LVLUP GAMING TCG',la:34.0087,lo:-118.2501,h:'12–22시',m:'4.2/85. 1인 1개 제한으로 스캘핑 방지'},
+ {rg:'la',t:'shop',n:'Next-Gen Games',la:34.0485,lo:-118.3575,h:'12–22시',m:'4.6/504지만 포켓몬 선택지가 형편없다는 후기 있음'},
+ {rg:'la',t:'shop',n:'Paper Hero\'s Games',la:34.0463,lo:-118.4486,h:'매일 14–22시',m:'4.6/102. 실드가 비싸다는 불만 있음'},
+ {rg:'la',t:'shop',n:'ENTER D. MAGIC',la:34.0242,lo:-118.4107,h:'일 휴무 · 10–18시',m:'5.0/17. 꽃집 안에 있는 특이한 가게. 카드 재고는 적음'},
+ {rg:'la',t:'shop',n:'Danny TCG',la:34.0575,lo:-118.2384,h:'24시간 표기',m:'4.7/3. 리뷰가 적으니 가기 전 연락 권장'},
+ {rg:'la',t:'shop',n:'Studio City Cards',la:34.1655,lo:-118.397,h:'9–24시',m:'4.8/110. 밸리. 늦게까지 여는 게 장점'},
+ {rg:'la',t:'shop',n:'RARE PULL',la:34.1647,lo:-118.4478,h:'요일별 상이',m:'5.0/48. 셔먼옥스. 자체 랜덤팩이 특색'},
+ {rg:'la',t:'shop',n:'Tartarian Cards',la:34.1728,lo:-118.5636,h:'13–21시',m:'4.9/30. 타자나. 멉니다'},
+ {rg:'la',t:'shop',n:'The TCG Center',la:34.2642,lo:-118.5041,h:'일 휴무 · 10–18시',m:'5.0/145. 그라나다힐스. 시세 이하 실드가 있다는 평'},
+ {rg:'la',t:'mart',n:'Ralphs (Western)',la:34.06,lo:-118.3086,h:'5–25시',m:'크로거 계열 — 공식 자판기 확인처'},
  {rg:'la',t:'mart',n:'Ralphs (3rd St)',la:34.0684,lo:-118.2905,h:'5–25시',m:'크로거 계열'},
- {rg:'la',t:'mart',n:'Vons (3rd St)',la:34.0700,lo:-118.2909,h:'6–26시',m:'앨버슨스 계열 — 공식 자판기 확인처'},
+ {rg:'la',t:'mart',n:'Vons (3rd St)',la:34.07,lo:-118.2909,h:'6–26시',m:'앨버슨스 계열 — 공식 자판기 확인처'},
  {rg:'la',t:'mart',n:'Target 코리아타운',la:34.0632,lo:-118.2865,h:'7–21시',m:'실드 정가. 재고는 기대 낮게'},
- // 베가스
- {rg:'vg',t:'shop',n:'888 Collectibles',la:36.1278,lo:-115.1971,h:'매일 11–22시',m:'리뷰 522개. 싱글·실드 모두 깊고 포켓몬 전문'},
- {rg:'vg',t:'shop',n:'777 Card Factory',la:36.1270,lo:-115.1925,h:'월 휴무, 14–22시',m:'888 바로 옆. 가격 협상 된다는 평'},
- {rg:'vg',t:'shop',n:'Phantasma',la:36.2039,lo:-115.2227,h:'14–21시',m:'4.8/53. 스트립에서 북서쪽으로 멉니다'},
- {rg:'vg',t:'mart',n:"Smith's (Maryland)",la:36.1434,lo:-115.1349,h:'6–24시',m:'크로거 계열 — 공식 자판기 확인처'},
- {rg:'vg',t:'mart',n:'Target 스트립',la:36.1048,lo:-115.1725,h:'7–22시',m:'스트립 위. 실드 정가'},
+ {rg:'vg',t:'shop',n:'Cards N Hobby',la:36.1433,lo:-115.2095,h:'매일 10–19시',m:'4.9/815. 포켓몬 벽 하나가 통째. 시내 최저가라는 평이 많음'},
+ {rg:'vg',t:'shop',n:'888 Collectibles',la:36.1278,lo:-115.1971,h:'매일 11–22시',m:'4.4/522. 싱글·실드 모두 깊음. 포켓몬 전문'},
+ {rg:'vg',t:'shop',n:'777 Card Factory',la:36.127,lo:-115.1925,h:'월 휴무 · 14–22시',m:'888 바로 옆. 가격 협상 된다는 평'},
+ {rg:'vg',t:'shop',n:'Redemption Cards',la:36.1315,lo:-115.278,h:'일 휴무 · 11–19시',m:'4.8/191. 시세대로 팔고 정리가 잘 돼 있음'},
+ {rg:'vg',t:'shop',n:'Commander Games',la:36.1162,lo:-115.2418,h:'매일 11–22시',m:'4.5/179. 부스터 팩이 바가지가 아니라는 평'},
+ {rg:'vg',t:'shop',n:'Sweet Pulls',la:36.152,lo:-115.2423,h:'화·수 휴무',m:'5.0/14. 작지만 최신 물건이 경쟁력 있게 들어옴'},
+ {rg:'vg',t:'shop',n:'Phantasma',la:36.2039,lo:-115.2227,h:'14–21시',m:'4.8/53. 스트립에서 북서쪽'},
+ {rg:'vg',t:'shop',n:'Legacy Trading Cards',la:36.2798,lo:-115.2616,h:'매일 11–18시',m:'4.8/226. 북쪽 외곽. 재고가 많음'},
+ {rg:'vg',t:'shop',n:'Ribbit TCG',la:36.2379,lo:-115.2103,h:'월·화 휴무',m:'4.7/39. 북쪽 외곽'},
+ {rg:'vg',t:'mart',n:'Smith\'s (Maryland)',la:36.1434,lo:-115.1349,h:'6–24시',m:'크로거 계열 — 공식 자판기 확인처'},
+ {rg:'vg',t:'mart',n:'Target 스트립',la:36.1048,lo:-115.1725,h:'7–22시',m:'스트립 위. 걸어갈 수 있음'},
  {rg:'vg',t:'mart',n:'Albertsons (Charleston)',la:36.1569,lo:-115.1256,h:'6–22시',m:'앨버슨스 계열 — 공식 자판기 확인처'},
 ];
 let CARDON=true, CMARKS=[];
