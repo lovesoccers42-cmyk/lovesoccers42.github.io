@@ -173,7 +173,9 @@ table.wash b{color:var(--ink)}
 .opt .o b{font-weight:700}
 .opt .o u{text-decoration:none;color:var(--faint);font-size:11.5px;font-weight:600;margin-left:6px;font-variant-numeric:tabular-nums}
 .opt .o i{font-style:normal;display:block;color:var(--dim);font-size:12.3px;margin-top:2px;line-height:1.5}
-.done{opacity:.32}
+.done{opacity:.4}
+.hid{display:none}
+body.showpast .hid{display:block}
 .done .spot,.done .shot{filter:grayscale(1)}
 .today{position:relative}
 .day.today,.rt.today{outline:1px solid rgba(87,224,174,.4);outline-offset:8px;border-radius:8px}
@@ -228,7 +230,8 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
 
 /* ========== 코스 만들기 (최종) ========== */
 #build{--day:#79B9EC}
-.daytabs{display:flex;gap:5px;margin-bottom:14px}
+.daytabs{display:flex;gap:5px;margin-bottom:14px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.daytabs button{flex:0 0 auto;min-width:62px}
 .daytabs button{flex:1;position:relative;padding:13px 3px 8px;border-radius:10px;border:1px solid var(--line);
   background:none;color:var(--dim);font:inherit;font-size:12px;font-weight:700;cursor:pointer;line-height:1.35}
 .daytabs button::before{content:"";position:absolute;top:5px;left:50%;transform:translateX(-50%);
@@ -351,7 +354,8 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
 <!-- ============ 일정 ============ -->
 <section id="plan">
   <h2>일정</h2>
-  <p class="sub">로키 구간(9/19–23)은 시간 단위로 펼쳐뒀습니다. 분홍 태그가 드라마 촬영지입니다.</p>
+  <p class="sub">지난 날짜는 접혀 있습니다. 오늘과 남은 일정만 보입니다.</p>
+  <button class="reset" id="pastBtn" style="margin-bottom:14px">지난 일정 보기</button>
 
   <div class="day" data-d="2026-09-16" style="--c:var(--yzf)"><div class="date">9.16<span>수</span></div><div class="what">인천 17:45 → 밴쿠버 11:30 → 옐로나이프 17:06 <span class="flag">AC252</span><em>환승 2시간 25분. 짐 찾아 재위탁해야 합니다. 체크인 후 두 시간이라도 자두고 21시 첫 오로라 투어.</em></div></div>
   <div class="day" data-d="2026-09-17" style="--c:var(--yzf)"><div class="date">9.17<span>목</span></div><div class="what">올드타운 한 바퀴<em>부시 파일럿 모뉴먼트(계단 75개) → 올드타운 도보. 점심은 불럭스 비스트로. 다운타운 마빈저스(12–18시)와 올드에어포트로 월마트(8–22시)에 카드 매대.</em></div></div>
@@ -360,15 +364,15 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
   
   <div class="rt" data-d="2026-09-19" style="--c:var(--yyc)"><figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Calgary_skyline_from_the_northwest,_Alberta,_Canada.jpg?width=1200" alt="캘거리 다운타운과 캘거리 타워" loading="lazy" onerror="this.parentElement.style.display='none'"><figcaption>캘거리 다운타운과 캘거리 타워 · 사진 Ethan Sahagun / Wikimedia Commons</figcaption></figure><div class="rt-head"><b>9.19</b><span>토 · 캘거리</span><em>도보 + 차 5분</em></div><div class="stop"><time>08:00</time><div class="s"><b>모레인 셔틀 예약</b><i>옐로나이프에서 오전 8시. 옐로나이프도 같은 시간대라 시차 계산은 필요 없습니다.</i></div></div><div class="stop"><time>14:15</time><div class="s"><b>옐로나이프 → 캘거리</b></div></div><div class="stop"><time>17:30</time><div class="s"><b>렌터카 픽업</b><i>공항에서 다운타운 20분. 델타 호텔 체크인.</i></div></div><div class="stop"><time>18:30</time><div class="s"><b>크레센트 하이츠 전망대</b> <span class="tag d">촬영지</span><i>선셋 장면. 240 Crescent Rd NW, 24시간. 해 진 직후가 가장 좋습니다.</i></div></div><div class="stop"><time>19:00</time><div class="s"><b>센터 스트리트 다리</b> <span class="tag d">촬영지</span><i>아침 조깅 장면. 전망대 바로 아래. 사자 조각상 넷.</i></div></div><div class="stop"><time>19:30</time><div class="s"><b>스티븐 애비뉴 · 저녁</b> <span class="tag d">촬영지</span><i>5화 주호진·신지선 PD 만남 장소. Saltlik 토 23시까지, 예약 권장.</i></div></div><div class="stop"><time>21:00</time><div class="s"><b>캘거리 타워</b><i>21시 마감, 입장은 20:15까지.</i></div></div></div>
   <div class="rt" data-d="2026-09-20" style="--c:var(--yyc)"><figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Canmore_Alberta_Canada.jpg?width=1200" alt="캔모어와 로키 봉우리" loading="lazy" onerror="this.parentElement.style.display='none'"><figcaption>캔모어 · 사진 Wikimedia Commons 기여자 / Wikimedia Commons</figcaption></figure><div class="rt-head"><b>9.20</b><span>일 · 캘거리 → 캔모어 → 밴프</span><em>여유 있는 날</em></div><div class="stops" data-day="2026-09-20"></div></div><div class="rt" data-d="2026-09-21" style="--c:var(--yyc)"><figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/1_lake_louise_pano_2019.jpg?width=1400" alt="레이크루이스 파노라마" loading="lazy" onerror="this.parentElement.style.display='none'"><figcaption>레이크루이스 · 사진 Chensiyuan / Wikimedia Commons</figcaption></figure><div class="rt-head"><b>9.21</b><span>월 · 레이크루이스</span><em>셔틀 예약 필수</em></div><div class="stops" data-day="2026-09-21"></div></div><div class="rt" data-d="2026-09-22" style="--c:var(--yyc)"><figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Emerald_Lake_-_Yoho_National_Park.JPG?width=1200" alt="요호 국립공원 에메랄드 호수" loading="lazy" onerror="this.parentElement.style.display='none'"><figcaption>에메랄드 호수 · 사진 JZ85 / Wikimedia Commons</figcaption></figure><div class="rt-head"><b>9.22</b><span>화 · 요호 → 밴프</span><em>촬영지 네 곳</em></div><div class="stops" data-day="2026-09-22"></div></div><div class="rt" data-d="2026-09-23" style="--c:var(--yyc)"><figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Town_of_Banff_viewed_from_Sulphur_Mountain.jpg?width=1200" alt="설퍼산에서 내려다본 밴프 타운" loading="lazy" onerror="this.parentElement.style.display='none'"><figcaption>밴프 타운 · 사진 Wikimedia Commons 기여자 / Wikimedia Commons</figcaption></figure><div class="rt-head"><b>9.23</b><span>수 · 밴프 → 캘거리</span><em>차 반납 20:00</em></div><div class="stops" data-day="2026-09-23"></div></div>
-  <div class="day" data-d="2026-09-24" style="--c:var(--lax)"><div class="date">9.24<span>목</span></div><div class="what">캘거리 10:00 → LA 12:25 <span class="flag">3시간 전 도착</span><em>미국 사전입국심사. 음식물 신고는 솔직하게. 차가 없으니 전부 우버입니다. 오후 산타모니카 피어 일몰, 저녁은 코리아타운. 윌셔가 턴 제로 게임즈 23시까지, 서부 670번지 랄프스 새벽 1시까지(크로거 계열이라 포켓몬 자판기 확인처).</em><img class="spot" loading="lazy" alt="산타모니카 피어" src="https://commons.wikimedia.org/wiki/Special:FilePath/Santa_Monica_Pier_at_sunset.jpg?width=900" onerror="this.classList.add('hide');this.nextElementSibling.classList.add('hide')"><span class="cr">산타모니카 피어 / Wikimedia Commons</span></div></div>
-  <div class="day" data-d="2026-09-25" style="--c:var(--lax)"><div class="date">9.25<span>금</span></div><div class="what">게티 센터 · 그리피스 천문대<em>게티 오전(입장 무료, 월요일 휴관) → 오후 그리피스(12–22시). 일몰과 야경을 한 번에 봅니다. 그리피스는 내려올 때 우버가 안 잡히기로 악명 높으니 미리 호출하거나 DASH 버스를 알아두세요. 세탁 돌리기 좋은 날.</em><img class="spot" loading="lazy" alt="그리피스 천문대에서 본 LA" src="https://commons.wikimedia.org/wiki/Special:FilePath/Griffith_Observatory_-_Aerial_view_of_Los_Angeles.jpg?width=900" onerror="this.classList.add('hide');this.nextElementSibling.classList.add('hide')"><span class="cr">그리피스 천문대에서 본 LA / Wikimedia Commons</span></div></div>
-  <div class="day" data-d="2026-09-26" style="--c:var(--lax)"><div class="date">9.26<span>토</span></div><div class="what">시타델 아울렛 · 코리아타운<em>우버로 30~40분. 시타델(10–21시) 안에 마우야 유니콘이 있어 아울렛 도는 김에 카드도 봅니다. 점심은 코리아타운. 토요일이라 우버 요금이 오릅니다.</em></div></div>
+  <div class="day" data-d="2026-09-24" style="--c:var(--lax)"><div class="date">9.24<span>목</span></div><div class="what">캘거리 10:00 → LA 12:25 <span class="flag">3시간 전 도착</span><em>미국 사전입국심사. 공항 나오는 데 1시간, 숙소까지 우버 30~40분. 짐 풀면 오후 3~4시입니다. 오늘은 숙소 근처에서 저녁만.</em><div class="stops" data-day="2026-09-24"></div><img class="spot" loading="lazy" alt="산타모니카 피어" src="https://commons.wikimedia.org/wiki/Special:FilePath/Santa_Monica_Pier_at_sunset.jpg?width=900" onerror="this.classList.add('hide');this.nextElementSibling.classList.add('hide')"><span class="cr">산타모니카 피어 / Wikimedia Commons</span></div></div>
+  <div class="day" data-d="2026-09-25" style="--c:var(--lax)"><div class="date">9.25<span>금</span></div><div class="what">샌디에고 투어 <span class="flag">모코코</span><em>아침 일찍 출발. 민박 투어라 픽업 시간과 장소를 전날 확인하세요. 정원 12명 선착순이니 신청부터.</em><img class="spot" loading="lazy" alt="그리피스 천문대에서 본 LA" src="https://commons.wikimedia.org/wiki/Special:FilePath/Griffith_Observatory_-_Aerial_view_of_Los_Angeles.jpg?width=900" onerror="this.classList.add('hide');this.nextElementSibling.classList.add('hide')"><span class="cr">그리피스 천문대에서 본 LA / Wikimedia Commons</span></div></div>
+  <div class="day" data-d="2026-09-26" style="--c:var(--lax)"><div class="date">9.26<span>토</span></div><div class="what">LA 자유<em>코스 탭에서 담아보세요. 다음 날 새벽 셔틀이라 야경 코스는 무리일 수 있습니다.</em><div class="stops" data-day="2026-09-26"></div></div></div>
   <div class="day" data-d="2026-09-27" style="--c:var(--las)"><div class="date">9.27<span>일</span></div><div class="what">LA → 라스베가스 셔틀 <span class="flag">새벽 출발</span><em>4~5시간. 전날 픽업 장소와 시간을 반드시 재확인하세요. 플라밍고 체크인 후 저녁엔 벨라지오 분수. 무료이고 저녁엔 15분 간격입니다.</em><img class="spot" loading="lazy" alt="라스베가스 스트립 야경" src="https://commons.wikimedia.org/wiki/Special:FilePath/Las_Vegas_Strip_at_night.jpg?width=900" onerror="this.classList.add('hide');this.nextElementSibling.classList.add('hide')"><span class="cr">라스베가스 스트립 야경 / Wikimedia Commons</span></div></div>
   <div class="day" data-d="2026-09-28" style="--c:var(--las)"><div class="date">9.28<span>월</span></div><div class="what">그랜드캐년 1박2일 투어 <span class="flag">경량 패딩</span><em>큰 캐리어는 플라밍고 벨데스크에 맡기고 배낭만. 브라이스 캐년은 해발 2,400m라 새벽에 한 자릿수까지 떨어집니다. 세면도구 지참, 가이드 팁 1인 1일 $10~20 현금.</em><img class="spot" loading="lazy" alt="그랜드캐년" src="https://commons.wikimedia.org/wiki/Special:FilePath/Grand_Canyon_view_from_Pima_Point_2010.jpg?width=900" onerror="this.classList.add('hide');this.nextElementSibling.classList.add('hide')"><span class="cr">그랜드캐년 / Wikimedia Commons</span></div></div>
   <div class="day" data-d="2026-09-29" style="--c:var(--las)"><div class="date">9.29<span>화</span></div><div class="what">투어 복귀 · 플라밍고 재체크인<em>프론트에 두 예약 연결(같은 방 유지)을 요청해보세요. 이동이 길었으니 저녁은 쉬는 쪽으로.</em></div></div>
-  <div class="day" data-d="2026-09-30" style="--c:var(--las)"><div class="date">9.30<span>수</span></div><div class="what">아울렛 · 스피어 20:00 <span class="flag">좌석 중요</span><em>낮엔 라스베가스 노스 프리미엄 아울렛(우버 10분, 10–20시). 야외형이라 땡볕은 피해 오후 늦게. 거기서 차로 10분인 스프링마운틴가에 888 컬렉터블스(11–22시). 공연장은 입장 대기가 기니 여유 있게.</em></div></div>
-  <div class="day" data-d="2026-10-01" style="--c:var(--las)"><div class="date">10.1<span>목</span></div><div class="what">코스트코 서머린 · 프리몬트 야경<em>코스트코는 스트립에서 우버 25분(10:00–20:30). 왕복 우버비가 붙으니 영양제를 한 번에 몰아서. 돌아오는 길 메릴랜드 파크웨이 스미스(6–24시)도 크로거 계열입니다. 밤엔 프리몬트 스트리트 LED 캐노피.</em></div></div>
-  <div class="day" data-d="2026-10-02" style="--c:var(--las)"><div class="date">10.2<span>금</span></div><div class="what">체크아웃 · 라스베가스 23:50 출발<em>11시 체크아웃 후 짐은 벨데스크 보관. 낮엔 실내 위주로, 저녁에 스트립 마지막 산책 후 21시경 공항. 대한항공 비즈니스라 라운지 이용 가능합니다.</em></div></div>
+  <div class="day" data-d="2026-09-30" style="--c:var(--las)"><div class="date">9.30<span>수</span></div><div class="what">아울렛 · 스피어 20:00 <span class="flag">좌석 중요</span><em>낮엔 라스베가스 노스 프리미엄 아울렛(우버 10분, 10–20시). 야외형이라 땡볕은 피해 오후 늦게. 거기서 차로 10분인 스프링마운틴가에 888 컬렉터블스(11–22시). 공연장은 입장 대기가 기니 여유 있게.</em><div class="stops" data-day="2026-09-30"></div></div></div>
+  <div class="day" data-d="2026-10-01" style="--c:var(--las)"><div class="date">10.1<span>목</span></div><div class="what">코스트코 서머린 · 프리몬트 야경<em>코스트코는 스트립에서 우버 25분(10:00–20:30). 왕복 우버비가 붙으니 영양제를 한 번에 몰아서. 돌아오는 길 메릴랜드 파크웨이 스미스(6–24시)도 크로거 계열입니다. 밤엔 프리몬트 스트리트 LED 캐노피.</em><div class="stops" data-day="2026-10-01"></div></div></div>
+  <div class="day" data-d="2026-10-02" style="--c:var(--las)"><div class="date">10.2<span>금</span></div><div class="what">체크아웃 · 라스베가스 23:50 출발<em>11시 체크아웃 후 짐은 벨데스크 보관. 낮엔 실내 위주로, 저녁에 스트립 마지막 산책 후 21시경 공항. 대한항공 비즈니스라 라운지 이용 가능합니다.</em><div class="stops" data-day="2026-10-02"></div></div></div>
   <div class="day" data-d="2026-10-04" style="--c:var(--yzf)"><div class="date">10.4<span>일</span></div><div class="what">인천 04:40 도착<em>공항버스 첫차 시간 확인해두세요.</em></div></div>
 </section>
 
@@ -890,7 +894,7 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
 <footer>
   <div id="sync">연결 확인 중…</div>
   <div id="jserr" style="display:none;margin:8px 0;padding:9px;border-radius:9px;background:rgba(228,101,140,.12);border:1px solid rgba(228,101,140,.4);color:#F0B7C8;font-size:11px;text-align:left;word-break:break-all"></div>
-  <div class="ver">v9 · 09-23 09:10</div>
+  <div class="ver">v10 · 09-23 10:20</div>
   <div class="tools">
     <button class="reset" id="resetBtn">체크 지우기</button>
   </div>
@@ -1098,12 +1102,13 @@ function paintMap(ordered,col){
   const m=initMap();
   if(!m) return false;
   LMARKS.forEach(x=>m.removeLayer(x)); LMARKS=[];
+  const HOME=homeOf(curDay);
   const pin=(html,cls,color)=>L.divIcon({className:'',html:
     '<div class="pin '+cls+'" style="border-color:'+color+';color:'+color+'">'+html+'</div>',
     iconSize:[24,24], iconAnchor:[12,12]});
   const pts=[[HOME.la,HOME.lo]];
   LMARKS.push(L.marker([HOME.la,HOME.lo],{icon:pin('숙소','home','#0E9E76')})
-    .bindPopup('<b>히든리지 리조트</b>').addTo(m));
+    .bindPopup('<b>'+REG[regOf(curDay)].home.n+'</b>').addTo(m));
   ordered.forEach((p,i)=>{
     pts.push([p.la,p.lo]);
     LMARKS.push(L.marker([p.la,p.lo],{icon:pin(i+1,'',col)})
@@ -1185,6 +1190,7 @@ function baseMap(){
 }
 const HOME={la:51.1880, lo:-115.5480};
 function drawMap(ordered, col){
+  const HOME=homeOf(curDay);
   const pts=[HOME].concat(ordered.map(p=>({la:p.la,lo:p.lo}))).concat([HOME]);
   let g=baseMap();
   if(ordered.length){
@@ -1202,7 +1208,14 @@ function drawMap(ordered, col){
 }
 
 /* ---------- 코스 만들기 ---------- */
+const REG={
+  rk:{home:{la:51.1880,lo:-115.5480,n:'히든리지'}, sp:70},
+  la:{home:{la:34.0619,lo:-118.3005,n:'모코코하우스(코리아타운 기준)'}, sp:32},
+  vg:{home:{la:36.1162,lo:-115.1720,n:'플라밍고'}, sp:40},
+};
 const ZONES=[
+  {z:'la',  n:'LA', rg:'la', note:'우버 기준'},
+  {z:'vg',  n:'라스베가스', rg:'vg', note:'스트립 기준'},
   {z:'can', n:'캔모어', pos:-0.4, note:'밴프에서 동쪽 20분'},
   {z:'town',n:'밴프 타운', pos:0.15, note:'숙소에서 가장 가까움'},
   {z:'near',n:'밴프 근교 호수', pos:0.4, note:'차로 15~25분'},
@@ -1256,13 +1269,54 @@ const SPOTS=[
  {id:'s73',z:'ice',n:'크로우풋 빙하',km:0.3,h:0.3,st:0,la:51.65,lo:-116.44},
  {id:'s74',z:'ice',n:'허버트 호수',km:0.5,h:0.3,st:0,la:51.483,lo:-116.211},
 ];
+SPOTS.push( {id:'u01',z:'la',n:'산타모니카 피어',km:2,h:2,st:2,la:34.0094,lo:-118.4973,img:'Santa_Monica_Pier_at_sunset.jpg',cap:'산타모니카 피어'});
+SPOTS.push( {id:'u02',z:'la',n:'베니스 비치',km:2,h:1.5,st:1,la:33.985,lo:-118.4695});
+SPOTS.push( {id:'u03',z:'la',n:'게티 센터',km:2,h:3,st:2,la:34.078,lo:-118.4741});
+SPOTS.push( {id:'u04',z:'la',n:'그리피스 천문대',km:1.5,h:2.5,st:2,la:34.1184,lo:-118.3004,img:'Griffith_Observatory_-_Aerial_view_of_Los_Angeles.jpg',cap:'그리피스 천문대'});
+SPOTS.push( {id:'u05',z:'la',n:'할리우드 명예의 거리',km:1.5,h:1.5,st:0,la:34.1016,lo:-118.3269});
+SPOTS.push( {id:'u06',z:'la',n:'유니버셜 스튜디오',km:5,h:6,st:1,la:34.1381,lo:-118.3534});
+SPOTS.push( {id:'u07',z:'la',n:'LACMA',km:1,h:2,st:0,la:34.0639,lo:-118.3592});
+SPOTS.push( {id:'u08',z:'la',n:'더 그로브',km:1.5,h:1.5,st:1,la:34.0722,lo:-118.3576});
+SPOTS.push( {id:'u09',z:'la',n:'로데오 드라이브',km:1,h:1,st:0,la:34.0674,lo:-118.4004});
+SPOTS.push( {id:'u10',z:'la',n:'그랜드 센트럴 마켓',km:1,h:1.5,st:1,la:34.0506,lo:-118.2487});
+SPOTS.push( {id:'u11',z:'la',n:'코리아타운 식사',km:0.5,h:1.5,st:1,la:34.0619,lo:-118.3005});
+SPOTS.push( {id:'u12',z:'la',n:'숙소에서 쉬기',km:0,h:2,st:0,la:34.0619,lo:-118.3005});
+SPOTS.push( {id:'v01',z:'vg',n:'벨라지오 분수',km:0.5,h:1,st:2,la:36.1126,lo:-115.1767});
+SPOTS.push( {id:'v02',z:'vg',n:'스피어 공연',km:0.5,h:3,st:2,la:36.1213,lo:-115.1626});
+SPOTS.push( {id:'v03',z:'vg',n:'프리몬트 스트리트',km:1.5,h:2,st:1,la:36.1699,lo:-115.1423});
+SPOTS.push( {id:'v04',z:'vg',n:'노스 프리미엄 아울렛',km:2,h:2.5,st:1,la:36.173,lo:-115.164});
+SPOTS.push( {id:'v05',z:'vg',n:'코스트코 서머린',km:1,h:1.5,st:1,la:36.1573,lo:-115.316});
+SPOTS.push( {id:'v06',z:'vg',n:'하이 롤러 관람차',km:0.5,h:1,st:0,la:36.1175,lo:-115.168});
+SPOTS.push( {id:'v07',z:'vg',n:'스트립 야경 산책',km:3,h:2,st:1,la:36.1147,lo:-115.1728,img:'Las_Vegas_Strip_at_night.jpg',cap:'라스베가스 스트립'});
+SPOTS.push( {id:'v08',z:'vg',n:'세븐 매직 마운틴',km:0.5,h:1,st:0,la:35.7843,lo:-115.2528});
+SPOTS.push( {id:'v09',z:'vg',n:'레드락 캐니언',km:2,h:2.5,st:1,la:36.135,lo:-115.427});
+SPOTS.push( {id:'v10',z:'vg',n:'호텔에서 쉬기',km:0,h:2,st:0,la:36.1162,lo:-115.172});
 const DAYS=[
-  {d:'2026-09-20', l:'9.20', s:'오늘', start:9, budget:10, c:'#79B9EC'},
-  {d:'2026-09-21', l:'9.21', s:'월',   start:7, budget:11, c:'#57E0AE'},
-  {d:'2026-09-22', l:'9.22', s:'화',   start:8, budget:11, c:'#F2A65A'},
-  {d:'2026-09-23', l:'9.23', s:'수',   start:7, budget:7,  c:'#E4658C'},
+  {d:'2026-09-20', l:'9.20', s:'일', rg:'rk', start:9, budget:10, c:'#79B9EC'},
+  {d:'2026-09-21', l:'9.21', s:'월', rg:'rk', start:7, budget:11, c:'#57E0AE'},
+  {d:'2026-09-22', l:'9.22', s:'화', rg:'rk', start:8, budget:11, c:'#F2A65A'},
+  {d:'2026-09-23', l:'9.23', s:'수', rg:'rk', start:7, budget:7,  c:'#E4658C'},
+  {d:'2026-09-24', l:'9.24', s:'LA 도착', rg:'la', start:15, budget:5,  c:'#F2A65A'},
+  {d:'2026-09-26', l:'9.26', s:'LA',      rg:'la', start:9,  budget:10, c:'#79B9EC'},
+  {d:'2026-09-30', l:'9.30', s:'베가스',  rg:'vg', start:11, budget:9,  c:'#E4658C'},
+  {d:'2026-10-01', l:'10.1', s:'베가스',  rg:'vg', start:10, budget:10, c:'#57E0AE'},
+  {d:'2026-10-02', l:'10.2', s:'마지막',  rg:'vg', start:11, budget:8,  c:'#F2A65A'},
 ];
-let curDay=DAYS[0].d;
+const today0=(()=>{const t=new Date();return new Date(t.getFullYear(),t.getMonth(),t.getDate());})();
+const isPast=d=>{const[y,m,dd]=d.split('-').map(Number);return new Date(y,m-1,dd)<today0;};
+function regOf(d){ return (DAYS.find(x=>x.d===d)||DAYS[0]).rg; }
+function homeOf(d){ return REG[regOf(d)].home; }
+function hav(a,b){
+  const R=6371, r=Math.PI/180;
+  const dla=(b.la-a.la)*r, dlo=(b.lo-a.lo)*r;
+  const x=Math.sin(dla/2)**2+Math.cos(a.la*r)*Math.cos(b.la*r)*Math.sin(dlo/2)**2;
+  return 2*R*Math.asin(Math.sqrt(x));
+}
+function driveH(day,a,b){
+  const km=hav(a,b)*1.3;
+  return Math.max(km/REG[regOf(day)].sp, km>0.5?0.08:0);
+}
+let curDay=(DAYS.find(x=>!isPast(x.d))||DAYS[DAYS.length-1]).d;
 const PICK={}, ORD={};
 const pk=(d,i)=>'opt:'+d+':'+i;
 const dayC=d=>(DAYS.find(x=>x.d===d)||DAYS[0]).c;
@@ -1279,14 +1333,21 @@ function orderedPicks(day){
   return {out};
 }
 function zoneOf(p){ return ZONES.find(z=>z.z===p.z); }
-function legs(out){
-  const L=[]; let prev=0;
-  out.forEach(p=>{ const pos=zoneOf(p).pos; L.push(Math.abs(pos-prev)); prev=pos; });
-  return {L, back:Math.abs(prev)};
+function legs(out, day){
+  day=day||curDay;
+  const H=homeOf(day); const L=[]; let prev=H;
+  out.forEach(p=>{ L.push(driveH(day,prev,p)); prev=p; });
+  return {L, back: out.length? driveH(day,prev,H):0};
 }
 function sortByRoute(day){
-  const out=SPOTS.filter(p=>PICK[pk(day,p.id)])
-    .sort((a,b)=> zoneOf(a).pos-zoneOf(b).pos || b.st-a.st);
+  const H=homeOf(day);
+  const pool=SPOTS.filter(p=>PICK[pk(day,p.id)]);
+  const out=[]; let cur=H;
+  while(pool.length){
+    let bi=0,bd=1e9;
+    pool.forEach((p,i)=>{ const d=hav(cur,p); if(d<bd){bd=d;bi=i;} });
+    cur=pool[bi]; out.push(pool.splice(bi,1)[0]);
+  }
   const t0=Date.now();
   out.forEach((p,i)=>{ ORD[pk(day,p.id)]=t0+i; savePick(day,p.id,true); });
 }
@@ -1294,14 +1355,15 @@ function buildTabs(){
   const box=document.getElementById('daytabs');
   if(!box||box.dataset.built) return;
   box.dataset.built='1';
-  box.innerHTML=DAYS.map(d=>'<button data-d="'+d.d+'" style="--dc:'+d.c+'">'+d.l+'<span>'+d.s+'</span></button>').join('');
+  box.innerHTML=DAYS.filter(d=>!isPast(d.d)).map(d=>'<button data-d="'+d.d+'" style="--dc:'+d.c+'">'+d.l+'<span>'+d.s+'</span></button>').join('');
   box.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
     curDay=b.dataset.d;
     box.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.d===curDay));
     document.getElementById('build').style.setProperty('--day',dayC(curDay));
     drawCatalog(); drawCart();
   }));
-  box.querySelector('button').classList.add('on');
+  const first=box.querySelector('button[data-d="'+curDay+'"]')||box.querySelector('button');
+  if(first) first.classList.add('on');
   document.getElementById('build').style.setProperty('--day',dayC(curDay));
   const dl=document.getElementById('dl');
   if(dl && !dl.dataset.b){ dl.dataset.b='1'; dl.addEventListener('click',()=>cacheTiles(dl)); }
@@ -1309,7 +1371,8 @@ function buildTabs(){
 function drawCatalog(){
   const box=document.getElementById('catalog');
   if(!box) return;
-  box.innerHTML=ZONES.map(z=>{
+  const rg=regOf(curDay);
+  box.innerHTML=ZONES.filter(z=>(z.rg||'rk')===rg).map(z=>{
     const list=SPOTS.filter(p=>p.z===z.z);
     if(!list.length) return '';
     return '<div class="zone"><h4>'+z.n+' <u>'+z.note+'</u></h4><div class="chips">'+list.map(p=>{
@@ -1336,7 +1399,7 @@ function drawCatalog(){
 function plan(){
   const day=DAYS.find(d=>d.d===curDay);
   const {out}=orderedPicks(curDay);
-  const {L,back}=legs(out);
+  const {L,back}=legs(out,curDay);
   const drive=L.reduce((a,x)=>a+x,0)+back;
   const act=out.reduce((a,p)=>a+p.h,0);
   return {day, sel:out, L, back, drive, act, km:out.reduce((a,p)=>a+p.km,0), total:act+drive};
@@ -1398,7 +1461,7 @@ function renderDays(){
     box.style.setProperty('--day',D.c);
     const {out}=orderedPicks(day);
     if(!out.length){ box.innerHTML='<div class="stop"><time>—</time><div class="s"><i>코스 탭에서 갈 곳을 담으면 시간표가 만들어집니다.</i></div></div>'; return; }
-    const {L,back}=legs(out);
+    const {L,back}=legs(out,day);
     let t=D.start, html='';
     out.forEach((p,i)=>{
       if(L[i]>0.05){ html+='<div class="stop"><time></time><div class="s"><i>차로 '+Math.round(L[i]*60)+'분 이동</i></div></div>'; t+=L[i]; }
@@ -1506,7 +1569,7 @@ try{ drawCatalog(); drawCart(); renderDays(); }catch(e){ console.error('builder'
     const [y,m,d] = el.dataset.d.split('-').map(Number);
     const day = new Date(y, m-1, d);
     if(day < t){
-      el.classList.add('done'); doneCount++;
+      el.classList.add('done','hid'); doneCount++;
       const h = el.querySelector('.date, .rt-head b');
       if(h && !h.querySelector('.badge')){
         const b = document.createElement('span');
@@ -1524,6 +1587,15 @@ try{ drawCatalog(); drawCart(); renderDays(); }catch(e){ console.error('builder'
     }
   });
 
+  const pb=document.getElementById('pastBtn');
+  if(pb){
+    if(!doneCount) pb.style.display='none';
+    else pb.textContent='지난 일정 보기 ('+doneCount+')';
+    pb.addEventListener('click',()=>{
+      const on=document.body.classList.toggle('showpast');
+      pb.textContent=(on?'지난 일정 접기':'지난 일정 보기 ('+doneCount+')');
+    });
+  }
   const dep = new Date(2026,8,16);
   if(t >= dep){
     const now = document.getElementById('now');
