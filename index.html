@@ -307,6 +307,8 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
   font-size:11.5px;font-weight:800;border:2.5px solid;background:#fff;
   box-shadow:0 1px 5px rgba(0,0,0,.35)}
 .pin.home{border-radius:7px;border-color:#0E9E76;color:#0E9E76;font-size:9px}
+.pin.card{border-color:#B57BE0;font-size:13px;width:24px;height:24px;background:#fff}
+.pin.card.mart{border-color:#8AA4C8;opacity:.9}
 .dl{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:11.5px;color:var(--faint)}
 .dl button{padding:6px 12px;border-radius:8px;border:1px solid var(--line);background:none;
   color:var(--dim);font:inherit;font-size:11.5px;font-weight:700;cursor:pointer}
@@ -347,7 +349,7 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
   <div id="catalog"></div>
   <div class="legend" id="legend"></div>
   <div id="lmap"></div>
-  <div class="dl"><button id="dl">지도 저장</button><span>한 번 눌러두면 산속에서도 보입니다</span></div>
+  <div class="dl"><button id="cardBtn">🃏 카드샵</button><button id="dl">지도 저장</button><span>한 번 눌러두면 산속에서도 보입니다</span></div>
   <div class="cart" id="cart"></div>
 </section>
 
@@ -894,7 +896,7 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
 <footer>
   <div id="sync">연결 확인 중…</div>
   <div id="jserr" style="display:none;margin:8px 0;padding:9px;border-radius:9px;background:rgba(228,101,140,.12);border:1px solid rgba(228,101,140,.4);color:#F0B7C8;font-size:11px;text-align:left;word-break:break-all"></div>
-  <div class="ver">v12 · 09-24 11:00</div>
+  <div class="ver">v13 · 09-24 12:00</div>
   <div class="tools">
     <button class="reset" id="resetBtn">체크 지우기</button>
   </div>
@@ -1120,6 +1122,7 @@ function paintMap(ordered,col){
       .bindPopup('<b>'+(p.st?stars(p.st)+' ':'')+p.n+'</b><i>'+(p.km?p.km+'km · ':'')+p.h+'시간</i>')
       .addTo(m));
   });
+  paintCards();
   setTimeout(()=>{ m.invalidateSize();
     m.fitBounds(L.latLngBounds(pts).pad(0.25),{maxZoom:12}); },60);
   return true;
@@ -1210,6 +1213,40 @@ function drawMap(ordered, col){
   const hx=MX(HOME.lo), hy=MY(HOME.la);
   g+='<rect x="'+(hx-6).toFixed(1)+'" y="'+(hy-6).toFixed(1)+'" width="12" height="12" rx="3.5" fill="#0B1324" stroke="#57E0AE" stroke-width="2"/>';
   return '<svg class="map" viewBox="0 0 '+MW+' '+MH+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="선택한 장소의 이동 경로 지도">'+g+'</svg>';
+}
+
+
+/* ---------- 카드 스팟 (자판기·마트·카드샵) ---------- */
+const CARDS=[
+ // LA
+ {rg:'la',t:'shop',n:'RWT Collective',la:34.0384,lo:-118.4422,h:'매일 11–23시',m:'리뷰 1003개 4.9. 팩·박스·싱글 다 있고 시세 적정'},
+ {rg:'la',t:'shop',n:'Turn Zero Games',la:34.0621,lo:-118.3136,h:'매일 11–22시',m:'코리아타운. MTG 중심이라 포켓몬은 곁다리'},
+ {rg:'la',t:'shop',n:'Lucky Vault',la:34.0906,lo:-118.3027,h:'수·일 휴무',m:'4.8/462, 가격 협상 가능. 요일별 시간 제각각 — 전화 확인'},
+ {rg:'la',t:'shop',n:'Pokepack bros',la:33.9375,lo:-118.2778,h:'매일 10–20시',m:'ETB·번들 재고 많음. 동네가 험하다는 후기'},
+ {rg:'la',t:'mart',n:'Ralphs (Western)',la:34.0600,lo:-118.3086,h:'5–25시',m:'크로거 계열 — 공식 자판기 확인처'},
+ {rg:'la',t:'mart',n:'Ralphs (3rd St)',la:34.0684,lo:-118.2905,h:'5–25시',m:'크로거 계열'},
+ {rg:'la',t:'mart',n:'Vons (3rd St)',la:34.0700,lo:-118.2909,h:'6–26시',m:'앨버슨스 계열 — 공식 자판기 확인처'},
+ {rg:'la',t:'mart',n:'Target 코리아타운',la:34.0632,lo:-118.2865,h:'7–21시',m:'실드 정가. 재고는 기대 낮게'},
+ // 베가스
+ {rg:'vg',t:'shop',n:'888 Collectibles',la:36.1278,lo:-115.1971,h:'매일 11–22시',m:'리뷰 522개. 싱글·실드 모두 깊고 포켓몬 전문'},
+ {rg:'vg',t:'shop',n:'777 Card Factory',la:36.1270,lo:-115.1925,h:'월 휴무, 14–22시',m:'888 바로 옆. 가격 협상 된다는 평'},
+ {rg:'vg',t:'shop',n:'Phantasma',la:36.2039,lo:-115.2227,h:'14–21시',m:'4.8/53. 스트립에서 북서쪽으로 멉니다'},
+ {rg:'vg',t:'mart',n:"Smith's (Maryland)",la:36.1434,lo:-115.1349,h:'6–24시',m:'크로거 계열 — 공식 자판기 확인처'},
+ {rg:'vg',t:'mart',n:'Target 스트립',la:36.1048,lo:-115.1725,h:'7–22시',m:'스트립 위. 실드 정가'},
+ {rg:'vg',t:'mart',n:'Albertsons (Charleston)',la:36.1569,lo:-115.1256,h:'6–22시',m:'앨버슨스 계열 — 공식 자판기 확인처'},
+];
+let CARDON=true, CMARKS=[];
+function paintCards(){
+  if(!LMAP) return;
+  CMARKS.forEach(x=>LMAP.removeLayer(x)); CMARKS=[];
+  if(!CARDON) return;
+  const rg=regOf(curDay);
+  CARDS.filter(c=>c.rg===rg).forEach(c=>{
+    const ic=L.divIcon({className:'',iconSize:[26,26],iconAnchor:[13,13],
+      html:'<div class="pin card'+(c.t==='mart'?' mart':'')+'">🃏</div>'});
+    CMARKS.push(L.marker([c.la,c.lo],{icon:ic,zIndexOffset:-100})
+      .bindPopup('<b>🃏 '+c.n+'</b><i>'+c.h+'<br>'+c.m+'</i>').addTo(LMAP));
+  });
 }
 
 /* ---------- 코스 만들기 ---------- */
@@ -1377,6 +1414,13 @@ function buildTabs(){
   document.getElementById('build').style.setProperty('--day',dayC(curDay));
   const dl=document.getElementById('dl');
   if(dl && !dl.dataset.b){ dl.dataset.b='1'; dl.addEventListener('click',()=>cacheTiles(dl)); }
+  const cb=document.getElementById('cardBtn');
+  if(cb && !cb.dataset.b){
+    cb.dataset.b='1'; cb.classList.add('done');
+    cb.addEventListener('click',()=>{
+      CARDON=!CARDON; cb.classList.toggle('done',CARDON); paintCards();
+    });
+  }
 }
 function drawCatalog(){
   const box=document.getElementById('catalog');
