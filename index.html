@@ -358,7 +358,7 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
 <!-- ============ 코스 만들기 ============ -->
 <section id="build">
   <h2>코스 만들기</h2>
-  <p class="sub">가고 싶은 곳을 담으면 동선과 시간을 계산합니다. <span style="color:var(--lax)">★</span>는 추천, <span style="color:var(--lax)">★★</span>는 놓치면 아까운 곳입니다.</p>
+  <p class="sub">가고 싶은 곳을 담으면 실제 도로 기준으로 동선과 시간을 계산합니다. <span style="color:var(--lax)">★</span>는 추천, <span style="color:var(--lax)">★★</span>는 놓치면 아까운 곳입니다.</p>
   <div class="cartbar"><div class="daytabs" id="daytabs"></div><div class="barsum" id="cartbar"></div></div>
   <div id="catalog"></div>
   <div class="addbox">
@@ -920,7 +920,7 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
 <footer>
   <div id="sync">연결 확인 중…</div>
   <div id="jserr" style="display:none;margin:8px 0;padding:9px;border-radius:9px;background:rgba(228,101,140,.12);border:1px solid rgba(228,101,140,.4);color:#F0B7C8;font-size:11px;text-align:left;word-break:break-all"></div>
-  <div class="ver">v17 · 09-24 15:40</div>
+  <div class="ver">v19 · 09-24 16:50</div>
   <div class="tools">
     <button class="reset" id="resetBtn">체크 지우기</button>
   </div>
@@ -1391,6 +1391,55 @@ function bindAdd(){
   });
 }
 
+
+/* ---------- 실제 도로 소요시간 ---------- */
+const RT={};                         // 'la,lo>la,lo' → 시간(h)
+const rkey=(a,b)=>a.la.toFixed(4)+','+a.lo.toFixed(4)+'>'+b.la.toFixed(4)+','+b.lo.toFixed(4);
+let rtPending=false;
+
+function estH(day,a,b){              // 직선 추정 (폴백) — LA는 우회가 많아 넉넉히
+  const rg=regOf(day);
+  const det=rg==='la'?1.6:rg==='vg'?1.35:1.3;
+  const sp=rg==='la'?28:rg==='vg'?38:70;
+  const km=hav(a,b)*det;
+  return Math.max(km/sp, km>0.8?0.17:0.05);
+}
+function isReal(a,b){ return RT[rkey(a,b)]!=null; }
+function driveH(day,a,b){
+  const v=RT[rkey(a,b)];
+  return (v!=null)?v:estH(day,a,b);
+}
+async function fetchRoutes(pairs){
+  const todo=pairs.filter(([a,b])=>RT[rkey(a,b)]==null);
+  if(!todo.length) return false;
+  let got=false;
+  for(const [a,b] of todo.slice(0,12)){
+    const u='https://router.project-osrm.org/route/v1/driving/'+
+      a.lo+','+a.la+';'+b.lo+','+b.la+'?overview=false';
+    try{
+      const r=await to(fetch(u),6000);
+      if(!r.ok) throw 0;
+      const j=await r.json();
+      if(j.routes&&j.routes[0]){
+        RT[rkey(a,b)]=j.routes[0].duration/3600*1.15;   // 신호·정체 보정
+        got=true;
+      }
+    }catch(e){ RT[rkey(a,b)]=estH(curDay,a,b); }
+  }
+  return got;
+}
+async function refreshRoutes(){
+  if(rtPending) return;
+  const {out}=orderedPicks(curDay);
+  if(!out.length) return;
+  const H=homeOf(curDay), pairs=[]; let prev=H;
+  out.forEach(p=>{ pairs.push([prev,p]); prev=p; });
+  pairs.push([prev,H]);
+  rtPending=true;
+  try{ if(await fetchRoutes(pairs)){ drawCart(); renderDays(); } }
+  finally{ rtPending=false; }
+}
+
 /* ---------- 코스 만들기 ---------- */
 const REG={
   rk:{home:{la:51.1880,lo:-115.5480,n:'히든리지'}, sp:70},
@@ -1499,10 +1548,7 @@ function hav(a,b){
   const x=Math.sin(dla/2)**2+Math.cos(a.la*r)*Math.cos(b.la*r)*Math.sin(dlo/2)**2;
   return 2*R*Math.asin(Math.sqrt(x));
 }
-function driveH(day,a,b){
-  const km=hav(a,b)*1.3;
-  return Math.max(km/REG[regOf(day)].sp, km>0.5?0.08:0);
-}
+
 let curDay=(DAYS.find(x=>!isPast(x.d))||DAYS[DAYS.length-1]).d;
 const PICK={}, ORD={};
 const pk=(d,i)=>'opt:'+d+':'+i;
@@ -1522,9 +1568,10 @@ function orderedPicks(day){
 function zoneOf(p){ return ZONES.find(z=>z.z===p.z); }
 function legs(out, day){
   day=day||curDay;
-  const H=homeOf(day); const L=[]; let prev=H;
-  out.forEach(p=>{ L.push(driveH(day,prev,p)); prev=p; });
-  return {L, back: out.length? driveH(day,prev,H):0};
+  const H=homeOf(day); const L=[], R=[]; let prev=H;
+  out.forEach(p=>{ L.push(driveH(day,prev,p)); R.push(isReal(prev,p)); prev=p; });
+  return {L, R, back: out.length? driveH(day,prev,H):0,
+          backR: out.length? isReal(prev,H):false};
 }
 function sortByRoute(day){
   const H=homeOf(day);
@@ -1532,7 +1579,7 @@ function sortByRoute(day){
   const out=[]; let cur=H;
   while(pool.length){
     let bi=0,bd=1e9;
-    pool.forEach((p,i)=>{ const d=hav(cur,p); if(d<bd){bd=d;bi=i;} });
+    pool.forEach((p,i)=>{ const d=driveH(day,cur,p); if(d<bd){bd=d;bi=i;} });
     cur=pool[bi]; out.push(pool.splice(bi,1)[0]);
   }
   const t0=Date.now();
@@ -1547,7 +1594,7 @@ function buildTabs(){
     curDay=b.dataset.d;
     box.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.d===curDay));
     document.getElementById('build').style.setProperty('--day',dayC(curDay));
-    drawCatalog(); drawCart();
+    drawCatalog(); drawCart(); refreshRoutes();
   }));
   const first=box.querySelector('button[data-d="'+curDay+'"]')||box.querySelector('button');
   if(first) first.classList.add('on');
@@ -1600,16 +1647,16 @@ function drawCatalog(){
     PICK[k]=!PICK[k];
     if(PICK[k]) ORD[k]=Date.now(); else delete ORD[k];
     savePick(curDay,c.dataset.s,PICK[k]);
-    drawCatalog(); drawCart(); renderDays();
+    drawCatalog(); drawCart(); renderDays(); refreshRoutes();
   }));
 }
 function plan(){
   const day=DAYS.find(d=>d.d===curDay);
   const {out}=orderedPicks(curDay);
-  const {L,back}=legs(out,curDay);
+  const {L,R,back,backR}=legs(out,curDay);
   const drive=L.reduce((a,x)=>a+x,0)+back;
   const act=out.reduce((a,p)=>a+p.h,0);
-  return {day, sel:out, L, back, drive, act, km:out.reduce((a,p)=>a+p.km,0), total:act+drive};
+  return {day, sel:out, L, R, back, backR, drive, act, km:out.reduce((a,p)=>a+p.km,0), total:act+drive};
 }
 function drawCart(){
   const box=document.getElementById('cart');
@@ -1624,14 +1671,14 @@ function drawCart(){
 
   let t=P.day.start, rows='';
   P.sel.forEach((p,i)=>{
-    if(P.L[i]>0.05){ rows+='<div class="mv">차로 '+Math.round(P.L[i]*60)+'분 이동</div>'; t+=P.L[i]; }
+    if(P.L[i]>0.05){ rows+='<div class="mv">차로 '+(P.R[i]?'':'약 ')+Math.round(P.L[i]*60)+'분 이동'+(P.R[i]?'':' (추정)')+'</div>'; t+=P.L[i]; }
     rows+='<div class="r"><time>'+hhmm(t)+'</time><div class="rr"><b class="sq">'+(i+1)+'</b>'+
       (p.st?'<span class="st2">'+stars(p.st)+'</span> ':'')+p.n+
       '<i>'+(p.km?p.km+'km · ':'')+p.h+'시간</i></div></div>';
     t+=p.h;
   });
   if(P.sel.length){
-    if(P.back>0.05){ rows+='<div class="mv">숙소까지 '+Math.round(P.back*60)+'분</div>'; t+=P.back; }
+    if(P.back>0.05){ rows+='<div class="mv">숙소까지 '+(P.backR?'':'약 ')+Math.round(P.back*60)+'분</div>'; t+=P.back; }
     rows+='<div class="r"><time>'+hhmm(t)+'</time><div class="rr">숙소 도착</div></div>';
   }
 
@@ -1668,10 +1715,10 @@ function renderDays(){
     box.style.setProperty('--day',D.c);
     const {out}=orderedPicks(day);
     if(!out.length){ box.innerHTML='<div class="stop"><time>—</time><div class="s"><i>코스 탭에서 갈 곳을 담으면 시간표가 만들어집니다.</i></div></div>'; return; }
-    const {L,back}=legs(out,day);
+    const {L,R,back,backR}=legs(out,day);
     let t=D.start, html='';
     out.forEach((p,i)=>{
-      if(L[i]>0.05){ html+='<div class="stop"><time></time><div class="s"><i>차로 '+Math.round(L[i]*60)+'분 이동</i></div></div>'; t+=L[i]; }
+      if(L[i]>0.05){ html+='<div class="stop"><time></time><div class="s"><i>차로 '+(R[i]?'':'약 ')+Math.round(L[i]*60)+'분 이동</i></div></div>'; t+=L[i]; }
       html+='<div class="stop"><time>'+hhmm(t)+'</time><div class="s"><b><span class="sq">'+(i+1)+'</span> '+
         (p.st?'<span class="st2">'+stars(p.st)+'</span> ':'')+p.n+'</b><i>'+
         (p.km?p.km+'km · ':'')+p.h+'시간</i>'+
@@ -1679,7 +1726,7 @@ function renderDays(){
         '</div></div>';
       t+=p.h;
     });
-    if(back>0.05){ html+='<div class="stop"><time></time><div class="s"><i>숙소까지 '+Math.round(back*60)+'분</i></div></div>'; t+=back; }
+    if(back>0.05){ html+='<div class="stop"><time></time><div class="s"><i>숙소까지 '+(backR?'':'약 ')+Math.round(back*60)+'분</i></div></div>'; t+=back; }
     html+='<div class="stop"><time>'+hhmm(t)+'</time><div class="s"><b>숙소 도착</b></div></div>';
     box.innerHTML=html;
   });
@@ -1691,7 +1738,7 @@ window.__loadOpts=function(rows){
     if(r.done) ORD[r.id]=Date.parse(r.updated_at||'')||Date.now();
     else delete ORD[r.id];
   });
-  drawCatalog(); drawCart(); renderDays();
+  drawCatalog(); drawCart(); renderDays(); refreshRoutes();
 };
 (function(){
   const SRC=['https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
@@ -1712,7 +1759,7 @@ try{ buildTabs(); }catch(e){ console.error(e); }
  ['2026-09-21',['s51','s52','s53','s41']],
  ['2026-09-22',['s61','s63','s64','s18','s15']],
  ['2026-09-23',['s32','s33']]].forEach(([d,ids])=>ids.forEach(i=>PICK[pk(d,i)]=true));
-try{ drawCatalog(); drawCart(); renderDays(); }catch(e){ console.error('builder', e); }
+try{ drawCatalog(); drawCart(); renderDays(); refreshRoutes(); }catch(e){ console.error('builder', e); }
 
 /* ---------- 날씨 자동 갱신 ---------- */
 (function(){
