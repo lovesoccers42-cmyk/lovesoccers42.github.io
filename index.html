@@ -373,7 +373,8 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
   </div>
   <div class="legend" id="legend"></div>
   <div id="lmap"></div>
-  <div class="dl"><button id="cardBtn">🃏 카드샵 · 🛒 마트</button><button id="dl">지도 저장</button><span>한 번 눌러두면 산속에서도 보입니다</span></div>
+  <div class="dl"><button id="cardBtn">🃏 카드샵 · 🛒 마트</button><button id="dl">지도 저장</button></div>
+  <div class="dl"><button id="rtBtn">이동시간 다시 계산</button><span id="rtStat"></span></div>
   <div class="cart" id="cart"></div>
 </section>
 
@@ -920,7 +921,7 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
 <footer>
   <div id="sync">연결 확인 중…</div>
   <div id="jserr" style="display:none;margin:8px 0;padding:9px;border-radius:9px;background:rgba(228,101,140,.12);border:1px solid rgba(228,101,140,.4);color:#F0B7C8;font-size:11px;text-align:left;word-break:break-all"></div>
-  <div class="ver">v19 · 09-24 16:50</div>
+  <div class="ver">v20 · 09-24 17:30</div>
   <div class="tools">
     <button class="reset" id="resetBtn">체크 지우기</button>
   </div>
@@ -1393,11 +1394,12 @@ function bindAdd(){
 
 
 /* ---------- 실제 도로 소요시간 ---------- */
-const RT={};                         // 'la,lo>la,lo' → 시간(h)
+const RT={};
 const rkey=(a,b)=>a.la.toFixed(4)+','+a.lo.toFixed(4)+'>'+b.la.toFixed(4)+','+b.lo.toFixed(4);
-let rtPending=false;
+let rtPending=false, RTSTAT='';
+const wto=(pr,ms)=>Promise.race([pr,new Promise((_,rj)=>setTimeout(()=>rj(new Error('시간 초과')),ms))]);
 
-function estH(day,a,b){              // 직선 추정 (폴백) — LA는 우회가 많아 넉넉히
+function estH(day,a,b){
   const rg=regOf(day);
   const det=rg==='la'?1.6:rg==='vg'?1.35:1.3;
   const sp=rg==='la'?28:rg==='vg'?38:70;
@@ -1409,24 +1411,24 @@ function driveH(day,a,b){
   const v=RT[rkey(a,b)];
   return (v!=null)?v:estH(day,a,b);
 }
-async function fetchRoutes(pairs){
-  const todo=pairs.filter(([a,b])=>RT[rkey(a,b)]==null);
-  if(!todo.length) return false;
-  let got=false;
-  for(const [a,b] of todo.slice(0,12)){
-    const u='https://router.project-osrm.org/route/v1/driving/'+
-      a.lo+','+a.la+';'+b.lo+','+b.la+'?overview=false';
+const RHOSTS=['https://router.project-osrm.org/route/v1/driving/',
+              'https://routing.openstreetmap.de/routed-car/route/v1/driving/'];
+let RHOST=0;
+async function oneRoute(a,b){
+  for(let k=0;k<RHOSTS.length;k++){
+    const h=RHOSTS[(RHOST+k)%RHOSTS.length];
     try{
-      const r=await to(fetch(u),6000);
-      if(!r.ok) throw 0;
+      const r=await wto(fetch(h+a.lo+','+a.la+';'+b.lo+','+b.la+'?overview=false'),7000);
+      if(!r.ok) throw new Error('HTTP '+r.status);
       const j=await r.json();
-      if(j.routes&&j.routes[0]){
-        RT[rkey(a,b)]=j.routes[0].duration/3600*1.15;   // 신호·정체 보정
-        got=true;
+      if(j && j.routes && j.routes[0]){
+        RHOST=(RHOST+k)%RHOSTS.length;
+        return j.routes[0].duration/3600*1.15;
       }
-    }catch(e){ RT[rkey(a,b)]=estH(curDay,a,b); }
+      throw new Error('경로 없음');
+    }catch(e){ RTSTAT=e.message||'실패'; }
   }
-  return got;
+  return null;
 }
 async function refreshRoutes(){
   if(rtPending) return;
@@ -1435,9 +1437,18 @@ async function refreshRoutes(){
   const H=homeOf(curDay), pairs=[]; let prev=H;
   out.forEach(p=>{ pairs.push([prev,p]); prev=p; });
   pairs.push([prev,H]);
+  const todo=pairs.filter(([x,y])=>RT[rkey(x,y)]==null).slice(0,12);
+  if(!todo.length) return;
   rtPending=true;
-  try{ if(await fetchRoutes(pairs)){ drawCart(); renderDays(); } }
-  finally{ rtPending=false; }
+  let got=0;
+  try{
+    for(const [x,y] of todo){
+      const v=await oneRoute(x,y);
+      if(v!=null){ RT[rkey(x,y)]=v; got++; }
+    }
+  }finally{ rtPending=false; }
+  RTSTAT = got? '' : (RTSTAT||'연결 실패');
+  drawCart(); renderDays();
 }
 
 /* ---------- 코스 만들기 ---------- */
@@ -1601,6 +1612,12 @@ function buildTabs(){
   document.getElementById('build').style.setProperty('--day',dayC(curDay));
   const dl=document.getElementById('dl');
   if(dl && !dl.dataset.b){ dl.dataset.b='1'; dl.addEventListener('click',()=>cacheTiles(dl)); }
+  const rb=document.getElementById('rtBtn');
+  if(rb && !rb.dataset.b){
+    rb.dataset.b='1';
+    rb.addEventListener('click',()=>{ rb.textContent='계산 중…';
+      refreshRoutes().then(()=>{ rb.textContent='이동시간 다시 계산'; }); });
+  }
   const cb=document.getElementById('cardBtn');
   if(cb && !cb.dataset.b){
     cb.dataset.b='1'; cb.classList.add('done');
@@ -1694,6 +1711,14 @@ function drawCart(){
     (tip?'<div class="hint">'+tip+'</div>':'')+
     '<div class="acts"><button id="srt">거리순 정렬</button><button id="clr">이 날 비우기</button></div>'+
     (rows?'<div class="rt2">'+rows+'</div>':'');
+  const rs=document.getElementById('rtStat');
+  if(rs){
+    const real=(P.R||[]).filter(Boolean).length + (P.backR?1:0);
+    const all=(P.L||[]).length + (P.back>0.05?1:0);
+    rs.textContent = !all ? '' : (real===all ? '실제 도로 기준'
+      : real ? ('실제 '+real+'/'+all+' 구간') : ('추정치 사용 중'+(RTSTAT?' — '+RTSTAT:'')));
+    rs.style.color = (all&&real===all)?'var(--yzf)':'var(--lax)';
+  }
   const leg=document.getElementById('legend');
   if(leg) leg.innerHTML=DAYS.filter(d=>!isPast(d.d)).map(d=>'<i><b style="background:'+d.c+'"></b>'+d.l+
     (d.d===curDay?' 보는 중':'')+'</i>').join('');
