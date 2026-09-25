@@ -299,6 +299,11 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
 .legend{display:flex;gap:9px;flex-wrap:wrap;font-size:10.5px;color:var(--faint);margin:9px 0 2px}
 .legend i{font-style:normal;display:inline-flex;align-items:center;gap:4px}
 .legend b{width:7px;height:7px;border-radius:50%;display:inline-block}
+.safelg{display:none;gap:9px;flex-wrap:wrap;font-size:10.5px;color:var(--faint);margin:6px 0 2px;align-items:center}
+.safelg.open{display:flex}
+.safelg i{font-style:normal;display:inline-flex;align-items:center;gap:4px}
+.safelg b{width:8px;height:8px;border-radius:2px;display:inline-block}
+.safelg span{flex:1 0 100%;line-height:1.5;margin-top:2px}
 
 .rt2{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
 .rt2 .r{display:flex;gap:11px;padding:6px 0}
@@ -374,7 +379,8 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
   <div class="legend" id="legend"></div>
   <div id="lmap"></div>
   <div class="dl"><button id="cardBtn">🃏 카드샵 · 🛒 마트</button><button id="dl">지도 저장</button></div>
-  <div class="dl"><button id="rtBtn">이동시간 다시 계산</button><span id="rtStat"></span></div>
+  <div class="dl"><button id="safeBtn">🚶 치안</button><button id="rtBtn">이동시간 다시 계산</button><span id="rtStat"></span></div>
+  <div class="safelg" id="safeLg"></div>
   <div class="cart" id="cart"></div>
 </section>
 
@@ -921,7 +927,7 @@ button.reset.danger{border-color:var(--las);color:var(--las)}
 <footer>
   <div id="sync">연결 확인 중…</div>
   <div id="jserr" style="display:none;margin:8px 0;padding:9px;border-radius:9px;background:rgba(228,101,140,.12);border:1px solid rgba(228,101,140,.4);color:#F0B7C8;font-size:11px;text-align:left;word-break:break-all"></div>
-  <div class="ver">v21 · 09-24 18:00</div>
+  <div class="ver">v22 · 09-25 09:00</div>
   <div class="tools">
     <button class="reset" id="resetBtn">체크 지우기</button>
   </div>
@@ -1148,7 +1154,7 @@ function paintMap(ordered,col){
       .bindPopup('<b>'+(p.st?stars(p.st)+' ':'')+p.n+'</b><i>'+(p.km?p.km+'km · ':'')+p.h+'시간</i>')
       .addTo(m));
   });
-  paintCards();
+  paintCards(); paintSafe();
   setTimeout(()=>{ m.invalidateSize();
     m.fitBounds(L.latLngBounds(pts).pad(0.25),{maxZoom:12}); },60);
   return true;
@@ -1453,6 +1459,48 @@ async function refreshRoutes(){
   drawCart(); renderDays();
 }
 
+
+/* ---------- 도보 안전도 ---------- */
+const SAFE=[
+ // LA — g: 도보 무난 / y: 낮만 / r: 도보 피하기
+ {rg:'la',lv:'g',n:'산타모니카 · 3번가',la:34.0154,lo:-118.4960,r:1100,m:'관광객이 많고 밤에도 사람이 있습니다. 해변 쪽은 어두워지면 인적이 끊깁니다'},
+ {rg:'la',lv:'g',n:'비벌리힐스 · 로데오',la:34.0674,lo:-118.4004,r:1300,m:'치안이 가장 안정적인 구역'},
+ {rg:'la',lv:'g',n:'더 그로브 · 페어팩스',la:34.0722,lo:-118.3576,r:900,m:'쇼핑몰 일대, 밤 10시까지 붐빕니다'},
+ {rg:'la',lv:'g',n:'컬버시티 (RWT 일대)',la:34.0384,lo:-118.4422,r:1000,m:'오피스·상업지구, 낮밤 무난'},
+ {rg:'la',lv:'g',n:'게티 센터',la:34.0780,lo:-118.4741,r:700,m:'폐쇄된 캠퍼스, 안전'},
+ {rg:'la',lv:'y',n:'코리아타운',la:34.0618,lo:-118.3090,r:1600,m:'낮과 초저녁은 무난. 밤늦게 골목길·주차장은 피하고 큰길로'},
+ {rg:'la',lv:'y',n:'숙소 일대 (이스트 할리우드)',la:34.0779,lo:-118.3049,r:900,m:'주거지라 밤엔 한산합니다. 큰길(웨스턴·산타모니카 블러바드) 위주로'},
+ {rg:'la',lv:'y',n:'할리우드 블러바드',la:34.1016,lo:-118.3269,r:1000,m:'낮엔 관광지, 밤엔 취객·노숙인이 늘어납니다. 소지품 주의'},
+ {rg:'la',lv:'y',n:'베니스 비치',la:33.9850,lo:-118.4695,r:900,m:'낮은 괜찮습니다. 해 지면 보드워크는 권하지 않습니다'},
+ {rg:'la',lv:'y',n:'다운타운 (그랜드 센트럴 마켓)',la:34.0506,lo:-118.2487,r:800,m:'낮엔 괜찮습니다. 동쪽으로 넘어가지 마세요'},
+ {rg:'la',lv:'y',n:'하이랜드 파크',la:34.1086,lo:-118.1968,r:900,m:'식당가는 활기 있습니다. 옆 골목은 밤에 한산'},
+ {rg:'la',lv:'y',n:'레이크 할리우드 · 협곡길',la:34.1269,lo:-118.3261,r:900,m:'치안보다 길이 문제. 인도가 없고 어둡습니다. 밤엔 차로만'},
+ {rg:'la',lv:'r',n:'스키드로 일대',la:34.0440,lo:-118.2450,r:1100,m:'노숙인 밀집 지역. 낮에도 도보 이동은 피하세요'},
+ {rg:'la',lv:'r',n:'사우스 LA (브로드웨이 남쪽)',la:33.9500,lo:-118.2780,r:2600,m:'Pokepack bros가 여기 있습니다. 가신다면 차로 문 앞까지'},
+ {rg:'la',lv:'r',n:'사우스 센트럴',la:34.0087,lo:-118.2501,r:1600,m:'LVLUP GAMING 일대. 도보 이동 비권장'},
+ // 라스베가스
+ {rg:'vg',lv:'g',n:'스트립 본구간',la:36.1100,lo:-115.1730,r:2400,m:'24시간 사람이 있습니다. 호객·구걸은 무시하고 지나가세요'},
+ {rg:'vg',lv:'y',n:'프리몬트 스트리트',la:36.1699,lo:-115.1423,r:500,m:'캐노피 아래는 괜찮습니다. 한 블록만 벗어나도 분위기가 달라집니다'},
+ {rg:'vg',lv:'y',n:'차이나타운 (스프링마운틴)',la:36.1278,lo:-115.1971,r:1100,m:'치안보다 구조가 문제. 상가 단지라 걸어 다니는 곳이 아닙니다. 차로'},
+ {rg:'vg',lv:'y',n:'사하라 (Cards N Hobby 일대)',la:36.1433,lo:-115.2095,r:1000,m:'낮엔 무난. 밤엔 차로 이동'},
+ {rg:'vg',lv:'r',n:'프리몬트 동쪽 · 북부',la:36.1720,lo:-115.1250,r:1800,m:'관광 구역을 벗어난 곳. 도보 이동 피하세요'},
+];
+let SAFEON=false, SMARKS=[];
+const SCOL={g:'#3FBF8F', y:'#E8A33D', r:'#E4658C'};
+function paintSafe(){
+  if(!LMAP) return;
+  SMARKS.forEach(x=>LMAP.removeLayer(x)); SMARKS=[];
+  if(!SAFEON) return;
+  const rg=regOf(curDay);
+  SAFE.filter(z=>z.rg===rg).forEach(z=>{
+    const c=SCOL[z.lv];
+    const lbl=z.lv==='g'?'도보 무난':z.lv==='y'?'낮에만 도보':'도보 피하기';
+    SMARKS.push(L.circle([z.la,z.lo],{radius:z.r,color:c,weight:1.5,
+      fillColor:c,fillOpacity:z.lv==='r'?0.22:0.13})
+      .bindPopup('<b>'+z.n+'</b><i>'+lbl+'<br>'+z.m+'</i>').addTo(LMAP));
+  });
+}
+
 /* ---------- 코스 만들기 ---------- */
 const REG={
   rk:{home:{la:51.1880,lo:-115.5480,n:'히든리지'}, sp:70},
@@ -1614,6 +1662,23 @@ function buildTabs(){
   document.getElementById('build').style.setProperty('--day',dayC(curDay));
   const dl=document.getElementById('dl');
   if(dl && !dl.dataset.b){ dl.dataset.b='1'; dl.addEventListener('click',()=>cacheTiles(dl)); }
+  const sf=document.getElementById('safeBtn');
+  if(sf && !sf.dataset.b){
+    sf.dataset.b='1';
+    sf.addEventListener('click',()=>{
+      SAFEON=!SAFEON; sf.classList.toggle('done',SAFEON); paintSafe();
+      const lg=document.getElementById('safeLg');
+      if(lg) lg.className='safelg'+(SAFEON?' open':'');
+    });
+  }
+  const lg0=document.getElementById('safeLg');
+  if(lg0 && !lg0.dataset.b){
+    lg0.dataset.b='1';
+    lg0.innerHTML='<i><b style="background:#3FBF8F"></b>도보 무난</i>'+
+      '<i><b style="background:#E8A33D"></b>낮에만 도보</i>'+
+      '<i><b style="background:#E4658C"></b>도보 피하기</i>'+
+      '<span>원을 누르면 설명이 나옵니다. 대략적인 기준이니 실제 분위기를 보고 판단하세요.</span>';
+  }
   const rb=document.getElementById('rtBtn');
   if(rb && !rb.dataset.b){
     rb.dataset.b='1';
